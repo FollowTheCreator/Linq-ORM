@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace MoneyManager.DAL.Models.Contexts
 {
@@ -8,6 +6,7 @@ namespace MoneyManager.DAL.Models.Contexts
     {
         public MoneyManagerCodeFirstContext()
         {
+            Database.EnsureCreated();
         }
 
         public MoneyManagerCodeFirstContext(DbContextOptions<MoneyManagerCodeFirstContext> options)

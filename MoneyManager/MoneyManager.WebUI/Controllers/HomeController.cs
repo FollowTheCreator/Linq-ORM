@@ -4,12 +4,21 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MoneyManager.DAL.Models.Contexts;
 using MoneyManager.WebUI.Models;
 
 namespace MoneyManager.WebUI.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly MoneyManagerCodeFirstContext _context;
+
+        public HomeController(MoneyManagerCodeFirstContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -22,11 +31,12 @@ namespace MoneyManager.WebUI.Controllers
             return View();
         }
 
-        public IActionResult Contact()
+        public async Task<IActionResult> Contact()
         {
+            var users = await _context.User.ToListAsync();
             ViewData["Message"] = "Your contact page.";
 
-            return View();
+            return View(users);
         }
 
         public IActionResult Privacy()

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MoneyManager.DAL.Migrations.DataSeeding;
 using MoneyManager.DAL.Models.Contexts;
 
 namespace MoneyManager.WebUI
@@ -35,7 +36,15 @@ namespace MoneyManager.WebUI
                 .AddDbContext<MoneyManagerCodeFirstContext>(options =>
                 options.UseSqlServer(connection));
 
+            services
+                .AddSingleton<IDataSeeding, DataSeeding>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var dataSeeding = serviceProvider.GetService<IDataSeeding>();
+            dataSeeding.SeedData().GetAwaiter().GetResult();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
