@@ -1,0 +1,42 @@
+﻿@model IEnumerable<UserViewModel>
+
+<div>
+    <table class="table mt-3">
+        <thead class="thead-light">
+            <tr>
+                <th class="text-dark">
+                    Id
+                </th>
+                <th class="text-dark">
+                    Name
+                </th>
+                <th class="text-dark">
+                    Email
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Email</td>
+                    <td>
+                        <a asp-controller="User" asp-action="GetByIdAsync" asp-route-id="@item.Id" class="text-dark">Details</a>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="4">
+                    <div>
+                        <a asp-controller="User" asp-action="CreateAsync" class="btn bg-light w-100">
+                            <h4>+</h4>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

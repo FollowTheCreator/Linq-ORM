@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MoneyManager.DAL.Interfaces.Models;
 
 namespace MoneyManager.DAL.Models.Contexts
 {

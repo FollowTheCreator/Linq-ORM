@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,8 +10,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MoneyManager.BLL.Interfaces;
+using MoneyManager.BLL.Interfaces.Services.AssetService;
+using MoneyManager.BLL.Interfaces.Services.UserService;
+using MoneyManager.BLL.Services.AssetService;
+using MoneyManager.BLL.Services.UserService;
+using MoneyManager.DAL.Interfaces.DataSeeding;
+using MoneyManager.DAL.Interfaces.Repositories.AssetRepository;
+using MoneyManager.DAL.Interfaces.Repositories.UserRepository;
 using MoneyManager.DAL.Migrations.DataSeeding;
 using MoneyManager.DAL.Models.Contexts;
+using MoneyManager.DAL.Repositories.AssetRepository;
+using MoneyManager.DAL.Repositories.UserRepository;
+using MoneyManager.WebUI.Configs.Mapping;
+using Utils;
 
 namespace MoneyManager.WebUI
 {
@@ -36,8 +49,24 @@ namespace MoneyManager.WebUI
                 .AddDbContext<MoneyManagerCodeFirstContext>(options =>
                 options.UseSqlServer(connection));
 
-            services
-                .AddSingleton<IDataSeeding, DataSeeding>();
+            services.AddSingleton<IDataSeeding, DataSeeding>();
+
+            services.AddSingleton(typeof(Coder));
+            services.AddSingleton(typeof(Generate));
+
+            var mappingConfig = new MapperConfiguration(mc =>
+                {
+                    mc.AddProfile(new WebUIMappingProfile());
+                    mc.AddProfile(new BLLMappingProfile());
+                }
+            );
+            services.AddSingleton(mappingConfig.CreateMapper());
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAssetService, AssetService>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAssetRepository, AssetRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -61,7 +90,7 @@ namespace MoneyManager.WebUI
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=User}/{action=GetAllAsync}");
             });
         }
     }

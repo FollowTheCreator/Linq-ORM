@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utils\Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Category\" />
+    <Folder Include="Models\Type\" />
+    <Folder Include="Models\Transaction\" />
+    <Folder Include="Services\CategoryService\" />
+    <Folder Include="Services\TypeService\" />
+    <Folder Include="Services\TransactionService\" />
+  </ItemGroup>
+
+</Project>

@@ -1,14 +1,12 @@
-﻿using MoneyManager.DAL.Models;
-using MoneyManager.DAL.Models.Contexts;
-using MoneyManager.DAL.Utils;
+﻿using MoneyManager.DAL.Models.Contexts;
 using System;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Utils;
 using Microsoft.EntityFrameworkCore;
+using MoneyManager.DAL.Interfaces.DataSeeding;
+using MoneyManager.DAL.Interfaces.Models;
 
 namespace MoneyManager.DAL.Migrations.DataSeeding
 {
@@ -16,11 +14,16 @@ namespace MoneyManager.DAL.Migrations.DataSeeding
     {
         private readonly MoneyManagerCodeFirstContext _context;
 
+        private readonly Coder _coder;
+        private readonly Generate _generate;
+
         private readonly Random _random;
 
-        public DataSeeding(MoneyManagerCodeFirstContext context)
+        public DataSeeding(MoneyManagerCodeFirstContext context, Coder coder, Generate generate)
         {
             _context = context;
+            _coder = coder;
+            _generate = generate;
             _random = new Random();
         }
 
@@ -38,11 +41,11 @@ namespace MoneyManager.DAL.Migrations.DataSeeding
                             var user = new User
                             {
                                 Id = Guid.NewGuid(),
-                                Name = Generate.RandomName(),
-                                Email = Generate.RandomEmail(),
-                                Salt = Generate.RandomSalt()
+                                Name = _generate.RandomName(),
+                                Email = _generate.RandomEmail(),
+                                Salt = _generate.RandomSalt()
                             };
-                            user.Hash = Coder.Encode(user.Name + user.Salt);
+                            user.Hash = _coder.Encode(user.Name + user.Salt);
 
                             usersId.Add(user.Id);
 
@@ -67,7 +70,7 @@ namespace MoneyManager.DAL.Migrations.DataSeeding
                             var asset = new Asset
                             {
                                 Id = Guid.NewGuid(),
-                                Name = Generate.RandomName(),
+                                Name = _generate.RandomName(),
                                 UserId = usersId[i / 2]
                             };
 
@@ -88,8 +91,8 @@ namespace MoneyManager.DAL.Migrations.DataSeeding
 
                     if (!await _context.Type.AnyAsync())
                     {
-                        _context.Type.Add(new Models.Type { Id = 1, Name = "income" });
-                        _context.Type.Add(new Models.Type { Id = 2, Name = "expence" });
+                        _context.Type.Add(new Interfaces.Models.Type { Id = 1, Name = "income" });
+                        _context.Type.Add(new Interfaces.Models.Type { Id = 2, Name = "expence" });
                         await _context.SaveChangesAsync();
                         //todo repository ---- AddType(Type)
                     }
@@ -102,7 +105,7 @@ namespace MoneyManager.DAL.Migrations.DataSeeding
                             var category = new Category
                             {
                                 Id = Guid.NewGuid(),
-                                Name = Generate.RandomName(),
+                                Name = _generate.RandomName(),
                                 Type = _random.Next(1, 2)
                             };
 

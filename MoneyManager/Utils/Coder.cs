@@ -3,14 +3,14 @@ using System.Text;
 
 namespace Utils
 {
-    public static class Coder
+    public class Coder
     {
-        public static string Encode(string rawData)
+        public string Encode(string rawData)
         {
             return ComputeSha256Hash(rawData);
         }
 
-        private static string ComputeSha256Hash(string rawData)
+        private string ComputeSha256Hash(string rawData)
         {
             using (SHA256 sha256Hash = SHA256.Create())
             {
