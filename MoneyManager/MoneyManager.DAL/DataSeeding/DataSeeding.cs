@@ -54,8 +54,6 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
                                 usersId.Add(user.Id);
 
                                 _context.User.Add(user);
-
-                                //todo repository ---- AddUser(user)
                             }
 
                             await _context.SaveChangesAsync();
@@ -63,7 +61,6 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
                         else
                         {
                             usersId = await _context.User.Select(user => user.Id).ToListAsync();
-                            //usersId = GetAllUsers().Select(user => user.Id)
                         }
 
                         var assetsId = new List<Guid>(21);
@@ -81,8 +78,6 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
                                 assetsId.Add(asset.Id);
 
                                 _context.Asset.Add(asset);
-
-                                //todo repository ---- AddAsset(asset)
                             }
 
                             await _context.SaveChangesAsync();
@@ -90,7 +85,6 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
                         else
                         {
                             assetsId = await _context.Asset.Select(asset => asset.Id).ToListAsync();
-                            //todo repository ---- assetsId = GetAllAssets().Select(asset => asset.Id)
                         }
 
                         if (!await _context.Type.AnyAsync())
@@ -98,7 +92,6 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
                             _context.Type.Add(new Interfaces.Models.Type { Name = "income" });
                             _context.Type.Add(new Interfaces.Models.Type { Name = "expence" });
                             await _context.SaveChangesAsync();
-                            //todo repository ---- AddType(Type)
                         }
 
                         var catrgories = new List<Category>(11);
@@ -124,7 +117,6 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
                             foreach (var category in catrgories)
                             {
                                 _context.Category.Add(category);
-                                //todo repository ---- AddCategory(category)
                             }
 
                             await _context.SaveChangesAsync();
@@ -132,7 +124,6 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
                         else
                         {
                             catrgories = await _context.Category.ToListAsync();
-                            //todo repository ---- categories = GetAllCategories()
                         }
 
                         if (!await _context.Transaction.AnyAsync())
@@ -149,8 +140,6 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
                                 };
 
                                 _context.Transaction.Add(transactionEntity);
-
-                                //todo repository ---- AddTransaction(transationEntity)
                             }
 
                             await _context.SaveChangesAsync();

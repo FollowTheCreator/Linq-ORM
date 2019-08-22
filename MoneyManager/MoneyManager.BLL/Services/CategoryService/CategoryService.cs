@@ -23,8 +23,10 @@ namespace MoneyManager.BLL.Services.CategoryService
 
         public async Task<CreateCategoryResult> CreateAsync(Category item)
         {
-            var result = new CreateCategoryResult();
-            result.IsTypeExists = await IsTypeExistsAsync(item.Type);
+            var result = new CreateCategoryResult
+            {
+                IsTypeExists = await IsTypeExistsAsync(item.Type)
+            };
 
             if (item.ParentId != null)
             {
@@ -78,10 +80,12 @@ namespace MoneyManager.BLL.Services.CategoryService
 
         public async Task<UpdateCategoryResult> UpdateAsync(Category item)
         {
-            var result = new UpdateCategoryResult();
-            result.IsTypeExists = await IsTypeExistsAsync(item.Type);
+            var result = new UpdateCategoryResult
+            {
+                IsTypeExists = await IsTypeExistsAsync(item.Type)
+            };
 
-            if(item.ParentId != null)
+            if (item.ParentId != null)
             {
                 result.IsParentExists = await IsParentExistsAsync((Guid)item.ParentId);
             }

@@ -8,21 +8,25 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MoneyManager.BLL.Interfaces.Services.AssetService;
 using MoneyManager.BLL.Interfaces.Services.CategoryService;
+using MoneyManager.BLL.Interfaces.Services.TransactionService;
 using MoneyManager.BLL.Interfaces.Services.TypeService;
 using MoneyManager.BLL.Interfaces.Services.UserService;
 using MoneyManager.BLL.Services.AssetService;
 using MoneyManager.BLL.Services.CategoryService;
+using MoneyManager.BLL.Services.TransactionService;
 using MoneyManager.BLL.Services.TypeService;
 using MoneyManager.BLL.Services.UserService;
 using MoneyManager.DAL.DataSeeding.DataSeeding;
 using MoneyManager.DAL.Interfaces.DataSeeding;
 using MoneyManager.DAL.Interfaces.Repositories.AssetRepository;
 using MoneyManager.DAL.Interfaces.Repositories.CategoryRepository;
+using MoneyManager.DAL.Interfaces.Repositories.TransactionRepository;
 using MoneyManager.DAL.Interfaces.Repositories.TypeRepository;
 using MoneyManager.DAL.Interfaces.Repositories.UserRepository;
 using MoneyManager.DAL.Models.Contexts;
 using MoneyManager.DAL.Repositories.AssetRepository;
 using MoneyManager.DAL.Repositories.CategoryRepository;
+using MoneyManager.DAL.Repositories.TransactionRepository;
 using MoneyManager.DAL.Repositories.TypeRepository;
 using MoneyManager.DAL.Repositories.UserRepository;
 using MoneyManager.WebUI.Configs.Mapping;
@@ -69,11 +73,13 @@ namespace MoneyManager.WebUI
             services.AddScoped<IAssetService, AssetService>();
             services.AddScoped<ITypeService, TypeService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ITransactionService, TransactionService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAssetRepository, AssetRepository>();
             services.AddScoped<ITypeRepository, TypeRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

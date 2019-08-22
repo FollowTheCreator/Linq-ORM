@@ -3,6 +3,7 @@ using MoneyManager.WebUI.Models.Asset;
 using MoneyManager.WebUI.Models.Category;
 using MoneyManager.WebUI.Models.Type;
 using MoneyManager.WebUI.Models.User;
+using MoneyManager.WebUI.Models.Transaction;
 
 namespace MoneyManager.WebUI.Configs.Mapping
 {
@@ -17,6 +18,8 @@ namespace MoneyManager.WebUI.Configs.Mapping
             CreateTypeMaps();
 
             CreateCategoryMaps();
+
+            CreateTransactionMaps();
         }
 
         private void CreateUserMaps()
@@ -43,6 +46,12 @@ namespace MoneyManager.WebUI.Configs.Mapping
         {
             CreateMap<Category, BLL.Interfaces.Models.Category.Category>();
             CreateMap<BLL.Interfaces.Models.Category.Category, Category>();
+        }
+
+        private void CreateTransactionMaps()
+        {
+            CreateMap<Transaction, BLL.Interfaces.Models.Transaction.Transaction>();
+            CreateMap<BLL.Interfaces.Models.Transaction.Transaction, Transaction>();
         }
     }
 }

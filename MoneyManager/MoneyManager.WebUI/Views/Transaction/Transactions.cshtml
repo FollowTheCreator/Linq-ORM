@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Transaction>
+
+<div>
+    <table class="table mt-3">
+        <thead class="thead-light">
+            <tr>
+                <th class="text-dark">
+                    Id
+                </th>
+                <th class="text-dark">
+                    Category Id
+                </th>
+                <th class="text-dark">
+                    Amount
+                </th>
+                <th class="text-dark">
+                    Date
+                </th>
+                <th class="text-dark">
+                    Asset Id
+                </th>
+                <th class="text-dark">
+                    Comment
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.CategoryId</td>
+                    <td>@item.Amount</td>
+                    <td>@item.Date</td>
+                    <td>@item.AssetId</td>
+                    <td>@item.Comment</td>
+                    <td>
+                        <a asp-controller="Transaction" asp-action="GetByIdAsync" asp-route-id="@item.Id" class="text-dark">Details</a>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="7">
+                    <div>
+                        <a asp-controller="Transaction" asp-action="CreateAsync" class="btn bg-light w-100">
+                            <h4>+</h4>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

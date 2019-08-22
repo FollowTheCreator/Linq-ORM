@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MoneyManager.BLL.Interfaces.Models.Asset;
 using MoneyManager.BLL.Interfaces.Models.Category;
+using MoneyManager.BLL.Interfaces.Models.Transaction;
 using MoneyManager.BLL.Interfaces.Models.Type;
 using MoneyManager.BLL.Interfaces.Models.User;
 
@@ -17,6 +18,8 @@ namespace MoneyManager.WebUI.Configs.Mapping
             CreateTypeMaps();
 
             CreateCategoryMaps();
+
+            CreateTransactionMaps();
         }
 
         private void CreateUserMaps()
@@ -51,6 +54,12 @@ namespace MoneyManager.WebUI.Configs.Mapping
         {
             CreateMap<Category, DAL.Interfaces.Models.Category>();
             CreateMap<DAL.Interfaces.Models.Category, Category>();
+        }
+
+        private void CreateTransactionMaps()
+        {
+            CreateMap<Transaction, DAL.Interfaces.Models.Transaction>();
+            CreateMap<DAL.Interfaces.Models.Transaction, Transaction>();
         }
     }
 }

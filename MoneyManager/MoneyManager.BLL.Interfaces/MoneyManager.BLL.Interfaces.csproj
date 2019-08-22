@@ -15,9 +15,7 @@
 
   <ItemGroup>
     <Folder Include="Models\Type\" />
-    <Folder Include="Models\Transaction\" />
     <Folder Include="Services\TypeService\" />
-    <Folder Include="Services\TransactionService\" />
   </ItemGroup>
 
 </Project>
