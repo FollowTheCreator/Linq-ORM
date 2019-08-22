@@ -14,4 +14,8 @@
     <ProjectReference Include="..\MoneyManager.DAL.Interfaces\MoneyManager.DAL.Interfaces.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\TransactionService\" />
+  </ItemGroup>
+
 </Project>

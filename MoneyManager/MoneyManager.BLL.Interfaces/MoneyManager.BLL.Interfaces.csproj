@@ -14,10 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Category\" />
     <Folder Include="Models\Type\" />
     <Folder Include="Models\Transaction\" />
-    <Folder Include="Services\CategoryService\" />
     <Folder Include="Services\TypeService\" />
     <Folder Include="Services\TransactionService\" />
   </ItemGroup>

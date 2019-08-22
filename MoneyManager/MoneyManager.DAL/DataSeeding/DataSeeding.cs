@@ -110,7 +110,7 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
                                 {
                                     Id = Guid.NewGuid(),
                                     Name = _generate.RandomName(),
-                                    Type = _random.Next(1, 2)
+                                    Type = _random.Next(1, 3)
                                 };
 
                                 catrgories.Add(category);
@@ -142,10 +142,10 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
                                 var transactionEntity = new Transaction
                                 {
                                     Id = Guid.NewGuid(),
-                                    CategoryId = catrgories[_random.Next(10)].Id,
+                                    CategoryId = catrgories[_random.Next(11)].Id,
                                     Amount = _random.Next(1000000),
                                     Date = DateTime.Now,
-                                    AssetId = assetsId[_random.Next(20)]
+                                    AssetId = assetsId[_random.Next(21)]
                                 };
 
                                 _context.Transaction.Add(transactionEntity);
