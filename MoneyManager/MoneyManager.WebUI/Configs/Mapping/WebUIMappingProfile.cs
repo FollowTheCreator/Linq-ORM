@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MoneyManager.WebUI.Models.Asset;
+using MoneyManager.WebUI.Models.Type;
 using MoneyManager.WebUI.Models.User;
 
 namespace MoneyManager.WebUI.Configs.Mapping
@@ -11,6 +12,8 @@ namespace MoneyManager.WebUI.Configs.Mapping
             CreateUserMaps();
 
             CreateAssetMaps();
+
+            CreateTypeMaps();
         }
 
         private void CreateUserMaps()
@@ -25,6 +28,12 @@ namespace MoneyManager.WebUI.Configs.Mapping
         {
             CreateMap<Asset, BLL.Interfaces.Models.Asset.Asset>();
             CreateMap<BLL.Interfaces.Models.Asset.Asset, Asset>();
+        }
+
+        private void CreateTypeMaps()
+        {
+            CreateMap<Type, BLL.Interfaces.Models.Type.Type>();
+            CreateMap<BLL.Interfaces.Models.Type.Type, Type>();
         }
     }
 }

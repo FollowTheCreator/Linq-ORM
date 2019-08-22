@@ -10,11 +10,11 @@ namespace MoneyManager.DAL.Repositories
 {
     public class Repository<T, TId> : IRepository<T, TId> where T : class, IId<TId>
     {
-        private readonly MoneyManagerCodeFirstContext _context;
+        private readonly MoneyManagerContext _context;
 
         public readonly DbSet<T> DbSet;
 
-        public Repository(MoneyManagerCodeFirstContext context)
+        public Repository(MoneyManagerContext context)
         {
             _context = context;
             DbSet = context.Set<T>();

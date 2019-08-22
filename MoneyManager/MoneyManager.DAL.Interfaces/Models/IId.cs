@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MoneyManager.DAL.Interfaces.Models
+﻿namespace MoneyManager.DAL.Interfaces.Models
 {
     public interface IId<TId>
     {

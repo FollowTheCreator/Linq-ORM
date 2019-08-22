@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MoneyManager.BLL.Interfaces.Models.Asset
+﻿namespace MoneyManager.BLL.Interfaces.Models.Asset
 {
     public class CreateAssetResult
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,17 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MoneyManager.BLL.Interfaces;
 using MoneyManager.BLL.Interfaces.Services.AssetService;
+using MoneyManager.BLL.Interfaces.Services.TypeService;
 using MoneyManager.BLL.Interfaces.Services.UserService;
 using MoneyManager.BLL.Services.AssetService;
+using MoneyManager.BLL.Services.TypeService;
 using MoneyManager.BLL.Services.UserService;
+using MoneyManager.DAL.DataSeeding.DataSeeding;
 using MoneyManager.DAL.Interfaces.DataSeeding;
 using MoneyManager.DAL.Interfaces.Repositories.AssetRepository;
+using MoneyManager.DAL.Interfaces.Repositories.TypeRepository;
 using MoneyManager.DAL.Interfaces.Repositories.UserRepository;
-using MoneyManager.DAL.Migrations.DataSeeding;
 using MoneyManager.DAL.Models.Contexts;
 using MoneyManager.DAL.Repositories.AssetRepository;
+using MoneyManager.DAL.Repositories.TypeRepository;
 using MoneyManager.DAL.Repositories.UserRepository;
 using MoneyManager.WebUI.Configs.Mapping;
 using Utils;
@@ -44,9 +43,9 @@ namespace MoneyManager.WebUI
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            string connection = Configuration.GetConnectionString("MoneyManagerCodeFirst");
+            string connection = Configuration.GetConnectionString("MoneyManagerDb");
             services
-                .AddDbContext<MoneyManagerCodeFirstContext>(options =>
+                .AddDbContext<MoneyManagerContext>(options =>
                 options.UseSqlServer(connection));
 
             services.AddSingleton<IDataSeeding, DataSeeding>();
@@ -64,9 +63,11 @@ namespace MoneyManager.WebUI
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAssetService, AssetService>();
+            services.AddScoped<ITypeService, TypeService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAssetRepository, AssetRepository>();
+            services.AddScoped<ITypeRepository, TypeRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

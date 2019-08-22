@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MoneyManager.BLL.Interfaces.Services.UserService;
 using MoneyManager.WebUI.Models.User;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MoneyManager.WebUI.Controllers
 {
@@ -23,18 +22,18 @@ namespace MoneyManager.WebUI.Controllers
 
         public async Task<ActionResult<IEnumerable<UserViewModel>>> GetAllAsync()
         {
-            var users = await _userService.GetAllAsync();
+            var items = await _userService.GetAllAsync();
 
-            var convertedUsers = _mapper.Map<IEnumerable<BLL.Interfaces.Models.User.User>, IEnumerable<UserViewModel>>(users);
+            var convertedUsers = _mapper.Map<IEnumerable<BLL.Interfaces.Models.User.User>, IEnumerable<UserViewModel>>(items);
 
             return View("~/Views/User/Users.cshtml", convertedUsers);
         }
 
         public async Task<ActionResult<UserViewModel>> GetByIdAsync(Guid id)
         {
-            var user = await _userService.GetByIdAsync(id);
+            var item = await _userService.GetByIdAsync(id);
 
-            var convertedUser = _mapper.Map<BLL.Interfaces.Models.User.User, UserViewModel>(user);
+            var convertedUser = _mapper.Map<BLL.Interfaces.Models.User.User, UserViewModel>(item);
 
             return View("~/Views/User/User.cshtml", convertedUser);
         }
@@ -54,8 +53,8 @@ namespace MoneyManager.WebUI.Controllers
             }
 
             var convertedModel = _mapper.Map<CreateUserModel, BLL.Interfaces.Models.User.CreateUserModel>(model);
-            var createUserResult = await _userService.CreateAsync(convertedModel);
-            if (!createUserResult.AlreadyExists)
+            var createResult = await _userService.CreateAsync(convertedModel);
+            if (!createResult.AlreadyExists)
             {
                 return RedirectToAction("GetAllAsync", "User");
             }

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MoneyManager.DAL.Interfaces.Models;
 using MoneyManager.DAL.Interfaces.Repositories.AssetRepository;
 using MoneyManager.DAL.Models.Contexts;
+using System;
+using System.Threading.Tasks;
 
 namespace MoneyManager.DAL.Repositories.AssetRepository
 {
@@ -13,7 +11,7 @@ namespace MoneyManager.DAL.Repositories.AssetRepository
     {
         private readonly DbSet<User> _userDbSet;
 
-        public AssetRepository(MoneyManagerCodeFirstContext context)
+        public AssetRepository(MoneyManagerContext context)
             :base(context)
         {
             _userDbSet = context.User;

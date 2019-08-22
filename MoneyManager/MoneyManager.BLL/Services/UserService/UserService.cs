@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using MoneyManager.BLL.Interfaces.Models.User;
 using MoneyManager.BLL.Interfaces.Services.UserService;
 using MoneyManager.DAL.Interfaces.Repositories.UserRepository;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Utils;
 
 namespace MoneyManager.BLL.Services.UserService

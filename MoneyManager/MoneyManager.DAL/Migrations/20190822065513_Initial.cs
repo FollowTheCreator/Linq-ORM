@@ -1,5 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 namespace MoneyManager.DAL.Migrations
 {
@@ -11,7 +12,8 @@ namespace MoneyManager.DAL.Migrations
                 name: "Type",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(maxLength: 64, nullable: false)
                 },
                 constraints: table =>

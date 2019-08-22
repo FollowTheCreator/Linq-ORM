@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MoneyManager.BLL.Interfaces.Services.AssetService;
 using MoneyManager.WebUI.Models.Asset;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MoneyManager.WebUI.Controllers
 {
@@ -23,20 +22,20 @@ namespace MoneyManager.WebUI.Controllers
 
         public async Task<ActionResult<IEnumerable<Asset>>> GetAllAsync()
         {
-            var assets = await _assetService.GetAllAsync();
+            var items = await _assetService.GetAllAsync();
 
-            var convertedAssets = _mapper.Map<IEnumerable<BLL.Interfaces.Models.Asset.Asset>, IEnumerable<Asset>>(assets);
+            var convertedItems = _mapper.Map<IEnumerable<BLL.Interfaces.Models.Asset.Asset>, IEnumerable<Asset>>(items);
 
-            return View("~/Views/Asset/Assets.cshtml", convertedAssets);
+            return View("~/Views/Asset/Assets.cshtml", convertedItems);
         }
 
         public async Task<ActionResult<Asset>> GetByIdAsync(Guid id)
         {
-            var asset = await _assetService.GetByIdAsync(id);
+            var item = await _assetService.GetByIdAsync(id);
 
-            var convertedAsset = _mapper.Map<BLL.Interfaces.Models.Asset.Asset, Asset>(asset);
+            var convertedItem = _mapper.Map<BLL.Interfaces.Models.Asset.Asset, Asset>(item);
 
-            return View("~/Views/Asset/Asset.cshtml", convertedAsset);
+            return View("~/Views/Asset/Asset.cshtml", convertedItem);
         }
 
         [HttpGet]

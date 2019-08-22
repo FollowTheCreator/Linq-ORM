@@ -1,15 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MoneyManager.DAL.Interfaces.Models;
 using MoneyManager.DAL.Interfaces.Repositories.UserRepository;
 using MoneyManager.DAL.Models.Contexts;
+using System;
+using System.Threading.Tasks;
 
 namespace MoneyManager.DAL.Repositories.UserRepository
 {
     public class UserRepository : Repository<User, Guid>, IUserRepository
     {
-        public UserRepository(MoneyManagerCodeFirstContext context)
+        public UserRepository(MoneyManagerContext context)
             : base(context)
         { }
 

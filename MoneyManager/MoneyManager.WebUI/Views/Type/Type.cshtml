@@ -1,0 +1,16 @@
+﻿@model MoneyManager.WebUI.Models.Type.Type
+
+<div class="form-group mx-auto w-50">
+    <br>
+    <label for="Id">Id</label>
+    @Html.TextBox("Id", Model.Id, new { id = "Id", @readonly = "readonly", @class = "form-control" })
+    <br>
+    <label for="Name">Name</label>
+    @Html.TextBox("Name", Model.Name, new { id = "Name", @readonly = "readonly", @class = "form-control" })
+    <br>
+    <div class="text-center">
+        <a asp-controller="Type" asp-action="UpdateAsync" asp-route-id="@Model.Id" class="text-dark">Update</a>
+        |
+        <a asp-controller="Type" asp-action="DeleteAsync" asp-route-id="@Model.Id" class="text-dark">Delete</a>
+    </div>
+</div>
