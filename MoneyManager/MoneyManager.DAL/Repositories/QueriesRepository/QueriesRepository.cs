@@ -81,7 +81,52 @@ namespace MoneyManager.DAL.Repositories.QueriesRepository
 
         public async Task<IEnumerable<AmountOfParents>> GetTotalAmountOfParents(Guid id, int operationTypeId)
         {
-            throw new NotImplementedException();
+            var groupedRecords = await _context
+                .Transaction
+                .Include(transaction => transaction.Category)
+                .ThenInclude(category => category.TypeNavigation)
+                .Include(transaction => transaction.Asset)
+                .ThenInclude(asset => asset.User)
+                .Where(transaction =>
+                    transaction.Asset.User.Id == id && 
+                    transaction.Category.TypeNavigation.Id == operationTypeId && 
+                    transaction.Date.Month == DateTime.Now.Month &&
+                    _context.Category.Where(category => category.ParentId == transaction.Category.Id).Any()
+                )
+                .GroupBy(transaction =>
+                    new
+                    {
+                        transaction.Category.Name
+                    }
+                )
+                .ToListAsync();
+
+            var result = groupedRecords
+                .Select(transaction =>
+                    new AmountOfParents
+                    {
+                        Name = transaction.Key.Name,
+                        Amount = _context.Transaction
+                            .Include(item => item.Category)
+                            .ThenInclude(category => category.TypeNavigation)
+                            .Include(item => item.Asset)
+                            .ThenInclude(asset => asset.User)
+                            .Where(item =>
+                                item.Category.Name == transaction.Key.Name &&
+                                item.Asset.User.Id == id &&
+                                item.Category.TypeNavigation.Id == operationTypeId &&
+                                item.Date.Month == DateTime.Now.Month &&
+                                _context.Category.Where(category => category.ParentId == item.Category.Id).Any()
+                            )
+                            .Select(item => item.Amount)
+                            .Sum()
+                    }
+                )
+                .OrderByDescending(a => a.Amount)
+                .OrderBy(a => a.Name)
+                .ToList();
+
+            return result;
         }
 
         public async Task<List<UserAsset>> GetUserAssets(Guid id)
