@@ -49,7 +49,6 @@ namespace MoneyManager.DAL.Repositories
         public async Task UpdateAsync(T item)
         {
             _context.Entry(item).State = EntityState.Modified;
-
             await _context.SaveChangesAsync();
         }
     }

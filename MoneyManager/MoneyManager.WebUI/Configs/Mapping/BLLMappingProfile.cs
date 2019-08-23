@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MoneyManager.BLL.Interfaces.Models.Asset;
 using MoneyManager.BLL.Interfaces.Models.Category;
+using MoneyManager.BLL.Interfaces.Models.QueriesModels;
 using MoneyManager.BLL.Interfaces.Models.Transaction;
 using MoneyManager.BLL.Interfaces.Models.Type;
 using MoneyManager.BLL.Interfaces.Models.User;
@@ -20,6 +21,8 @@ namespace MoneyManager.WebUI.Configs.Mapping
             CreateCategoryMaps();
 
             CreateTransactionMaps();
+
+            CreateQueriesMaps();
         }
 
         private void CreateUserMaps()
@@ -60,6 +63,27 @@ namespace MoneyManager.WebUI.Configs.Mapping
         {
             CreateMap<Transaction, DAL.Interfaces.Models.Transaction>();
             CreateMap<DAL.Interfaces.Models.Transaction, Transaction>();
+        }
+
+        private void CreateQueriesMaps()
+        {
+            CreateMap<UserIdEmailName, DAL.Interfaces.Models.QueriesModels.UserIdEmailName>();
+            CreateMap<DAL.Interfaces.Models.QueriesModels.UserIdEmailName, UserIdEmailName>();
+
+            CreateMap<AmountOfParents, DAL.Interfaces.Models.QueriesModels.AmountOfParents>();
+            CreateMap<DAL.Interfaces.Models.QueriesModels.AmountOfParents, AmountOfParents>();
+
+            CreateMap<TotalAmountForDate, DAL.Interfaces.Models.QueriesModels.TotalAmountForDate>();
+            CreateMap<DAL.Interfaces.Models.QueriesModels.TotalAmountForDate, TotalAmountForDate>();
+
+            CreateMap<UserAsset, DAL.Interfaces.Models.QueriesModels.UserAsset>();
+            CreateMap<DAL.Interfaces.Models.QueriesModels.UserAsset, UserAsset>();
+
+            CreateMap<UserBalance, DAL.Interfaces.Models.QueriesModels.UserBalance>();
+            CreateMap<DAL.Interfaces.Models.QueriesModels.UserBalance, UserBalance>();
+
+            CreateMap<UserTransaction, DAL.Interfaces.Models.QueriesModels.UserTransaction>();
+            CreateMap<DAL.Interfaces.Models.QueriesModels.UserTransaction, UserTransaction>();
         }
     }
 }

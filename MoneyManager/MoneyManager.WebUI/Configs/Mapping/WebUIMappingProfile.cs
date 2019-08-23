@@ -4,6 +4,7 @@ using MoneyManager.WebUI.Models.Category;
 using MoneyManager.WebUI.Models.Type;
 using MoneyManager.WebUI.Models.User;
 using MoneyManager.WebUI.Models.Transaction;
+using MoneyManager.WebUI.Models.QueriesModels;
 
 namespace MoneyManager.WebUI.Configs.Mapping
 {
@@ -20,6 +21,8 @@ namespace MoneyManager.WebUI.Configs.Mapping
             CreateCategoryMaps();
 
             CreateTransactionMaps();
+
+            CreateQueriesMaps();
         }
 
         private void CreateUserMaps()
@@ -52,6 +55,27 @@ namespace MoneyManager.WebUI.Configs.Mapping
         {
             CreateMap<Transaction, BLL.Interfaces.Models.Transaction.Transaction>();
             CreateMap<BLL.Interfaces.Models.Transaction.Transaction, Transaction>();
+        }
+
+        private void CreateQueriesMaps()
+        {
+            CreateMap<UserIdEmailName, BLL.Interfaces.Models.QueriesModels.UserIdEmailName>();
+            CreateMap<BLL.Interfaces.Models.QueriesModels.UserIdEmailName, UserIdEmailName>();
+
+            CreateMap<AmountOfParents, BLL.Interfaces.Models.QueriesModels.AmountOfParents>();
+            CreateMap<BLL.Interfaces.Models.QueriesModels.AmountOfParents, AmountOfParents>();
+
+            CreateMap<TotalAmountForDate, BLL.Interfaces.Models.QueriesModels.TotalAmountForDate>();
+            CreateMap<BLL.Interfaces.Models.QueriesModels.TotalAmountForDate, TotalAmountForDate>();
+
+            CreateMap<UserAsset, BLL.Interfaces.Models.QueriesModels.UserAsset>();
+            CreateMap<BLL.Interfaces.Models.QueriesModels.UserAsset, UserAsset>();
+
+            CreateMap<UserBalance, BLL.Interfaces.Models.QueriesModels.UserBalance>();
+            CreateMap<BLL.Interfaces.Models.QueriesModels.UserBalance, UserBalance>();
+
+            CreateMap<UserTransaction, BLL.Interfaces.Models.QueriesModels.UserTransaction>();
+            CreateMap<BLL.Interfaces.Models.QueriesModels.UserTransaction, UserTransaction>();
         }
     }
 }
