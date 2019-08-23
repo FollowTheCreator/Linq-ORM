@@ -27,16 +27,18 @@ namespace MoneyManager.DAL.Repositories.QueriesRepository
 
         public async Task<List<UserIdEmailName>> GetSortedUsers()
         {
-            var result = await _context.User.Select(user => 
-                new UserIdEmailName
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    Email = user.Email
-                }
-            )
-            .OrderBy(user => user.Name)
-            .ToListAsync();
+            var result = await _context
+                .User
+                .Select(user => 
+                    new UserIdEmailName
+                    {
+                        Id = user.Id,
+                        Name = user.Name,
+                        Email = user.Email
+                    }
+                )
+                .OrderBy(user => user.Name)
+                .ToListAsync();
 
             return result;
         }
@@ -63,7 +65,36 @@ namespace MoneyManager.DAL.Repositories.QueriesRepository
 
         public async Task<List<UserBalance>> GetUsersBalances()
         {
-            throw new NotImplementedException();
+            var groupedRecords = await _context
+                .User
+                .Include(user => user.Asset)
+                .ThenInclude(asset => asset.Transaction)
+                .GroupBy(user =>
+                    new
+                    {
+                        user.Id,
+                        user.Email,
+                        user.Name
+                    }
+                )
+                .ToListAsync();
+
+            var result = groupedRecords
+                .Select(user =>
+                    new UserBalance
+                    {
+                        Id = user.Key.Id,
+                        Email = user.Key.Email,
+                        Name = user.Key.Name,
+                        Balance = _context.Asset.Where(asset => asset.UserId == user.Key.Id)
+                            .SelectMany(asset => asset.Transaction)
+                            .Select(transaction => transaction.Amount)
+                            .Sum()
+                    }
+                )
+                .ToList();
+
+            return result;
         }
 
         public async Task<List<UserTransaction>> GetUserTransactions(Guid id)
