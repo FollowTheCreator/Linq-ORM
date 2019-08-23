@@ -20,7 +20,14 @@
         <a class="btn btn-outline-secondary" asp-action="GetTotalAmountOfParents" asp-controller="Queries">GetTotalAmountOfParents</a>
     </li>
     <li class="list-group-item">
-        <a class="btn btn-outline-secondary" asp-action="GetTotalAmount" asp-controller="Queries">GetTotalAmount</a>
+        <form asp-action="GetTotalAmount" asp-controller="Queries" class="ml-3 form-inline">
+            <div class="form-group row">
+                <input type="submit" value="GetTotalAmount" class="btn btn-outline-secondary mr-3" />
+                @Html.TextBox("Id", "80142AE6-7498-49E5-8022-041EC20C4FE9", new { @class = "form-control mr-3" })
+                Min Date <input type="date" name="startDate" value="2019-01-14" class = "form-control ml-1 mr-3">
+                Max Date <input type="date" name="endDate" value="2019-10-29" class = "form-control ml-1">
+            </div>
+        </form>
     </li>
     <li class="list-group-item">
         <a class="btn btn-outline-secondary" asp-action="GetUserTransactions" asp-controller="Queries">GetUserTransactions</a>

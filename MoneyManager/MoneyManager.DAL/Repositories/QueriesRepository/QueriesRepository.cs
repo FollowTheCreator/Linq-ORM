@@ -45,7 +45,38 @@ namespace MoneyManager.DAL.Repositories.QueriesRepository
 
         public async Task<IEnumerable<TotalAmountForDate>> GetTotalAmount(Guid id, DateTime startDate, DateTime endDate)
         {
-            throw new NotImplementedException();
+            var groupedRecords = await _context
+                .Transaction
+                .Include(transaction => transaction.Category)
+                .Include(transaction => transaction.Asset)
+                .ThenInclude(asset => asset.User)
+                .Where(transaction => transaction.Asset.User.Id == id && transaction.Date > startDate && transaction.Date < endDate)
+                .GroupBy(transaction =>
+                    new
+                    {
+                        transaction.Date.Month,
+                        transaction.Date.Year
+                    }
+                )
+                .ToListAsync();
+
+            var result = groupedRecords
+                .Select(transaction =>
+                    new TotalAmountForDate
+                    {
+                        Month = transaction.Key.Month,
+                        Year = transaction.Key.Year,
+                        TotalValue = _context.Transaction.Where(item => 
+                                item.Date.Month == transaction.Key.Month &&
+                                item.Date.Year == transaction.Key.Year
+                            )
+                            .Select(item => item.Amount)
+                            .Sum()
+                    }
+                )
+                .ToList();
+
+            return result;
         }
 
         public async Task<IEnumerable<AmountOfParents>> GetTotalAmountOfParents(Guid id, int operationTypeId)
@@ -127,6 +158,7 @@ namespace MoneyManager.DAL.Repositories.QueriesRepository
 
         public async Task<List<UserTransaction>> GetUserTransactions(Guid id)
         {
+            //todo 
             throw new NotImplementedException();
         }
     }
