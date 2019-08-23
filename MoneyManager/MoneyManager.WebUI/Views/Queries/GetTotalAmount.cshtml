@@ -1,7 +1,29 @@
-﻿
-@{
-    ViewData["Title"] = "GetTotalAmount";
-}
+﻿@model IEnumerable<TotalAmountForDate>
 
-<h2>GetTotalAmount</h2>
-
+<div>
+    <table class="table mt-3">
+        <thead class="thead-light">
+            <tr>
+                <th class="text-dark">
+                    TotalValue
+                </th>
+                <th class="text-dark">
+                    Month
+                </th>
+                <th class="text-dark">
+                    Year
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TotalValue</td>
+                    <td>@item.Month</td>
+                    <td>@item.Year</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

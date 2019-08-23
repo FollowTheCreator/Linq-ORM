@@ -3,9 +3,26 @@
 </div>
 <ul class="list-group list-group-flush">
     <li class="list-group-item">
-        <a class="text-dark" asp-action="GetSortedUsers" asp-controller="Queries">GetSortedUsers</a>
+        <a class="btn btn-outline-secondary" asp-action="GetSortedUsers" asp-controller="Queries">GetSortedUsers</a>
     </li>
     <li class="list-group-item">
-        <a class="text-dark" asp-action="GetUsersBalances" asp-controller="Queries">GetUsersBalances</a>
+        <a class="btn btn-outline-secondary" asp-action="GetUsersBalances" asp-controller="Queries">GetUsersBalances</a>
+    </li>
+    <li class="list-group-item">
+        <form asp-action="GetUserAssets" asp-controller="Queries" class="ml-3 form-inline">
+            <div class="form-group row">
+                <input type="submit" value="GetUserAssets" class="btn btn-outline-secondary mr-3" />
+                @Html.TextBox("Id", "80142AE6-7498-49E5-8022-041EC20C4FE9", new { @class = "form-control" })
+            </div>
+        </form>
+    </li>
+    <li class="list-group-item">
+        <a class="btn btn-outline-secondary" asp-action="GetTotalAmountOfParents" asp-controller="Queries">GetTotalAmountOfParents</a>
+    </li>
+    <li class="list-group-item">
+        <a class="btn btn-outline-secondary" asp-action="GetTotalAmount" asp-controller="Queries">GetTotalAmount</a>
+    </li>
+    <li class="list-group-item">
+        <a class="btn btn-outline-secondary" asp-action="GetUserTransactions" asp-controller="Queries">GetUserTransactions</a>
     </li>
 </ul>

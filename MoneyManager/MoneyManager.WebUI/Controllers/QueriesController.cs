@@ -50,7 +50,7 @@ namespace MoneyManager.WebUI.Controllers
 
             var convertedResult = _mapper.Map<IEnumerable<BLL.Interfaces.Models.QueriesModels.TotalAmountForDate>, IEnumerable<TotalAmountForDate>>(result);
 
-            return View("~/Views/Queries/GetUsersBalances.cshtml", convertedResult);
+            return View("~/Views/Queries/GetTotalAmount.cshtml", convertedResult);
         }
 
         public async Task<ActionResult<IEnumerable<AmountOfParents>>> GetTotalAmountOfParents(Guid id, int operationTypeId)
@@ -59,7 +59,7 @@ namespace MoneyManager.WebUI.Controllers
 
             var convertedResult = _mapper.Map<IEnumerable<BLL.Interfaces.Models.QueriesModels.AmountOfParents>, IEnumerable<AmountOfParents>>(result);
 
-            return View("~/Views/Queries/GetUsersBalances.cshtml", convertedResult);
+            return View("~/Views/Queries/GetTotalAmountOfParents.cshtml", convertedResult);
         }
 
         public async Task<ActionResult<List<UserAsset>>> GetUserAssets(Guid id)
@@ -68,7 +68,7 @@ namespace MoneyManager.WebUI.Controllers
 
             var convertedResult = _mapper.Map<List<BLL.Interfaces.Models.QueriesModels.UserAsset>, List<UserAsset>>(result);
 
-            return View("~/Views/Queries/GetUsersBalances.cshtml", convertedResult);
+            return View("~/Views/Queries/GetUserAssets.cshtml", convertedResult);
         }
 
         public async Task<ActionResult<List<UserTransaction>>> GetUserTransactions(Guid id)
@@ -77,7 +77,7 @@ namespace MoneyManager.WebUI.Controllers
 
             var convertedResult = _mapper.Map<List<BLL.Interfaces.Models.QueriesModels.UserTransaction>, List<UserTransaction>>(result);
 
-            return View("~/Views/Queries/GetUsersBalances.cshtml", convertedResult);
+            return View("~/Views/Queries/GetUserTransactions.cshtml", convertedResult);
         }
     }
 }

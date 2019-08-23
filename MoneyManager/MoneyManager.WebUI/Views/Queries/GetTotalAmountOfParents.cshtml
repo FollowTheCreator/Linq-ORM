@@ -1,7 +1,25 @@
-﻿
-@{
-    ViewData["Title"] = "GetTotalAmountOfParents";
-}
+﻿@model IEnumerable<AmountOfParents>
 
-<h2>GetTotalAmountOfParents</h2>
-
+<div>
+    <table class="table mt-3">
+        <thead class="thead-light">
+            <tr>
+                <th class="text-dark">
+                    Amount
+                </th>
+                <th class="text-dark">
+                    Name
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Amount</td>
+                    <td>@item.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

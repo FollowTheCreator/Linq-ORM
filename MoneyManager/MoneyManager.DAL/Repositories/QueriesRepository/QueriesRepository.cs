@@ -55,7 +55,35 @@ namespace MoneyManager.DAL.Repositories.QueriesRepository
 
         public async Task<List<UserAsset>> GetUserAssets(Guid id)
         {
-            throw new NotImplementedException();
+            var groupedRecords = await _context
+                .Asset
+                .Include(asset => asset.User)
+                .Include(asset => asset.Transaction)
+                .Where(asset => asset.UserId == id)
+                .GroupBy(asset =>
+                    new
+                    {
+                        asset.Id,
+                        asset.Name
+                    }
+                )
+                .ToListAsync();
+
+            var result = groupedRecords
+                .Select(asset =>
+                    new UserAsset
+                    {
+                        Id = asset.Key.Id,
+                        Name = asset.Key.Name,
+                        Balance = _context.Asset.Where(item => item.Id == asset.Key.Id)
+                            .SelectMany(item => item.Transaction)
+                            .Select(transaction => transaction.Amount)
+                            .Sum()
+                    }
+                )
+                .ToList();
+
+            return result;
         }
 
         public async Task<User> GetUserByEmail(string email)
