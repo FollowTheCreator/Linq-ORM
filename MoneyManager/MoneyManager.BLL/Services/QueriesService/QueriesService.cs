@@ -5,7 +5,6 @@ using MoneyManager.BLL.Interfaces.Services.QueriesService;
 using MoneyManager.DAL.Interfaces.Repositories.QueriesRepository;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MoneyManager.BLL.Services.QueriesService
@@ -24,7 +23,7 @@ namespace MoneyManager.BLL.Services.QueriesService
 
         public async Task DeleteAllUsersInCurrentMonth(Guid id)
         {
-            throw new NotImplementedException();
+            await _repository.DeleteAllUsersInCurrentMonth(id);
         }
 
         public async Task<List<UserIdEmailName>> GetSortedUsers()
@@ -65,7 +64,11 @@ namespace MoneyManager.BLL.Services.QueriesService
 
         public async Task<User> GetUserByEmail(string email)
         {
-            throw new NotImplementedException();
+            var result = await _repository.GetUserByEmail(email);
+
+            var convertedResult = _mapper.Map<DAL.Interfaces.Models.User, User>(result);
+
+            return convertedResult;
         }
 
         public async Task<List<UserBalance>> GetUsersBalances()

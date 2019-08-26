@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MoneyManager.BLL.Interfaces.Services.QueriesService;
 using MoneyManager.WebUI.Models.QueriesModels;
+using MoneyManager.WebUI.Models.User;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MoneyManager.WebUI.Controllers
 {
@@ -78,6 +78,20 @@ namespace MoneyManager.WebUI.Controllers
             var convertedResult = _mapper.Map<List<BLL.Interfaces.Models.QueriesModels.UserTransaction>, List<UserTransaction>>(result);
 
             return View("~/Views/Queries/GetUserTransactions.cshtml", convertedResult);
+        }
+
+        public async Task<ActionResult<User>> GetUserByEmail(string email)
+        {
+            var result = await _service.GetUserByEmail(email);
+
+            var convertedResult = _mapper.Map<BLL.Interfaces.Models.User.User, User>(result);
+
+            return View("~/Views/Queries/GetUserByEmail.cshtml", convertedResult);
+        }
+
+        public async Task DeleteAllUsersInCurrentMonth(Guid id)
+        {
+            await _service.DeleteAllUsersInCurrentMonth(id);
         }
     }
 }

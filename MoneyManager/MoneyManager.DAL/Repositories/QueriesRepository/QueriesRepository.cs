@@ -6,7 +6,6 @@ using MoneyManager.DAL.Models.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MoneyManager.DAL.Repositories.QueriesRepository
@@ -22,7 +21,16 @@ namespace MoneyManager.DAL.Repositories.QueriesRepository
 
         public async Task DeleteAllUsersInCurrentMonth(Guid id)
         {
-            throw new NotImplementedException();
+            var transactionIds = await _context
+                .Transaction
+                .Include(transaction => transaction.Asset)
+                .ThenInclude(asset => asset.User)
+                .Where(transaction =>
+                    transaction.Date.Month == DateTime.Now.Month &&
+                    transaction.Asset.User.Id == id
+                )
+                .Select(transaction => transaction.Id)
+                .ToListAsync();
         }
 
         public async Task<List<UserIdEmailName>> GetSortedUsers()
@@ -74,6 +82,8 @@ namespace MoneyManager.DAL.Repositories.QueriesRepository
                             .Sum()
                     }
                 )
+                .OrderBy(a => a.Year)
+                .ThenBy(a => a.Month)
                 .ToList();
 
             return result;
@@ -157,6 +167,7 @@ namespace MoneyManager.DAL.Repositories.QueriesRepository
                             .Sum()
                     }
                 )
+                .OrderBy(a => a.Name)
                 .ToList();
 
             return result;
@@ -164,7 +175,10 @@ namespace MoneyManager.DAL.Repositories.QueriesRepository
 
         public async Task<User> GetUserByEmail(string email)
         {
-            throw new NotImplementedException();
+            return await _context
+                .User
+                .Where(user => user.Email == email)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<List<UserBalance>> GetUsersBalances()
@@ -203,8 +217,29 @@ namespace MoneyManager.DAL.Repositories.QueriesRepository
 
         public async Task<List<UserTransaction>> GetUserTransactions(Guid id)
         {
-            //todo 
-            throw new NotImplementedException();
+            var result = await _context
+                .Transaction
+                .Include(transaction => transaction.Category)
+                .Include(transaction => transaction.Asset)
+                .ThenInclude(asset => asset.User)
+                .Where(transaction => transaction.Asset.User.Id == id)
+                .Select(transaction =>
+                    new UserTransaction
+                    {
+                        AssetName = transaction.Asset.Name,
+                        TransactionSubcategory = transaction.Category.Name,
+                        TransactionParentCategory = transaction.Category.Parent.Name,
+                        TransactionAmount = transaction.Amount,
+                        TransactionDate = transaction.Date,
+                        TransactionComment = transaction.Comment
+                    }
+                )
+                .OrderByDescending(a => a.TransactionDate)
+                .ThenBy(a => a.AssetName)
+                .ThenBy(a => a.TransactionSubcategory)
+                .ToListAsync();
+
+            return result;
         }
     }
 }

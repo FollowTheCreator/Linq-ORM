@@ -2,7 +2,6 @@
 using MoneyManager.DAL.Interfaces.Models.QueriesModels;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MoneyManager.DAL.Interfaces.Repositories.QueriesRepository

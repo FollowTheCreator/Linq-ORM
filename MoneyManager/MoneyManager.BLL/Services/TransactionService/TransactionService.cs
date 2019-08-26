@@ -4,7 +4,6 @@ using MoneyManager.BLL.Interfaces.Services.TransactionService;
 using MoneyManager.DAL.Interfaces.Repositories.TransactionRepository;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MoneyManager.BLL.Services.TransactionService

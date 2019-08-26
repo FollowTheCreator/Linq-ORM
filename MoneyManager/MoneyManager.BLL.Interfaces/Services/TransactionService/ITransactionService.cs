@@ -1,7 +1,6 @@
 ﻿using MoneyManager.BLL.Interfaces.Models.Transaction;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MoneyManager.BLL.Interfaces.Services.TransactionService

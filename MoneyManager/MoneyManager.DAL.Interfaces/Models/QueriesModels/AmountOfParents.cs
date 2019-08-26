@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MoneyManager.DAL.Interfaces.Models.QueriesModels
+﻿namespace MoneyManager.DAL.Interfaces.Models.QueriesModels
 {
     public class AmountOfParents
     {

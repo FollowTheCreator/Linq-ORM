@@ -1,1 +1,34 @@
-﻿
+﻿@model User
+
+<div>
+    <table class="table mt-3">
+        <thead class="thead-light">
+            <tr>
+                <th class="text-dark">
+                    Id
+                </th>
+                <th class="text-dark">
+                    Name
+                </th>
+                <th class="text-dark">
+                    Email
+                </th>
+                <th class="text-dark">
+                    Hash
+                </th>
+                <th class="text-dark">
+                    Salt
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Id</td>
+                <td>@Model.Name</td>
+                <td>@Model.Email</td>
+                <td>@Model.Hash</td>
+                <td>@Model.Salt</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

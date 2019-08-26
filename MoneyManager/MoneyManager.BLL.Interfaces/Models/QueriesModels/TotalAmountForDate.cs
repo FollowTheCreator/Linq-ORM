@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MoneyManager.BLL.Interfaces.Models.QueriesModels
+﻿namespace MoneyManager.BLL.Interfaces.Models.QueriesModels
 {
     public class TotalAmountForDate
     {
