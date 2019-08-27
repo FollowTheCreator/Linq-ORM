@@ -70,8 +70,8 @@ namespace MoneyManager.WebUI.Configs.Mapping
             CreateMap<UserIdEmailName, DAL.Interfaces.Models.QueriesModels.UserIdEmailName>();
             CreateMap<DAL.Interfaces.Models.QueriesModels.UserIdEmailName, UserIdEmailName>();
 
-            CreateMap<AmountOfParents, DAL.Interfaces.Models.QueriesModels.AmountOfParents>();
-            CreateMap<DAL.Interfaces.Models.QueriesModels.AmountOfParents, AmountOfParents>();
+            CreateMap<AmountOfCategories, DAL.Interfaces.Models.QueriesModels.AmountOfCategories>();
+            CreateMap<DAL.Interfaces.Models.QueriesModels.AmountOfCategories, AmountOfCategories>();
 
             CreateMap<TotalAmountForDate, DAL.Interfaces.Models.QueriesModels.TotalAmountForDate>();
             CreateMap<DAL.Interfaces.Models.QueriesModels.TotalAmountForDate, TotalAmountForDate>();

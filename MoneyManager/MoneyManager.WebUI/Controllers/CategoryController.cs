@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using MoneyManager.BLL.Interfaces.Services.CategoryService;
+using MoneyManager.BLL.Interfaces.Services;
 using MoneyManager.WebUI.Models.Category;
 using System;
 using System.Collections.Generic;
@@ -47,16 +47,17 @@ namespace MoneyManager.WebUI.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> CreateAsync(Category model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Category/Create.cshtml", model);
+            }
+
             var convertedModel = _mapper.Map<Category, BLL.Interfaces.Models.Category.Category>(model);
 
             var createResult = await _categoryService.CreateAsync(convertedModel);
-            if (createResult.IsParentExists && createResult.IsTypeExists)
+            if (createResult.IsTypeExists)
             {
                 return RedirectToAction("GetAllAsync", "Category");
-            }
-            else if(!createResult.IsParentExists)
-            {
-                ModelState.AddModelError("", "Parent category with this Id doesn't exist");
             }
             else
             {
@@ -79,16 +80,17 @@ namespace MoneyManager.WebUI.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateAsync(Category model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Category/Update.cshtml", model);
+            }
+
             var convertedModel = _mapper.Map<Category, BLL.Interfaces.Models.Category.Category>(model);
 
             var createResult = await _categoryService.UpdateAsync(convertedModel);
-            if (createResult.IsParentExists && createResult.IsTypeExists)
+            if (createResult.IsTypeExists)
             {
                 return RedirectToAction("GetAllAsync", "Category");
-            }
-            else if (!createResult.IsParentExists)
-            {
-                ModelState.AddModelError("", "Parent category with this Id doesn't exist");
             }
             else
             {

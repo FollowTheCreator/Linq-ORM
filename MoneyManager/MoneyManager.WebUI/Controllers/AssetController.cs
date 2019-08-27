@@ -47,6 +47,11 @@ namespace MoneyManager.WebUI.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> CreateAsync(Asset model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Asset/Create.cshtml", model);
+            }
+
             var convertedModel = _mapper.Map<Asset, BLL.Interfaces.Models.Asset.Asset>(model);
 
             var createResult = await _assetService.CreateAsync(convertedModel);
@@ -72,6 +77,11 @@ namespace MoneyManager.WebUI.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateAsync(Asset model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Asset/Update.cshtml", model);
+            }
+
             var convertedModel = _mapper.Map<Asset, BLL.Interfaces.Models.Asset.Asset>(model);
  
             var createResult = await _assetService.UpdateAsync(convertedModel);

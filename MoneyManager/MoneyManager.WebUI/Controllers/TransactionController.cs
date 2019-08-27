@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using MoneyManager.BLL.Interfaces.Services.TransactionService;
+using MoneyManager.BLL.Interfaces.Services;
 using MoneyManager.WebUI.Models.Transaction;
 using System;
 using System.Collections.Generic;
@@ -47,14 +47,15 @@ namespace MoneyManager.WebUI.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> CreateAsync(Transaction model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Transaction/Create.cshtml", model);
+            }
+
             var convertedModel = _mapper.Map<Transaction, BLL.Interfaces.Models.Transaction.Transaction>(model);
 
             var createResult = await _transactionService.CreateAsync(convertedModel);
-            if (createResult.IsAssetExists && createResult.IsCategoryExists && createResult.IsAmountPositive)
-            {
-                return RedirectToAction("GetAllAsync", "Transaction");
-            }
-            else if (!createResult.IsCategoryExists)
+            if (!createResult.IsCategoryExists)
             {
                 ModelState.AddModelError("", "Category with this Id doesn't exist");
             }
@@ -62,9 +63,13 @@ namespace MoneyManager.WebUI.Controllers
             {
                 ModelState.AddModelError("", "Asset with this Id doesn't exist");
             }
-            else
+            else if(!createResult.IsAmountPositive)
             {
                 ModelState.AddModelError("", "Amount should be positive");
+            }
+            else
+            {
+                return RedirectToAction("GetAllAsync", "Transaction");
             }
 
             return View("~/Views/Transaction/Create.cshtml", model);
@@ -83,14 +88,15 @@ namespace MoneyManager.WebUI.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateAsync(Transaction model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Transaction/Update.cshtml", model);
+            }
+
             var convertedModel = _mapper.Map<Transaction, BLL.Interfaces.Models.Transaction.Transaction>(model);
 
             var createResult = await _transactionService.UpdateAsync(convertedModel);
-            if (createResult.IsAssetExists && createResult.IsCategoryExists && createResult.IsAmountPositive)
-            {
-                return RedirectToAction("GetAllAsync", "Transaction");
-            }
-            else if (!createResult.IsCategoryExists)
+            if (!createResult.IsCategoryExists)
             {
                 ModelState.AddModelError("", "Category with this Id doesn't exist");
             }
@@ -98,9 +104,13 @@ namespace MoneyManager.WebUI.Controllers
             {
                 ModelState.AddModelError("", "Asset with this Id doesn't exist");
             }
-            else
+            else if(!createResult.IsAmountPositive)
             {
                 ModelState.AddModelError("", "Amount should be positive");
+            }
+            else
+            {
+                return RedirectToAction("GetAllAsync", "Transaction");
             }
 
             return View("~/Views/Transaction/Update.cshtml", model);

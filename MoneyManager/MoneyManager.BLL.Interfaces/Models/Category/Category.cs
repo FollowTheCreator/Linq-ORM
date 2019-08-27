@@ -9,7 +9,5 @@ namespace MoneyManager.BLL.Interfaces.Models.Category
         public string Name { get; set; }
 
         public int Type { get; set; }
-
-        public Guid? ParentId { get; set; }
     }
 }

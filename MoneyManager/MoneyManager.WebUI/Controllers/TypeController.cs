@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using MoneyManager.BLL.Interfaces.Services.TypeService;
+using MoneyManager.BLL.Interfaces.Services;
 using MoneyManager.WebUI.Models.Type;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -46,6 +46,11 @@ namespace MoneyManager.WebUI.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> CreateAsync(Type model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Type/Create.cshtml", model);
+            }
+
             var convertedModel = _mapper.Map<Type, BLL.Interfaces.Models.Type.Type>(model);
 
             await _typeService.CreateAsync(convertedModel);
@@ -66,6 +71,11 @@ namespace MoneyManager.WebUI.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateAsync(Type model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/Type/Update.cshtml", model);
+            }
+
             var convertedModel = _mapper.Map<Type, BLL.Interfaces.Models.Type.Type>(model);
 
             await _typeService.UpdateAsync(convertedModel);

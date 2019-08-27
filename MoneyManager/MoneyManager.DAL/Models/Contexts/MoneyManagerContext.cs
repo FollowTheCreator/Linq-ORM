@@ -46,11 +46,6 @@ namespace MoneyManager.DAL.Models.Contexts
                     .IsRequired()
                     .HasMaxLength(64);
 
-                entity.HasOne(d => d.Parent)
-                    .WithMany(p => p.InverseParent)
-                    .HasForeignKey(d => d.ParentId)
-                    .HasConstraintName("FK_Category_Category_Id");
-
                 entity.HasOne(d => d.TypeNavigation)
                     .WithMany(p => p.Category)
                     .HasForeignKey(d => d.Type)

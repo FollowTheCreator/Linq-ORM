@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using MoneyManager.BLL.Interfaces.Services.UserService;
+using MoneyManager.BLL.Interfaces.Services;
 using MoneyManager.WebUI.Models.User;
 using System;
 using System.Collections.Generic;
@@ -76,6 +76,11 @@ namespace MoneyManager.WebUI.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateAsync(UpdateUserModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("~/Views/User/Update.cshtml", model);
+            }
+
             var convertedModel = _mapper.Map<UpdateUserModel, BLL.Interfaces.Models.User.UpdateUserModel>(model);
 
             await _userService.UpdateAsync(convertedModel);

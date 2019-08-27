@@ -108,12 +108,6 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
 
                                 catrgories.Add(category);
                             }
-                            catrgories[5].ParentId = catrgories[0].Id;
-                            catrgories[6].ParentId = catrgories[0].Id;
-                            catrgories[7].ParentId = catrgories[1].Id;
-                            catrgories[8].ParentId = catrgories[1].Id;
-                            catrgories[9].ParentId = catrgories[5].Id;
-                            catrgories[10].ParentId = catrgories[6].Id;
                             foreach (var category in catrgories)
                             {
                                 _context.Category.Add(category);

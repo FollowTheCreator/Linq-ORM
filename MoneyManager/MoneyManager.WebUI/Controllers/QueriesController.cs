@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using MoneyManager.BLL.Interfaces.Services.QueriesService;
+using MoneyManager.BLL.Interfaces.Services;
 using MoneyManager.WebUI.Models.QueriesModels;
 using MoneyManager.WebUI.Models.User;
 using System;
@@ -53,13 +53,13 @@ namespace MoneyManager.WebUI.Controllers
             return View("~/Views/Queries/GetTotalAmount.cshtml", convertedResult);
         }
 
-        public async Task<ActionResult<IEnumerable<AmountOfParents>>> GetTotalAmountOfParents(Guid id, int operationTypeId)
+        public async Task<ActionResult<IEnumerable<AmountOfCategories>>> GetTotalAmountOfCategories(Guid id, int operationTypeId)
         {
-            var result = await _service.GetTotalAmountOfParents(id, operationTypeId);
+            var result = await _service.GetTotalAmountOfCategories(id, operationTypeId);
 
-            var convertedResult = _mapper.Map<IEnumerable<BLL.Interfaces.Models.QueriesModels.AmountOfParents>, IEnumerable<AmountOfParents>>(result);
+            var convertedResult = _mapper.Map<IEnumerable<BLL.Interfaces.Models.QueriesModels.AmountOfCategories>, IEnumerable<AmountOfCategories>>(result);
 
-            return View("~/Views/Queries/GetTotalAmountOfParents.cshtml", convertedResult);
+            return View("~/Views/Queries/GetTotalAmountOfCategories.cshtml", convertedResult);
         }
 
         public async Task<ActionResult<List<UserAsset>>> GetUserAssets(Guid id)

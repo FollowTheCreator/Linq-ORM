@@ -64,8 +64,8 @@ namespace MoneyManager.WebUI.Configs.Mapping
             CreateMap<UserIdEmailName, BLL.Interfaces.Models.QueriesModels.UserIdEmailName>();
             CreateMap<BLL.Interfaces.Models.QueriesModels.UserIdEmailName, UserIdEmailName>();
 
-            CreateMap<AmountOfParents, BLL.Interfaces.Models.QueriesModels.AmountOfParents>();
-            CreateMap<BLL.Interfaces.Models.QueriesModels.AmountOfParents, AmountOfParents>();
+            CreateMap<AmountOfCategories, BLL.Interfaces.Models.QueriesModels.AmountOfCategories>();
+            CreateMap<BLL.Interfaces.Models.QueriesModels.AmountOfCategories, AmountOfCategories>();
 
             CreateMap<TotalAmountForDate, BLL.Interfaces.Models.QueriesModels.TotalAmountForDate>();
             CreateMap<BLL.Interfaces.Models.QueriesModels.TotalAmountForDate, TotalAmountForDate>();
