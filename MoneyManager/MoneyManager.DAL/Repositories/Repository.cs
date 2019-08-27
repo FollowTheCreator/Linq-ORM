@@ -35,6 +35,7 @@ namespace MoneyManager.DAL.Repositories
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await DbSet
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -48,7 +49,7 @@ namespace MoneyManager.DAL.Repositories
 
         public async Task UpdateAsync(T item)
         {
-            _context.Entry(item).State = EntityState.Modified;
+            DbSet.Update(item);
             await _context.SaveChangesAsync();
         }
     }

@@ -16,6 +16,7 @@ namespace MoneyManager.DAL.Repositories
         public async Task<bool> IsEmailExistsAsync(string email)
         {
             User user = await DbSet
+                .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             return user != null;

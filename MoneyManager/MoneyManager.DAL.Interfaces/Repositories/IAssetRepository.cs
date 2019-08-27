@@ -6,6 +6,6 @@ namespace MoneyManager.DAL.Interfaces.Repositories
 {
     public interface IAssetRepository : IRepository<Asset, Guid>
     {
-        Task<bool> IsUserExistsAsync(Guid id);
+        Task<bool> IsAssetExistsAsync(Guid id);
     }
 }

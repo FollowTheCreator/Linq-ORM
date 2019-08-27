@@ -31,6 +31,9 @@ namespace MoneyManager.DAL.Models.Contexts
                     .IsRequired()
                     .HasMaxLength(64);
 
+                entity.Property(e => e.CurrentBalance)
+                    .IsRequired();
+
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Asset)
                     .HasForeignKey(d => d.UserId)

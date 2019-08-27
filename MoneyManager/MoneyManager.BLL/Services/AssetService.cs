@@ -62,7 +62,7 @@ namespace MoneyManager.BLL.Services
 
         public async Task<bool> IsUserExistsAsync(Guid id)
         {
-            return await _repository.IsUserExistsAsync(id);
+            return await _repository.IsAssetExistsAsync(id);
         }
 
         public async Task<UpdateAssetResult> UpdateAsync(Asset item)

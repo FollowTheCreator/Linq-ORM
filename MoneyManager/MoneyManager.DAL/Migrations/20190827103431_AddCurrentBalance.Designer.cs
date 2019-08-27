@@ -9,8 +9,8 @@ using System;
 namespace MoneyManager.DAL.Migrations
 {
     [DbContext(typeof(MoneyManagerContext))]
-    [Migration("20190826120321_RemoveParentId")]
-    partial class RemoveParentId
+    [Migration("20190827103431_AddCurrentBalance")]
+    partial class AddCurrentBalance
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,8 @@ namespace MoneyManager.DAL.Migrations
             modelBuilder.Entity("MoneyManager.DAL.Interfaces.Models.Asset", b =>
                 {
                     b.Property<Guid>("Id");
+
+                    b.Property<decimal>("CurrentBalance");
 
                     b.Property<string>("Name")
                         .IsRequired()

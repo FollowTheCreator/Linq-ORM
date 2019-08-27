@@ -1,4 +1,5 @@
-﻿using MoneyManager.DAL.Interfaces.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using MoneyManager.DAL.Interfaces.Models;
 using MoneyManager.DAL.Interfaces.Repositories;
 using MoneyManager.DAL.Models.Contexts;
 using System;
@@ -18,7 +19,7 @@ namespace MoneyManager.DAL.Repositories
 
         public async Task<bool> IsTypeExistsAsync(int id)
         {
-            var result = await _context.Type.FindAsync(id);
+            var result = await _context.Type.AsNoTracking().FirstOrDefaultAsync(type => type.Id == id);
 
             return result != null;
         }

@@ -17,9 +17,9 @@ namespace MoneyManager.DAL.Repositories
             _userDbSet = context.User;
         }
 
-        public async Task<bool> IsUserExistsAsync(Guid id)
+        public async Task<bool> IsAssetExistsAsync(Guid id)
         {
-            var result = await _userDbSet.FindAsync(id);
+            var result = await _userDbSet.AsNoTracking().FirstOrDefaultAsync(user => user.Id == id);
 
             return result != null;
         }

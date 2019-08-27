@@ -24,6 +24,7 @@ namespace MoneyManager.DAL.Repositories
         {
             var transactionIds = await _context
                 .Transaction
+                .AsNoTracking()
                 .Include(transaction => transaction.Asset)
                 .ThenInclude(asset => asset.User)
                 .Where(transaction =>
@@ -38,6 +39,7 @@ namespace MoneyManager.DAL.Repositories
         {
             var result = await _context
                 .User
+                .AsNoTracking()
                 .Select(user => 
                     new UserIdEmailName
                     {
@@ -56,6 +58,7 @@ namespace MoneyManager.DAL.Repositories
         {
             var groupedRecords = await _context
                 .Transaction
+                .AsNoTracking()
                 .Include(transaction => transaction.Category)
                 .Include(transaction => transaction.Asset)
                 .ThenInclude(asset => asset.User)
@@ -75,7 +78,7 @@ namespace MoneyManager.DAL.Repositories
                     {
                         Month = transaction.Key.Month,
                         Year = transaction.Key.Year,
-                        TotalValue = await _context.Transaction.Where(item => 
+                        TotalValue = await _context.Transaction.AsNoTracking().Where(item => 
                                 item.Date.Month == transaction.Key.Month &&
                                 item.Date.Year == transaction.Key.Year
                             )
@@ -95,6 +98,7 @@ namespace MoneyManager.DAL.Repositories
         {
             var groupedRecords = await _context
                 .Transaction
+                .AsNoTracking()
                 .Include(transaction => transaction.Category)
                 .ThenInclude(category => category.TypeNavigation)
                 .Include(transaction => transaction.Asset)
@@ -117,7 +121,7 @@ namespace MoneyManager.DAL.Repositories
                     new AmountOfCategories
                     {
                         Name = transaction.Key.Name,
-                        Amount = await _context.Transaction
+                        Amount = await _context.Transaction.AsNoTracking()
                             .Include(item => item.Category)
                             .ThenInclude(category => category.TypeNavigation)
                             .Include(item => item.Asset)
@@ -144,6 +148,7 @@ namespace MoneyManager.DAL.Repositories
         {
             var groupedRecords = await _context
                 .Asset
+                .AsNoTracking()
                 .Include(asset => asset.User)
                 .Include(asset => asset.Transaction)
                 .Where(asset => asset.UserId == id)
@@ -151,24 +156,34 @@ namespace MoneyManager.DAL.Repositories
                     new
                     {
                         asset.Id,
-                        asset.Name
+                        asset.Name,
+                        asset.CurrentBalance
                     }
                 )
                 .ToListAsync();
 
+            //var result = (await Task.WhenAll(groupedRecords
+            //    .Select(async asset =>
+            //        new UserAsset
+            //        {
+            //            Id = asset.Key.Id,
+            //            Name = asset.Key.Name,
+            //            Balance = await _context.Asset.AsNoTracking().Where(item => item.Id == asset.Key.Id)
+            //                .SelectMany(item => item.Transaction)
+            //                .Select(transaction => transaction.Amount)
+            //                .SumAsync()
+            //        }
+            //    )
             var result = (await Task.WhenAll(groupedRecords
-                .Select(async asset =>
-                    new UserAsset
-                    {
-                        Id = asset.Key.Id,
-                        Name = asset.Key.Name,
-                        Balance = await _context.Asset.Where(item => item.Id == asset.Key.Id)
-                            .SelectMany(item => item.Transaction)
-                            .Select(transaction => transaction.Amount)
-                            .SumAsync()
-                    }
-                )
-                ))
+               .Select(async asset =>
+                   new UserAsset
+                   {
+                       Id = asset.Key.Id,
+                       Name = asset.Key.Name,
+                       Balance = asset.Key.CurrentBalance
+                   }
+               )
+               ))
                 .OrderBy(a => a.Name)
                 .ToList();
 
@@ -179,6 +194,7 @@ namespace MoneyManager.DAL.Repositories
         {
             return await _context
                 .User
+                .AsNoTracking()
                 .Where(user => user.Email == email)
                 .FirstOrDefaultAsync();
         }
@@ -187,6 +203,7 @@ namespace MoneyManager.DAL.Repositories
         {
             var groupedRecords = await _context
                 .User
+                .AsNoTracking()
                 .Include(user => user.Asset)
                 .ThenInclude(asset => asset.Transaction)
                 .GroupBy(user =>
@@ -206,9 +223,8 @@ namespace MoneyManager.DAL.Repositories
                         Id = user.Key.Id,
                         Email = user.Key.Email,
                         Name = user.Key.Name,
-                        Balance = await _context.Asset.Where(asset => asset.UserId == user.Key.Id)
-                            .SelectMany(asset => asset.Transaction)
-                            .Select(transaction => transaction.Amount)
+                        Balance = await _context.Asset.AsNoTracking().Where(asset => asset.UserId == user.Key.Id)
+                            .Select(asset => asset.CurrentBalance)
                             .SumAsync()
                     }
                 )
@@ -222,6 +238,7 @@ namespace MoneyManager.DAL.Repositories
         {
             var result = await _context
                 .Transaction
+                .AsNoTracking()
                 .Include(transaction => transaction.Category)
                 .Include(transaction => transaction.Asset)
                 .ThenInclude(asset => asset.User)
