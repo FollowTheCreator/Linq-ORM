@@ -2,6 +2,6 @@
 {
     public class CreateAssetResult
     {
-        public bool IsExists { get; set; }
+        public bool IsAssetUserExists { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MoneyManager.BLL.Interfaces.Services;
 using MoneyManager.WebUI.Models.Type;
+using MoneyManager.WebUI.Models.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,11 +20,12 @@ namespace MoneyManager.WebUI.Controllers
             _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<Type>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<Type>>> GetRecordsAsync(PageInfo pageInfo)
         {
-            var items = await _typeService.GetAllAsync();
+            var convertedPageInfo = _mapper.Map<PageInfo, BLL.Interfaces.Models.PageInfo>(pageInfo);
+            var items = await _typeService.GetRecordsAsync(convertedPageInfo);
 
-            var convertedItems = _mapper.Map<IEnumerable<BLL.Interfaces.Models.Type.Type>, IEnumerable<Type>>(items);
+            var convertedItems = _mapper.Map<BLL.Interfaces.Models.Type.TypeViewModel, TypeViewModel>(items);
 
             return View("~/Views/Type/Types.cshtml", convertedItems);
         }
@@ -55,7 +57,7 @@ namespace MoneyManager.WebUI.Controllers
 
             await _typeService.CreateAsync(convertedModel);
 
-            return RedirectToAction("GetAllAsync", "Type");
+            return RedirectToAction("GetRecordsAsync", "Type");
         }
 
         [HttpGet]
@@ -78,7 +80,13 @@ namespace MoneyManager.WebUI.Controllers
 
             var convertedModel = _mapper.Map<Type, BLL.Interfaces.Models.Type.Type>(model);
 
-            await _typeService.UpdateAsync(convertedModel);
+            var updateResult = await _typeService.UpdateAsync(convertedModel);
+            if (!updateResult.IsTypeExists)
+            {
+                ModelState.AddModelError("", "Type with this Id doesn't exist");
+
+                return View("~/Views/Type/Update.cshtml", model);
+            }
 
             return RedirectToAction("GetByIdAsync", "Type", new { id = model.Id });
         }
@@ -87,7 +95,7 @@ namespace MoneyManager.WebUI.Controllers
         {
             await _typeService.DeleteAsync(id);
 
-            return RedirectToAction("GetAllAsync", "Type");
+            return RedirectToAction("GetRecordsAsync", "Type");
         }
     }
 }

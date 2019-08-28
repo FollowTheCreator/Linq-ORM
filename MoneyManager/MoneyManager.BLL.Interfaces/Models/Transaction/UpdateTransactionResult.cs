@@ -2,10 +2,12 @@
 {
     public class UpdateTransactionResult
     {
-        public bool IsCategoryExists { get; set; }
+        public bool IsTransactionExists { get; set; }
 
-        public bool IsAssetExists { get; set; }
+        public bool IsTransactionCategoryExists { get; set; }
 
-        public bool IsAmountPositive { get; set; }
+        public bool IsTransactionAssetExists { get; set; }
+
+        public bool IsTransactionAmountPositive { get; set; }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using MoneyManager.BLL.Interfaces.Models;
 using MoneyManager.BLL.Interfaces.Models.Transaction;
 using MoneyManager.BLL.Interfaces.Services;
 using MoneyManager.DAL.Interfaces.Repositories;
+using MoneyManager.DAL.Models.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,58 +13,112 @@ namespace MoneyManager.BLL.Services
 {
     public class TransactionService : ITransactionService
     {
+        private readonly MoneyManagerContext _context;
+
         private readonly ITransactionRepository _transactionRepository;
 
-        private readonly IAssetRepository _assetRepository;
+        private readonly IAssetService _assetService;
+        private readonly ICategoryService _categoryService;
+        private readonly IConfigService _configService;
 
         private readonly IMapper _mapper;
 
-        public TransactionService(ITransactionRepository transactionRepository, IAssetRepository assetRepository, IMapper mapper)
+        public TransactionService
+        (
+            MoneyManagerContext context,
+            ITransactionRepository transactionRepository, 
+            IAssetService assetService, 
+            ICategoryService categoryService, 
+            IConfigService configService,
+            IMapper mapper
+        )
         {
+            _context = context;
+
             _transactionRepository = transactionRepository;
-            _assetRepository = assetRepository;
+
+            _assetService = assetService;
+            _categoryService = categoryService;
+            _configService = configService;
+
             _mapper = mapper;
         }
 
         public async Task<CreateTransactionResult> CreateAsync(Transaction item)
         {
-            var result = new CreateTransactionResult
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                IsAssetExists = await IsAssetExistsAsync(item.AssetId),
-                IsCategoryExists = await IsCategoryExistsAsync(item.CategoryId),
-                IsAmountPositive = IsAmountPositive(item.Amount)
-            };
+                var result = new CreateTransactionResult
+                {
+                    IsTransactionAssetExists = await _assetService.IsAssetExistsAsync(item.AssetId),
+                    IsTransactionCategoryExists = await _categoryService.IsCategoryExistsAsync(item.CategoryId),
+                    IsTransactionAmountPositive = IsAmountPositive(item.Amount)
+                };
 
-            if (result.IsCategoryExists && result.IsAssetExists && result.IsAmountPositive)
-            {
-                item.Id = Guid.NewGuid();
-                var convertedItem = _mapper.Map<Transaction, DAL.Interfaces.Models.Transaction>(item);
-                await _transactionRepository.CreateAsync(convertedItem);
+                try
+                {
+                    if (result.IsTransactionCategoryExists && result.IsTransactionAssetExists && result.IsTransactionAmountPositive)
+                    {
+                        item.Id = Guid.NewGuid();
+                        var convertedItem = _mapper.Map<Transaction, DAL.Interfaces.Models.Transaction>(item);
+                        await _transactionRepository.CreateAsync(convertedItem);
 
-                var asset = await _assetRepository.GetByIdAsync(item.AssetId);
-                asset.CurrentBalance += item.Amount;
-                await _assetRepository.UpdateAsync(asset);
+                        var asset = await _assetService.GetByIdAsync(item.AssetId);
+                        asset.CurrentBalance += item.Amount;
+                        await _assetService.UpdateAsync(asset);
+                    }
+
+                    transaction.Commit();
+
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+
+                    return result;
+                }
             }
-
-            return result;
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            var transaction = await _transactionRepository.GetByIdAsync(id);
-            var asset = await _assetRepository.GetByIdAsync(transaction.AssetId);
-            asset.CurrentBalance -= transaction.Amount;
-            await _assetRepository.UpdateAsync(asset);
+            using (var dbTransaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var transaction = await _transactionRepository.GetByIdAsync(id);
+                    var asset = await _assetService.GetByIdAsync(transaction.AssetId);
+                    asset.CurrentBalance -= transaction.Amount;
+                    await _assetService.UpdateAsync(asset);
 
-            await _transactionRepository.DeleteAsync(id);
+                    await _transactionRepository.DeleteAsync(id);
+
+                    dbTransaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    dbTransaction.Rollback();
+                }
+            }
         }
 
-        public async Task<IEnumerable<Transaction>> GetAllAsync()
+        public async Task<TransactionViewModel> GetRecordsAsync(PageInfo pageInfo)
         {
-            var items = await _transactionRepository.GetAllAsync();
+            pageInfo.CheckPageInfo(_configService.GetPageSize());
+
+            var convertedPageInfo = _mapper.Map<PageInfo, DAL.Interfaces.Models.PageInfo>(pageInfo);
+            var items = await _transactionRepository.GetRecordsAsync(convertedPageInfo);
             var convertedItems = _mapper.Map<IEnumerable<DAL.Interfaces.Models.Transaction>, IEnumerable<Transaction>>(items);
 
-            return convertedItems;
+            pageInfo.TotalItems = await _transactionRepository.RecordsCountAsync();
+            pageInfo.TotalPages = (int)Math.Ceiling(pageInfo.TotalItems / (double)pageInfo.PageSize);
+
+            return new TransactionViewModel
+            {
+                Transactions = convertedItems,
+                PageInfo = pageInfo
+            };
         }
 
         public async Task<Transaction> GetByIdAsync(Guid id)
@@ -78,51 +134,63 @@ namespace MoneyManager.BLL.Services
             return amount > 0;
         }
 
-        public async Task<bool> IsAssetExistsAsync(Guid id)
-        {
-            return await _transactionRepository.IsAssetExistsAsync(id);
-        }
-
-        public async Task<bool> IsCategoryExistsAsync(Guid id)
-        {
-            return await _transactionRepository.IsCategoryExistsAsync(id);
-        }
-
         public async Task<UpdateTransactionResult> UpdateAsync(Transaction item)
         {
-            var result = new UpdateTransactionResult
+            using (var dbTransaction = await _context.Database.BeginTransactionAsync())
             {
-                IsAssetExists = await IsAssetExistsAsync(item.AssetId),
-                IsCategoryExists = await IsCategoryExistsAsync(item.CategoryId),
-                IsAmountPositive = IsAmountPositive(item.Amount)
-            };
-
-            if (result.IsCategoryExists && result.IsAssetExists && result.IsAmountPositive)
-            {
-                var transaction = await _transactionRepository.GetByIdAsync(item.Id);
-                if(transaction.AssetId != item.AssetId)
+                var result = new UpdateTransactionResult
                 {
-                    var oldAsset = await _assetRepository.GetByIdAsync(transaction.AssetId);
-                    oldAsset.CurrentBalance -= transaction.Amount;
-                    await _assetRepository.UpdateAsync(oldAsset);
+                    IsTransactionAssetExists = await _assetService.IsAssetExistsAsync(item.AssetId),
+                    IsTransactionCategoryExists = await _categoryService.IsCategoryExistsAsync(item.CategoryId),
+                    IsTransactionAmountPositive = IsAmountPositive(item.Amount),
+                    IsTransactionExists = await IsTransactionExistsAsync(item.Id)
+                };
 
-                    var newAsset = await _assetRepository.GetByIdAsync(item.AssetId);
-                    newAsset.CurrentBalance += item.Amount;
-                    await _assetRepository.UpdateAsync(newAsset);
-                }
-                else
+                try
                 {
-                    var asset = await _assetRepository.GetByIdAsync(transaction.AssetId);
-                    asset.CurrentBalance -= transaction.Amount;
-                    asset.CurrentBalance += item.Amount;
-                    await _assetRepository.UpdateAsync(asset);
-                }
+                    if (result.IsTransactionExists && result.IsTransactionCategoryExists && result.IsTransactionAssetExists && result.IsTransactionAmountPositive)
+                    {
+                        var transaction = await _transactionRepository.GetByIdAsync(item.Id);
+                        if (transaction.AssetId != item.AssetId)
+                        {
+                            var oldAsset = await _assetService.GetByIdAsync(transaction.AssetId);
+                            oldAsset.CurrentBalance -= transaction.Amount;
+                            await _assetService.UpdateAsync(oldAsset);
 
-                var convertedItem = _mapper.Map<Transaction, DAL.Interfaces.Models.Transaction>(item);
-                await _transactionRepository.UpdateAsync(convertedItem);
+                            var newAsset = await _assetService.GetByIdAsync(item.AssetId);
+                            newAsset.CurrentBalance += item.Amount;
+                            await _assetService.UpdateAsync(newAsset);
+                        }
+                        else
+                        {
+                            var asset = await _assetService.GetByIdAsync(transaction.AssetId);
+                            asset.CurrentBalance -= transaction.Amount;
+                            asset.CurrentBalance += item.Amount;
+                            await _assetService.UpdateAsync(asset);
+                        }
+
+                        var convertedItem = _mapper.Map<Transaction, DAL.Interfaces.Models.Transaction>(item);
+                        await _transactionRepository.UpdateAsync(convertedItem);
+                    }
+
+                    dbTransaction.Commit();
+
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    dbTransaction.Rollback();
+
+                    return result;
+                }
             }
+        }
 
-            return result;
+        public async Task<bool> IsTransactionExistsAsync(Guid id)
+        {
+            var result = await _transactionRepository.GetByIdAsync(id);
+
+            return result != null;
         }
     }
 }

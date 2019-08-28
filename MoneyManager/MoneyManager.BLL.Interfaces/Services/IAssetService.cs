@@ -1,13 +1,14 @@
-﻿using MoneyManager.BLL.Interfaces.Models.Asset;
+﻿using MoneyManager.BLL.Interfaces.Models;
+using MoneyManager.BLL.Interfaces.Models.Asset;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MoneyManager.BLL.Interfaces.Services.AssetService
+namespace MoneyManager.BLL.Interfaces.Services
 {
     public interface IAssetService
     {
-        Task<IEnumerable<Asset>> GetAllAsync();
+        Task<AssetViewModel> GetRecordsAsync(PageInfo pageInfo);
 
         Task<Asset> GetByIdAsync(Guid id);
 
@@ -17,6 +18,6 @@ namespace MoneyManager.BLL.Interfaces.Services.AssetService
 
         Task DeleteAsync(Guid id);
 
-        Task<bool> IsUserExistsAsync(Guid id);
+        Task<bool> IsAssetExistsAsync(Guid id);
     }
 }

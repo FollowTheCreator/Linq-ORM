@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MoneyManager.BLL.Interfaces.Services;
 using MoneyManager.WebUI.Models.Category;
+using MoneyManager.WebUI.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,11 +21,12 @@ namespace MoneyManager.WebUI.Controllers
             _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<Category>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<Category>>> GetRecordsAsync(PageInfo pageInfo)
         {
-            var items = await _categoryService.GetAllAsync();
+            var convertedPageInfo = _mapper.Map<PageInfo, BLL.Interfaces.Models.PageInfo>(pageInfo);
+            var items = await _categoryService.GetRecordsAsync(convertedPageInfo);
 
-            var convertedItems = _mapper.Map<IEnumerable<BLL.Interfaces.Models.Category.Category>, IEnumerable<Category>>(items);
+            var convertedItems = _mapper.Map<BLL.Interfaces.Models.Category.CategoryViewModel, CategoryViewModel>(items);
 
             return View("~/Views/Category/Categories.cshtml", convertedItems);
         }
@@ -55,9 +57,9 @@ namespace MoneyManager.WebUI.Controllers
             var convertedModel = _mapper.Map<Category, BLL.Interfaces.Models.Category.Category>(model);
 
             var createResult = await _categoryService.CreateAsync(convertedModel);
-            if (createResult.IsTypeExists)
+            if (createResult.IsCategoryTypeExists)
             {
-                return RedirectToAction("GetAllAsync", "Category");
+                return RedirectToAction("GetRecordsAsync", "Category");
             }
             else
             {
@@ -87,14 +89,18 @@ namespace MoneyManager.WebUI.Controllers
 
             var convertedModel = _mapper.Map<Category, BLL.Interfaces.Models.Category.Category>(model);
 
-            var createResult = await _categoryService.UpdateAsync(convertedModel);
-            if (createResult.IsTypeExists)
+            var updateResult = await _categoryService.UpdateAsync(convertedModel);
+            if (!updateResult.IsCategoryExists)
             {
-                return RedirectToAction("GetAllAsync", "Category");
+                ModelState.AddModelError("", "Category with this Id doesn't exist");
+            }
+            else if (!updateResult.IsCategoryTypeExists)
+            {
+                ModelState.AddModelError("", "Type with this Id doesn't exist");
             }
             else
             {
-                ModelState.AddModelError("", "Type with this Id doesn't exist");
+                return RedirectToAction("GetRecordsAsync", "Category");
             }
 
             return View("~/Views/Category/Update.cshtml", model);
@@ -103,7 +109,7 @@ namespace MoneyManager.WebUI.Controllers
         public async Task<ActionResult> DeleteAsync(Guid id)
         {
             await _categoryService.DeleteAsync(id);
-            return RedirectToAction("GetAllAsync", "Category");
+            return RedirectToAction("GetRecordsAsync", "Category");
         }
     }
 }

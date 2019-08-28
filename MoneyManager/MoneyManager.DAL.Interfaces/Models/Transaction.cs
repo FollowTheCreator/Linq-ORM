@@ -2,7 +2,7 @@
 
 namespace MoneyManager.DAL.Interfaces.Models
 {
-    public partial class Transaction : IId<Guid>
+    public partial class Transaction : IEntity<Guid>
     {
         public Guid Id { get; set; }
         public Guid CategoryId { get; set; }

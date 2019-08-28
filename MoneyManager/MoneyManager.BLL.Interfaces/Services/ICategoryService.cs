@@ -1,4 +1,5 @@
-﻿using MoneyManager.BLL.Interfaces.Models.Category;
+﻿using MoneyManager.BLL.Interfaces.Models;
+using MoneyManager.BLL.Interfaces.Models.Category;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ namespace MoneyManager.BLL.Interfaces.Services
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<Category>> GetAllAsync();
+        Task<CategoryViewModel> GetRecordsAsync(PageInfo pageInfo);
 
         Task<Category> GetByIdAsync(Guid id);
 
@@ -17,6 +18,6 @@ namespace MoneyManager.BLL.Interfaces.Services
 
         Task DeleteAsync(Guid id);
 
-        Task<bool> IsTypeExistsAsync(int id);
+        Task<bool> IsCategoryExistsAsync(Guid id);
     }
 }

@@ -1,4 +1,5 @@
-﻿using MoneyManager.BLL.Interfaces.Models.Transaction;
+﻿using MoneyManager.BLL.Interfaces.Models;
+using MoneyManager.BLL.Interfaces.Models.Transaction;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ namespace MoneyManager.BLL.Interfaces.Services
 {
     public interface ITransactionService
     {
-        Task<IEnumerable<Transaction>> GetAllAsync();
+        Task<TransactionViewModel> GetRecordsAsync(PageInfo pageInfo);
 
         Task<Transaction> GetByIdAsync(Guid id);
 
@@ -17,9 +18,7 @@ namespace MoneyManager.BLL.Interfaces.Services
 
         Task DeleteAsync(Guid id);
 
-        Task<bool> IsAssetExistsAsync(Guid id);
-
-        Task<bool> IsCategoryExistsAsync(Guid id);
+        Task<bool> IsTransactionExistsAsync(Guid id);
 
         bool IsAmountPositive(decimal amount);
     }

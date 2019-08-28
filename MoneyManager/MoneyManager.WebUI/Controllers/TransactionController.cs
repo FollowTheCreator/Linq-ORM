@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MoneyManager.BLL.Interfaces.Services;
 using MoneyManager.WebUI.Models.Transaction;
+using MoneyManager.WebUI.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,11 +21,12 @@ namespace MoneyManager.WebUI.Controllers
             _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<Transaction>>> GetAllAsync()
+        public async Task<ActionResult<TransactionViewModel>> GetRecordsAsync(PageInfo pageInfo)
         {
-            var items = await _transactionService.GetAllAsync();
+            var convertedPageInfo = _mapper.Map<PageInfo, BLL.Interfaces.Models.PageInfo>(pageInfo);
+            var items = await _transactionService.GetRecordsAsync(convertedPageInfo);
 
-            var convertedItems = _mapper.Map<IEnumerable<BLL.Interfaces.Models.Transaction.Transaction>, IEnumerable<Transaction>>(items);
+            var convertedItems = _mapper.Map<BLL.Interfaces.Models.Transaction.TransactionViewModel, TransactionViewModel>(items);
 
             return View("~/Views/Transaction/Transactions.cshtml", convertedItems);
         }
@@ -55,21 +57,21 @@ namespace MoneyManager.WebUI.Controllers
             var convertedModel = _mapper.Map<Transaction, BLL.Interfaces.Models.Transaction.Transaction>(model);
 
             var createResult = await _transactionService.CreateAsync(convertedModel);
-            if (!createResult.IsCategoryExists)
+            if (!createResult.IsTransactionCategoryExists)
             {
                 ModelState.AddModelError("", "Category with this Id doesn't exist");
             }
-            else if (!createResult.IsAssetExists)
+            else if (!createResult.IsTransactionAssetExists)
             {
                 ModelState.AddModelError("", "Asset with this Id doesn't exist");
             }
-            else if(!createResult.IsAmountPositive)
+            else if(!createResult.IsTransactionAmountPositive)
             {
                 ModelState.AddModelError("", "Amount should be positive");
             }
             else
             {
-                return RedirectToAction("GetAllAsync", "Transaction");
+                return RedirectToAction("GetRecordsAsync", "Transaction");
             }
 
             return View("~/Views/Transaction/Create.cshtml", model);
@@ -95,22 +97,26 @@ namespace MoneyManager.WebUI.Controllers
 
             var convertedModel = _mapper.Map<Transaction, BLL.Interfaces.Models.Transaction.Transaction>(model);
 
-            var createResult = await _transactionService.UpdateAsync(convertedModel);
-            if (!createResult.IsCategoryExists)
+            var updateResult = await _transactionService.UpdateAsync(convertedModel);
+            if (!updateResult.IsTransactionExists)
+            {
+                ModelState.AddModelError("", "Transaction with this Id doesn't exist");
+            }
+            else if (!updateResult.IsTransactionCategoryExists)
             {
                 ModelState.AddModelError("", "Category with this Id doesn't exist");
             }
-            else if (!createResult.IsAssetExists)
+            else if (!updateResult.IsTransactionAssetExists)
             {
                 ModelState.AddModelError("", "Asset with this Id doesn't exist");
             }
-            else if(!createResult.IsAmountPositive)
+            else if(!updateResult.IsTransactionAmountPositive)
             {
                 ModelState.AddModelError("", "Amount should be positive");
             }
             else
             {
-                return RedirectToAction("GetAllAsync", "Transaction");
+                return RedirectToAction("GetRecordsAsync", "Transaction");
             }
 
             return View("~/Views/Transaction/Update.cshtml", model);
@@ -119,7 +125,7 @@ namespace MoneyManager.WebUI.Controllers
         public async Task<ActionResult> DeleteAsync(Guid id)
         {
             await _transactionService.DeleteAsync(id);
-            return RedirectToAction("GetAllAsync", "Transaction");
+            return RedirectToAction("GetRecordsAsync", "Transaction");
         }
     }
 }

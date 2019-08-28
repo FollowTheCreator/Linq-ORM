@@ -2,7 +2,7 @@
 
 namespace MoneyManager.WebUI.Models.User
 {
-    public class UserViewModel
+    public class ProtectedUserModel
     {
         public Guid Id { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MoneyManager.BLL.Interfaces.Models;
 using MoneyManager.BLL.Interfaces.Models.User;
 using MoneyManager.BLL.Interfaces.Services;
 using MoneyManager.DAL.Interfaces.Repositories;
@@ -11,18 +12,24 @@ namespace MoneyManager.BLL.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _repository;
+        private readonly IUserRepository _userRepository;
+
+        private readonly IConfigService _configService;
 
         private readonly Coder _coder;
         private readonly Generate _generate;
 
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository repository, IMapper mapper, Coder coder, Generate generate)
+        public UserService(IUserRepository userRepository, IMapper mapper, Coder coder, Generate generate, IConfigService configService)
         {
-            _repository = repository;
+            _userRepository = userRepository;
+
+            _configService = configService;
+
             _coder = coder;
             _generate = generate;
+
             _mapper = mapper;
         }
 
@@ -39,7 +46,7 @@ namespace MoneyManager.BLL.Services
                 convertedItem.Salt = _generate.RandomSalt();
                 convertedItem.Hash = _coder.Encode(convertedItem.Hash + convertedItem.Salt);
 
-                await _repository.CreateAsync(convertedItem);
+                await _userRepository.CreateAsync(convertedItem);
 
                 return result;
             }
@@ -50,21 +57,31 @@ namespace MoneyManager.BLL.Services
 
         public async Task DeleteAsync(Guid id)
         {
-            await _repository.DeleteAsync(id);
+            await _userRepository.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<UserViewModel> GetRecordsAsync(PageInfo pageInfo)
         {
-            var users = await _repository.GetAllAsync();
+            pageInfo.CheckPageInfo(_configService.GetPageSize());
 
-            var convertedUsers = _mapper.Map<IEnumerable<DAL.Interfaces.Models.User> , IEnumerable<User>>(users);
+            var convertedPageInfo = _mapper.Map<PageInfo, DAL.Interfaces.Models.PageInfo>(pageInfo);
+            var users = await _userRepository.GetRecordsAsync(convertedPageInfo);
 
-            return convertedUsers;
+            var convertedItems = _mapper.Map<IEnumerable<DAL.Interfaces.Models.User> , IEnumerable<User>>(users);
+
+            pageInfo.TotalItems = await _userRepository.RecordsCountAsync();
+            pageInfo.TotalPages = (int)Math.Ceiling(pageInfo.TotalItems / (double)pageInfo.PageSize);
+
+            return new UserViewModel
+            {
+                Users = convertedItems,
+                PageInfo = pageInfo
+            };
         }
 
         public async Task<User> GetByIdAsync(Guid id)
         {
-            var item = await _repository.GetByIdAsync(id);
+            var item = await _userRepository.GetByIdAsync(id);
 
             var convertedItem = _mapper.Map<DAL.Interfaces.Models.User, User>(item);
 
@@ -73,28 +90,53 @@ namespace MoneyManager.BLL.Services
 
         public async Task<bool> IsEmailExistsAsync(string email)
         {
-            return await _repository.IsEmailExistsAsync(email);
+            return await _userRepository.IsEmailExistsAsync(email);
         }
 
-        public async Task UpdateAsync(UpdateUserModel item)
+        public async Task<UpdateUserResult> UpdateAsync(UpdateUserModel item)
         {
-            if (string.IsNullOrWhiteSpace(item.Password))
+            var result = new UpdateUserResult
             {
-                var oldProfile = await _repository.GetByIdAsync(item.Id);
-                item.Password = oldProfile.Hash;
-            }
-            else
+                IsUserExists = await IsUserExistsAsync(item.Id)
+            };
+
+            if (result.IsUserExists)
             {
-                var salt = _generate.RandomSalt();
-                item.Password = _coder.Encode(item.Password + salt);
+                var user = _mapper.Map<UpdateUserModel, User>(item);
+
+                if (string.IsNullOrWhiteSpace(user.Hash))
+                {
+                    var oldProfile = await _userRepository.GetByIdAsync(item.Id);
+                    user.Hash = oldProfile.Hash;
+                }
+                else
+                {
+                    var salt = _generate.RandomSalt();
+                    user.Hash = _coder.Encode(user.Hash + salt);
+                }
+
+                user.Salt = await GetSaltByIdAsync(user.Id);
+
+                var convertedUser = _mapper.Map<User, DAL.Interfaces.Models.User>(user);
+
+                await _userRepository.UpdateAsync(convertedUser);
             }
 
-            var user = _mapper.Map<UpdateUserModel, User>(item);
-            user.Salt = await _repository.GetSaltByIdAsync(user.Id);
+            return result;
+        }
 
-            var convertedUser = _mapper.Map<User, DAL.Interfaces.Models.User>(user);
+        public async Task<string> GetSaltByIdAsync(Guid id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
 
-            await _repository.UpdateAsync(convertedUser);
+            return user.Salt;
+        }
+
+        public async Task<bool> IsUserExistsAsync(Guid id)
+        {
+            var result = await _userRepository.GetByIdAsync(id);
+
+            return result != null;
         }
     }
 }

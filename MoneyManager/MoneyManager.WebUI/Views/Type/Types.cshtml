@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MoneyManager.WebUI.Models.Type.Type>
+﻿@model TypeViewModel
 
 <div>
     <table class="table mt-3">
@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.Types)
             {
                 <tr>
                     <td>@item.Id</td>
@@ -35,4 +35,23 @@
             </tr>
         </tbody>
     </table>
+    <div class="d-flex my-5">
+        <div class="btn-group mx-auto">
+            @for (int i = 1; i <= Model.PageInfo.TotalPages; i++)
+            {
+                if (i == Model.PageInfo.PageNumber)
+                {
+                    <a asp-controller="Type" asp-action="GetRecordsAsync" asp-route-PageNumber="@i" class="btn btn-secondary">
+                        @i
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Type" asp-action="GetRecordsAsync" asp-route-PageNumber="@i" class="btn btn-outline-secondary">
+                        @i
+                    </a>
+                }
+            }
+        </div>
+    </div>
 </div>

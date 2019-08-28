@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
+using MoneyManager.BLL.Interfaces.Services;
 using MoneyManager.DAL.Interfaces.DataSeeding;
 using MoneyManager.DAL.Interfaces.Models;
 using MoneyManager.DAL.Models.Contexts;
@@ -10,20 +11,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Utils;
 
-namespace MoneyManager.DAL.DataSeeding.DataSeeding
+namespace MoneyManager.BLL.DataSeeding
 {
     public class DataSeeding : IDataSeeding
     {
         private readonly MoneyManagerContext _context;
+
+        private readonly IConfigService _configService;
 
         private readonly Coder _coder;
         private readonly Generate _generate;
 
         private readonly Random _random;
 
-        public DataSeeding(MoneyManagerContext context, Coder coder, Generate generate)
+        public DataSeeding(MoneyManagerContext context, Coder coder, Generate generate, IConfigService configService)
         {
             _context = context;
+            _configService = configService;
             _coder = coder;
             _generate = generate;
             _random = new Random();
@@ -37,10 +41,15 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
                 {
                     try
                     {
-                        var usersId = new List<Guid>(11);
+                        var countOfUsers = _configService.GetCountOfUsers();
+                        var countOfAssets = _configService.GetCountOfAssets();
+                        var countOfCategories = _configService.GetCountOfCategories();
+                        var countOfTransactions = _configService.GetCountOfTransactions();
+
+                        var usersId = new List<Guid>(countOfUsers);
                         if (!await _context.User.AnyAsync())
                         {
-                            for (int i = 0; i < 11; i++)
+                            for (int i = 0; i < countOfUsers; i++)
                             {
                                 var user = new User
                                 {
@@ -63,10 +72,10 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
                             usersId = await _context.User.Select(user => user.Id).ToListAsync();
                         }
 
-                        var assetsId = new List<Guid>(21);
+                        var assetsId = new List<Guid>(countOfAssets);
                         if (!await _context.Asset.AnyAsync())
                         {
-                            for (int i = 0; i < 21; i++)
+                            for (int i = 0; i < countOfAssets; i++)
                             {
                                 var asset = new Asset
                                 {
@@ -89,15 +98,15 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
 
                         if (!await _context.Type.AnyAsync())
                         {
-                            _context.Type.Add(new Interfaces.Models.Type { Name = "income" });
-                            _context.Type.Add(new Interfaces.Models.Type { Name = "expence" });
+                            _context.Type.Add(new DAL.Interfaces.Models.Type { Name = "income" });
+                            _context.Type.Add(new DAL.Interfaces.Models.Type { Name = "expence" });
                             await _context.SaveChangesAsync();
                         }
 
-                        var catrgories = new List<Category>(11);
+                        var catrgories = new List<Category>(countOfCategories);
                         if (!await _context.Category.AnyAsync())
                         {
-                            for (int i = 0; i < 11; i++)
+                            for (int i = 0; i < countOfCategories; i++)
                             {
                                 var category = new Category
                                 {
@@ -122,7 +131,7 @@ namespace MoneyManager.DAL.DataSeeding.DataSeeding
 
                         if (!await _context.Transaction.AnyAsync())
                         {
-                            for (int i = 0; i < 1001; i++)
+                            for (int i = 0; i < countOfTransactions; i++)
                             {
                                 var transactionEntity = new Transaction
                                 {

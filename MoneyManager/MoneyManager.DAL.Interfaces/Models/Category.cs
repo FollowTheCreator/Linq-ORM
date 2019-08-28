@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MoneyManager.DAL.Interfaces.Models
 {
-    public partial class Category : IId<Guid>
+    public partial class Category : IEntity<Guid>
     {
         public Category()
         {

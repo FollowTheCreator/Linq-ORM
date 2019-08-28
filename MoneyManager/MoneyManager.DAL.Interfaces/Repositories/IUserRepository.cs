@@ -1,5 +1,8 @@
 ﻿using MoneyManager.DAL.Interfaces.Models;
+using MoneyManager.DAL.Interfaces.Models.QueriesModels;
 using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace MoneyManager.DAL.Interfaces.Repositories
@@ -8,6 +11,12 @@ namespace MoneyManager.DAL.Interfaces.Repositories
     {
         Task<bool> IsEmailExistsAsync(string email);
 
-        Task<string> GetSaltByIdAsync(Guid id);
+        Task DeleteAllUsersInMonth(Guid id, DateTime date);
+
+        Task<List<UserIdEmailName>> GetSortedUsers(Expression<Func<UserIdEmailName, string>> expression);
+
+        Task<User> GetUserByEmail(string email);
+
+        Task<List<UserBalance>> GetUsersBalances();
     }
 }

@@ -2,6 +2,8 @@
 {
     public class UpdateAssetResult
     {
-        public bool IsExists { get; set; }
+        public bool IsAssetExists { get; set; }
+
+        public bool IsAssetUserExists { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MoneyManager.DAL.Repositories
 {
-    public class Repository<T, TId> : IRepository<T, TId> where T : class, IId<TId>
+    public class Repository<T, TId> : IRepository<T, TId> where T : class, IEntity<TId>
     {
         private readonly MoneyManagerContext _context;
 
@@ -32,10 +32,12 @@ namespace MoneyManager.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetRecordsAsync(PageInfo pageInfo)
         {
             return await DbSet
                 .AsNoTracking()
+                .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
+                .Take(pageInfo.PageSize)
                 .ToListAsync();
         }
 
@@ -51,6 +53,12 @@ namespace MoneyManager.DAL.Repositories
         {
             DbSet.Update(item);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> RecordsCountAsync()
+        {
+            var a = await DbSet.CountAsync();
+            return a;
         }
     }
 }

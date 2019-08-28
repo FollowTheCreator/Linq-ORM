@@ -2,7 +2,7 @@
 
 namespace MoneyManager.DAL.Interfaces.Models
 {
-    public partial class Type : IId<int>
+    public partial class Type : IEntity<int>
     {
         public Type()
         {

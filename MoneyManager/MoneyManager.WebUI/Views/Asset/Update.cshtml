@@ -24,6 +24,12 @@
             <input type="text" asp-for="UserId" class="form-control" value="@Model.UserId" />
             <span asp-validation-for="UserId"></span>
         </div>
+        <br>
+        <div>
+            <label asp-for="CurrentBalance">CurrentBalance</label><br />
+            <input type="text" asp-for="CurrentBalance" class="form-control" value="@Model.CurrentBalance" />
+            <span asp-validation-for="CurrentBalance"></span>
+        </div>
         <br />
         <div class="text-center">
             <input type="submit" value="Update" class="btn btn-outline-secondary w-100 mt-5" />

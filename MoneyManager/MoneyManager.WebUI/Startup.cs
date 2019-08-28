@@ -7,9 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MoneyManager.BLL.Interfaces.Services;
-using MoneyManager.BLL.Interfaces.Services.AssetService;
 using MoneyManager.BLL.Services;
-using MoneyManager.DAL.DataSeeding.DataSeeding;
+using MoneyManager.BLL.DataSeeding;
 using MoneyManager.DAL.Interfaces.DataSeeding;
 using MoneyManager.DAL.Interfaces.Repositories;
 using MoneyManager.DAL.Models.Contexts;
@@ -52,6 +51,9 @@ namespace MoneyManager.WebUI
                     mc.AddProfile(new BLLMappingProfile());
                 }
             );
+#if DEBUG
+            mappingConfig.AssertConfigurationIsValid();
+#endif
             services.AddSingleton(mappingConfig.CreateMapper());
 
             services.AddScoped<IUserService, UserService>();
@@ -60,13 +62,13 @@ namespace MoneyManager.WebUI
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IQueriesService, QueriesService>();
+            services.AddScoped<IConfigService, ConfigService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAssetRepository, AssetRepository>();
             services.AddScoped<ITypeRepository, TypeRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
-            services.AddScoped<IQueriesRepository, QueriesRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -90,7 +92,7 @@ namespace MoneyManager.WebUI
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=User}/{action=GetAllAsync}");
+                    template: "{controller=User}/{action=GetRecordsAsync}");
             });
         }
     }

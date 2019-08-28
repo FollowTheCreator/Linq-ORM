@@ -2,6 +2,6 @@
 {
     public class CreateCategoryResult
     {
-        public bool IsTypeExists { get; set; }
+        public bool IsCategoryTypeExists { get; set; }
     }
 }

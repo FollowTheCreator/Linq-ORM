@@ -2,6 +2,8 @@
 {
     public class UpdateCategoryResult
     {
-        public bool IsTypeExists { get; set; }
+        public bool IsCategoryExists { get; set; }
+
+        public bool IsCategoryTypeExists { get; set; }
     }
 }

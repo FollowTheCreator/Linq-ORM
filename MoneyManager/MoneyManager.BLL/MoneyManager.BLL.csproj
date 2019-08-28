@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MoneyManager.BLL.Interfaces\MoneyManager.BLL.Interfaces.csproj" />
     <ProjectReference Include="..\MoneyManager.DAL.Interfaces\MoneyManager.DAL.Interfaces.csproj" />
+    <ProjectReference Include="..\MoneyManager.DAL\MoneyManager.DAL.csproj" />
   </ItemGroup>
 
 </Project>

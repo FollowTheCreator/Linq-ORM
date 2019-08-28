@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MoneyManager.BLL.Interfaces.Services;
 using MoneyManager.WebUI.Models.User;
+using MoneyManager.WebUI.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,20 +21,21 @@ namespace MoneyManager.WebUI.Controllers
             _mapper = mapper;
         }
 
-        public async Task<ActionResult<IEnumerable<UserViewModel>>> GetAllAsync()
+        public async Task<ActionResult<UserViewModel>> GetRecordsAsync(PageInfo pageInfo)
         {
-            var items = await _userService.GetAllAsync();
+            var convertedPageInfo = _mapper.Map<PageInfo, BLL.Interfaces.Models.PageInfo>(pageInfo);
+            var items = await _userService.GetRecordsAsync(convertedPageInfo);
 
-            var convertedUsers = _mapper.Map<IEnumerable<BLL.Interfaces.Models.User.User>, IEnumerable<UserViewModel>>(items);
+            var convertedUsers = _mapper.Map<BLL.Interfaces.Models.User.UserViewModel, UserViewModel>(items);
 
             return View("~/Views/User/Users.cshtml", convertedUsers);
         }
 
-        public async Task<ActionResult<UserViewModel>> GetByIdAsync(Guid id)
+        public async Task<ActionResult<ProtectedUserModel>> GetByIdAsync(Guid id)
         {
             var item = await _userService.GetByIdAsync(id);
 
-            var convertedUser = _mapper.Map<BLL.Interfaces.Models.User.User, UserViewModel>(item);
+            var convertedUser = _mapper.Map<BLL.Interfaces.Models.User.User, ProtectedUserModel>(item);
 
             return View("~/Views/User/User.cshtml", convertedUser);
         }
@@ -56,7 +58,7 @@ namespace MoneyManager.WebUI.Controllers
             var createResult = await _userService.CreateAsync(convertedModel);
             if (!createResult.AlreadyExists)
             {
-                return RedirectToAction("GetAllAsync", "User");
+                return RedirectToAction("GetRecordsAsync", "User");
             }
 
             ModelState.AddModelError("", "This Email already exists");
@@ -83,7 +85,13 @@ namespace MoneyManager.WebUI.Controllers
 
             var convertedModel = _mapper.Map<UpdateUserModel, BLL.Interfaces.Models.User.UpdateUserModel>(model);
 
-            await _userService.UpdateAsync(convertedModel);
+            var updateResult = await _userService.UpdateAsync(convertedModel);
+            if (!updateResult.IsUserExists)
+            {
+                ModelState.AddModelError("", "User with this Id doesn't exist");
+
+                return View("~/Views/User/Update.cshtml", model);
+            }
 
             return RedirectToAction("GetByIdAsync", "User", new { id = model.Id });
         }
@@ -91,7 +99,7 @@ namespace MoneyManager.WebUI.Controllers
         public async Task<ActionResult> DeleteAsync(Guid id)
         {
             await _userService.DeleteAsync(id);
-            return RedirectToAction("GetAllAsync", "User");
+            return RedirectToAction("GetRecordsAsync", "User");
         }
     }
 }

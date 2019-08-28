@@ -1,7 +1,7 @@
 ﻿namespace MoneyManager.DAL.Interfaces.Models
 {
-    public interface IId<TId>
+    public interface IEntity<TKey>
     {
-        TId Id { get; set; }
+        TKey Id { get; set; }
     }
 }

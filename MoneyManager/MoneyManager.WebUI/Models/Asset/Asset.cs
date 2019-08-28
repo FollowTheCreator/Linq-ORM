@@ -13,5 +13,8 @@ namespace MoneyManager.WebUI.Models.Asset
 
         [Required(ErrorMessage = "UserId is null")]
         public Guid UserId { get; set; }
+
+        [Required(ErrorMessage = "CurrentBalance is null")]
+        public decimal CurrentBalance { get; set; }
     }
 }

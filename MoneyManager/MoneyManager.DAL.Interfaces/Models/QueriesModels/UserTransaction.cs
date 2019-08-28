@@ -8,8 +8,6 @@ namespace MoneyManager.DAL.Interfaces.Models.QueriesModels
 
         public string TransactionSubcategory { get; set; }
 
-        public string TransactionParentCategory { get; set; }
-
         public decimal TransactionAmount { get; set; }
 
         public DateTime TransactionDate { get; set; }

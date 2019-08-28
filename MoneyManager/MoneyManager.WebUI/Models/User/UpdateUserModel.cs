@@ -11,9 +11,9 @@ namespace MoneyManager.WebUI.Models.User
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Email is null")]
+        [EmailAddress]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Password is null")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
