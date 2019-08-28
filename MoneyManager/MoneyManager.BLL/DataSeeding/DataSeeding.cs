@@ -49,23 +49,7 @@ namespace MoneyManager.BLL.DataSeeding
                         var usersId = new List<Guid>(countOfUsers);
                         if (!await _context.User.AnyAsync())
                         {
-                            for (int i = 0; i < countOfUsers; i++)
-                            {
-                                var user = new User
-                                {
-                                    Id = Guid.NewGuid(),
-                                    Name = _generate.RandomName(),
-                                    Email = _generate.RandomEmail(),
-                                    Salt = _generate.RandomSalt()
-                                };
-                                user.Hash = _coder.Encode(user.Name + user.Salt);
-
-                                usersId.Add(user.Id);
-
-                                _context.User.Add(user);
-                            }
-
-                            await _context.SaveChangesAsync();
+                            usersId = await SeedUsersAsync(countOfUsers);
                         }
                         else
                         {
@@ -75,21 +59,7 @@ namespace MoneyManager.BLL.DataSeeding
                         var assetsId = new List<Guid>(countOfAssets);
                         if (!await _context.Asset.AnyAsync())
                         {
-                            for (int i = 0; i < countOfAssets; i++)
-                            {
-                                var asset = new Asset
-                                {
-                                    Id = Guid.NewGuid(),
-                                    Name = _generate.RandomName(),
-                                    UserId = usersId[i / 2]
-                                };
-
-                                assetsId.Add(asset.Id);
-
-                                _context.Asset.Add(asset);
-                            }
-
-                            await _context.SaveChangesAsync();
+                            assetsId = await SeedAssetsAsync(countOfAssets);
                         }
                         else
                         {
@@ -98,54 +68,29 @@ namespace MoneyManager.BLL.DataSeeding
 
                         if (!await _context.Type.AnyAsync())
                         {
-                            _context.Type.Add(new DAL.Interfaces.Models.Type { Name = "income" });
-                            _context.Type.Add(new DAL.Interfaces.Models.Type { Name = "expence" });
-                            await _context.SaveChangesAsync();
+                            await SeedTypesAsync();
                         }
 
-                        var catrgories = new List<Category>(countOfCategories);
+                        var categories = new List<Category>(countOfCategories);
                         if (!await _context.Category.AnyAsync())
                         {
-                            for (int i = 0; i < countOfCategories; i++)
-                            {
-                                var category = new Category
-                                {
-                                    Id = Guid.NewGuid(),
-                                    Name = _generate.RandomName(),
-                                    Type = _random.Next(1, 3)
-                                };
-
-                                catrgories.Add(category);
-                            }
-                            foreach (var category in catrgories)
-                            {
-                                _context.Category.Add(category);
-                            }
-
-                            await _context.SaveChangesAsync();
+                            categories = await SeedCategoriesAsync(countOfCategories);
                         }
                         else
                         {
-                            catrgories = await _context.Category.ToListAsync();
+                            categories = await _context.Category.ToListAsync();
                         }
 
                         if (!await _context.Transaction.AnyAsync())
                         {
-                            for (int i = 0; i < countOfTransactions; i++)
-                            {
-                                var transactionEntity = new Transaction
-                                {
-                                    Id = Guid.NewGuid(),
-                                    CategoryId = catrgories[_random.Next(11)].Id,
-                                    Amount = _random.Next(1000000),
-                                    Date = DateTime.Now,
-                                    AssetId = assetsId[_random.Next(21)]
-                                };
-
-                                _context.Transaction.Add(transactionEntity);
-                            }
-
-                            await _context.SaveChangesAsync();
+                            await SeedTransactionsAsync
+                            (
+                                categories,
+                                assetsId,
+                                countOfTransactions,
+                                countOfCategories,
+                                countOfAssets
+                            );
                         }
 
                         transaction.Commit();
@@ -153,9 +98,118 @@ namespace MoneyManager.BLL.DataSeeding
                     catch (Exception e)
                     {
                         transaction.Rollback();
+
+                        throw new InvalidOperationException($"Transaction completed by Rollback", e);
                     }
                 }
             }
+        }
+
+        private async Task<List<Guid>> SeedUsersAsync(int countOfUsers)
+        {
+            var usersId = new List<Guid>(countOfUsers);
+
+            for (int i = 0; i < countOfUsers; i++)
+            {
+                var user = new User
+                {
+                    Id = Guid.NewGuid(),
+                    Name = _generate.RandomName(),
+                    Email = _generate.RandomEmail(),
+                    Salt = _generate.RandomSalt()
+                };
+                user.Hash = _coder.Encode(user.Name + user.Salt);
+
+                usersId.Add(user.Id);
+
+                _context.User.Add(user);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return usersId;
+        }
+
+        private async Task<List<Guid>> SeedAssetsAsync(int countOfAssets)
+        {
+            var assetsId = new List<Guid>(countOfAssets);
+
+            for (int i = 0; i < countOfAssets; i++)
+            {
+                var asset = new Asset
+                {
+                    Id = Guid.NewGuid(),
+                    Name = _generate.RandomName(),
+                    UserId = assetsId[i / 2]
+                };
+
+                assetsId.Add(asset.Id);
+
+                _context.Asset.Add(asset);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return assetsId;
+        }
+
+        private async Task SeedTypesAsync()
+        {
+            _context.Type.Add(new DAL.Interfaces.Models.Type { Name = "income" });
+            _context.Type.Add(new DAL.Interfaces.Models.Type { Name = "expence" });
+
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task<List<Category>> SeedCategoriesAsync(int countOfCategories)
+        {
+            var categories = new List<Category>(countOfCategories);
+
+            for (int i = 0; i < countOfCategories; i++)
+            {
+                var category = new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = _generate.RandomName(),
+                    Type = _random.Next(1, 3)
+                };
+
+                categories.Add(category);
+            }
+            foreach (var category in categories)
+            {
+                _context.Category.Add(category);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return categories;
+        }
+
+        private async Task SeedTransactionsAsync
+        (
+            List<Category> categories, 
+            List<Guid> assetsId, 
+            int countOfTransactions, 
+            int countOfCategories, 
+            int countOfAssets
+        )
+        {
+            for (int i = 0; i < countOfTransactions; i++)
+            {
+                var transactionEntity = new Transaction
+                {
+                    Id = Guid.NewGuid(),
+                    CategoryId = categories[_random.Next(countOfCategories)].Id,
+                    Amount = _random.Next(1000000),
+                    Date = DateTime.Now,
+                    AssetId = assetsId[_random.Next(countOfAssets)]
+                };
+
+                _context.Transaction.Add(transactionEntity);
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -76,7 +76,7 @@ namespace MoneyManager.BLL.Services
                 {
                     transaction.Rollback();
 
-                    return result;
+                    throw new InvalidOperationException($"Transaction completed by Rollback", e);
                 }
             }
         }
@@ -99,6 +99,8 @@ namespace MoneyManager.BLL.Services
                 catch (Exception e)
                 {
                     dbTransaction.Rollback();
+
+                    throw new InvalidOperationException($"Transaction completed by Rollback", e);
                 }
             }
         }
@@ -181,7 +183,7 @@ namespace MoneyManager.BLL.Services
                 {
                     dbTransaction.Rollback();
 
-                    return result;
+                    throw new InvalidOperationException($"Transaction completed by Rollback", e);
                 }
             }
         }
