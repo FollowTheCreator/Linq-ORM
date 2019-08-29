@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ShareMe.DAL.Interfaces.Models
 {
-    public partial class Category
+    public partial class Category : IEntity
     {
         public Category()
         {

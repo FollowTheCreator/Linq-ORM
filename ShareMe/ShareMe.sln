@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareMe.WebUI", "ShareMe.WebUI\ShareMe.WebUI.csproj", "{B1083AE9-5695-442C-A71B-DC6E5AB85CBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareMe.WebUI", "ShareMe.WebUI\ShareMe.WebUI.csproj", "{B1083AE9-5695-442C-A71B-DC6E5AB85CBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareMe.BLL", "ShareMe.BLL\ShareMe.BLL.csproj", "{C4F7EB2E-9697-4377-94EC-60F2C575F86A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareMe.BLL", "ShareMe.BLL\ShareMe.BLL.csproj", "{C4F7EB2E-9697-4377-94EC-60F2C575F86A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareMe.BLL.Interfaces", "ShareMe.BLL.Interfaces\ShareMe.BLL.Interfaces.csproj", "{8F10F8D2-7369-4E31-A4B1-6544FF2A464D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareMe.BLL.Interfaces", "ShareMe.BLL.Interfaces\ShareMe.BLL.Interfaces.csproj", "{8F10F8D2-7369-4E31-A4B1-6544FF2A464D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareMe.DAL", "ShareMe.DAL\ShareMe.DAL.csproj", "{3983414F-9E21-443A-B77B-7A88A768E6EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareMe.DAL", "ShareMe.DAL\ShareMe.DAL.csproj", "{3983414F-9E21-443A-B77B-7A88A768E6EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareMe.DAL.Interfaces", "ShareMe.DAL.Interfaces\ShareMe.DAL.Interfaces.csproj", "{BB44052E-9135-4BCD-B7D8-21BDE9BD8633}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareMe.DAL.Interfaces", "ShareMe.DAL.Interfaces\ShareMe.DAL.Interfaces.csproj", "{BB44052E-9135-4BCD-B7D8-21BDE9BD8633}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareMe.Utils", "ShareMe.Utils\ShareMe.Utils.csproj", "{F7D4975B-2E0C-4B1B-9127-259E091455F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{BB44052E-9135-4BCD-B7D8-21BDE9BD8633}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB44052E-9135-4BCD-B7D8-21BDE9BD8633}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB44052E-9135-4BCD-B7D8-21BDE9BD8633}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7D4975B-2E0C-4B1B-9127-259E091455F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7D4975B-2E0C-4B1B-9127-259E091455F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7D4975B-2E0C-4B1B-9127-259E091455F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7D4975B-2E0C-4B1B-9127-259E091455F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
