@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyManager.WebUI", "MoneyManager.WebUI\MoneyManager.WebUI.csproj", "{91499411-2412-4A13-BB33-0B258F7DADAC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneyManager.DAL", "MoneyManager.DAL\MoneyManager.DAL.csproj", "{56EDEFC6-4D13-4B12-B35E-7F614B3F422F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils", "Utils\Utils.csproj", "{478FE75D-FDCD-4DC8-A620-DBF041027C1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyManager.BLL.Interfaces", "MoneyManager.BLL.Interfaces\MoneyManager.BLL.Interfaces.csproj", "{681FEA08-2D6F-46B5-9690-21379F067CD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyManager.DAL.Interfaces", "MoneyManager.DAL.Interfaces\MoneyManager.DAL.Interfaces.csproj", "{5B8E4784-F685-4D3C-9847-303806B85861}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyManager.BLL", "MoneyManager.BLL\MoneyManager.BLL.csproj", "{3AE90EC6-196D-4888-84F0-9113ECB132F0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91499411-2412-4A13-BB33-0B258F7DADAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91499411-2412-4A13-BB33-0B258F7DADAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91499411-2412-4A13-BB33-0B258F7DADAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91499411-2412-4A13-BB33-0B258F7DADAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56EDEFC6-4D13-4B12-B35E-7F614B3F422F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56EDEFC6-4D13-4B12-B35E-7F614B3F422F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56EDEFC6-4D13-4B12-B35E-7F614B3F422F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56EDEFC6-4D13-4B12-B35E-7F614B3F422F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{478FE75D-FDCD-4DC8-A620-DBF041027C1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{478FE75D-FDCD-4DC8-A620-DBF041027C1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{478FE75D-FDCD-4DC8-A620-DBF041027C1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{478FE75D-FDCD-4DC8-A620-DBF041027C1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{681FEA08-2D6F-46B5-9690-21379F067CD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{681FEA08-2D6F-46B5-9690-21379F067CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{681FEA08-2D6F-46B5-9690-21379F067CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{681FEA08-2D6F-46B5-9690-21379F067CD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B8E4784-F685-4D3C-9847-303806B85861}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B8E4784-F685-4D3C-9847-303806B85861}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B8E4784-F685-4D3C-9847-303806B85861}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B8E4784-F685-4D3C-9847-303806B85861}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AE90EC6-196D-4888-84F0-9113ECB132F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AE90EC6-196D-4888-84F0-9113ECB132F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AE90EC6-196D-4888-84F0-9113ECB132F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AE90EC6-196D-4888-84F0-9113ECB132F0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2AD4A1A3-4DA5-48AA-B82D-3AF427345914}
+	EndGlobalSection
+EndGlobal

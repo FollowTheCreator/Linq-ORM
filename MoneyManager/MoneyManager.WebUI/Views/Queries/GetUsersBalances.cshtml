@@ -1,0 +1,33 @@
+﻿@model List<UserBalance>
+
+<div>
+    <table class="table mt-3">
+        <thead class="thead-light">
+            <tr>
+                <th class="text-dark">
+                    Id
+                </th>
+                <th class="text-dark">
+                    Email
+                </th>
+                <th class="text-dark">
+                    Name
+                </th>
+                <th class="text-dark">
+                    Balance
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Email</td>
+                    <td>@item.Name</td>
+                    <td>@item.Balance</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

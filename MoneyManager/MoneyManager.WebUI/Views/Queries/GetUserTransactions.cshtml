@@ -1,0 +1,37 @@
+﻿@model List<UserTransaction>
+
+<div>
+    <table class="table mt-3">
+        <thead class="thead-light">
+            <tr>
+                <th class="text-dark">
+                    AssetName
+                </th>
+                <th class="text-dark">
+                    TransactionSubcategory
+                </th>
+                <th class="text-dark">
+                    TransactionAmount
+                </th>
+                <th class="text-dark">
+                    TransactionDate
+                </th>
+                <th class="text-dark">
+                    TransactionComment
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.AssetName</td>
+                    <td>@item.TransactionSubcategory</td>
+                    <td>@item.TransactionAmount</td>
+                    <td>@item.TransactionDate</td>
+                    <td>@item.TransactionComment</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

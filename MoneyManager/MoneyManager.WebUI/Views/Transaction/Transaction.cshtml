@@ -1,0 +1,28 @@
+﻿@model Transaction
+
+    <div class="form-group mx-auto w-50">
+        <br>
+        <label for="Id">Id</label>
+        @Html.TextBox("Id", Model.Id, new { id = "Id", @readonly = "readonly", @class = "form-control" })
+        <br>
+        <label for="CategoryId">Category Id</label>
+        @Html.TextBox("CategoryId", Model.CategoryId, new { id = "CategoryId", @readonly = "readonly", @class = "form-control" })
+        <br>
+        <label for="Amount">Amount</label>
+        @Html.TextBox("Amount", Model.Amount, new { id = "Amount", @readonly = "readonly", @class = "form-control" })
+        <br>
+        <label for="Date">Date</label>
+        @Html.TextBox("Date", Model.Date, new { id = "Date", @readonly = "readonly", @class = "form-control" })
+        <br>
+        <label for="AssetId">Asset Id</label>
+        @Html.TextBox("AssetId", Model.AssetId, new { id = "AssetId", @readonly = "readonly", @class = "form-control" })
+        <br>
+        <label for="Comment">Comment</label>
+        @Html.TextBox("Comment", Model.Comment, new { id = "Comment", @readonly = "readonly", @class = "form-control" })
+        <br>
+        <div class="text-center">
+            <a asp-controller="Transaction" asp-action="UpdateAsync" asp-route-id="@Model.Id" class="text-dark">Update</a>
+            |
+            <a asp-controller="Transaction" asp-action="DeleteAsync" asp-route-id="@Model.Id" class="text-dark">Delete</a>
+        </div>
+    </div>

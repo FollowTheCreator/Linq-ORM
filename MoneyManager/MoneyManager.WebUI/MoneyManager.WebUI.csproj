@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MoneyManager.BLL.Interfaces\MoneyManager.BLL.Interfaces.csproj" />
+    <ProjectReference Include="..\MoneyManager.BLL\MoneyManager.BLL.csproj" />
+    <ProjectReference Include="..\MoneyManager.DAL.Interfaces\MoneyManager.DAL.Interfaces.csproj" />
+    <ProjectReference Include="..\MoneyManager.DAL\MoneyManager.DAL.csproj" />
+  </ItemGroup>
+
+</Project>
