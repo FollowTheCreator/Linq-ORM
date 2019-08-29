@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Post>
+
+<div>
+    <table class="table mt-3">
+        <thead class="thead-light">
+            <tr>
+                <th class="text-dark">
+                    Id
+                </th>
+                <th class="text-dark">
+                    Header
+                </th>
+                <th class="text-dark">
+                    Content
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Header</td>
+                    <td>@item.Content</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
