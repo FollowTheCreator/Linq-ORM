@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShareMe.DAL.Interfaces.Context;
 using ShareMe.DAL.Interfaces.Models;
+using ShareMe.DAL.Interfaces.Models.UserModels;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +17,24 @@ namespace ShareMe.DAL.Repositories
             : base(context)
         { }
 
+        public async Task<UserViewModel> GetUserAsync(Guid id)
+        {
+            var item = await DbSet
+                .Where(user => user.Id == id)
+                .Select(user =>
+                    new UserViewModel
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        Name = user.Name,
+                        Image = user.Image
+                    }
+                )
+                .FirstOrDefaultAsync();
+
+            return item;
+        }
+
         public async Task<bool> IsEmailExistsAsync(string email)
         {
             var item = await DbSet
@@ -23,5 +43,7 @@ namespace ShareMe.DAL.Repositories
 
             return item != null;
         }
+
+
     }
 }

@@ -1,5 +1,5 @@
 ﻿using ShareMe.BLL.Interfaces.Models;
-using ShareMe.BLL.Interfaces.Models.Post;
+using ShareMe.BLL.Interfaces.Models.PostModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,7 +11,7 @@ namespace ShareMe.BLL.Interfaces.Services
     {
         Task<IEnumerable<Post>> GetRecordsAsync(PageInfo pageInfo);
 
-        Task<Post> GetByIdAsync(Guid id);
+        Task<PostViewModel> GetByIdAsync(Guid id);
 
         Task CreateAsync(Post item);
 
@@ -20,5 +20,19 @@ namespace ShareMe.BLL.Interfaces.Services
         Task DeleteAsync(Guid id);
 
         Task<bool> IsPostExistsAsync(Guid id);
+
+        Task<PostPreviewViewModel> GetPostPreviewsAsync(PageInfo pageInfo);
+
+        Task<PostPreviewViewModel> GetPostPreviewsByTagAsync(PageInfo pageInfo, string tag);
+
+        Task<PostPreviewViewModel> GetPostPreviewsBySearchAsync(PageInfo pageInfo, string header);
+
+        Task<PostPreviewViewModel> GetPostPreviewsByCategoryAsync(PageInfo pageInfo, Guid categoryId);
+
+        Task<PostViewModel> GetPostViewModelAsync(Guid id);
+
+        Task<List<PopularPost>> GetPopularPostsAsync();
+
+        Task<List<UserPost>> GetUserPostsAsync(Guid userId);
     }
 }

@@ -1,5 +1,5 @@
 ﻿using ShareMe.BLL.Interfaces.Models;
-using ShareMe.BLL.Interfaces.Models.Category;
+using ShareMe.BLL.Interfaces.Models.CategoryModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,5 +20,7 @@ namespace ShareMe.BLL.Interfaces.Services
         Task DeleteAsync(Guid id);
 
         Task<bool> IsCategoryExistsAsync(Guid id);
+
+        Task<List<CategoryViewModel>> GetCategoriesAsync();
     }
 }

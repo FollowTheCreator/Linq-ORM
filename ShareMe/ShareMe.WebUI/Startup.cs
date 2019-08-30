@@ -1,10 +1,16 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ShareMe.BLL.Interfaces.Services;
+using ShareMe.BLL.Services;
 using ShareMe.DAL.Interfaces.Context;
+using ShareMe.DAL.Interfaces.Repositories;
+using ShareMe.DAL.Repositories;
+using ShareMe.WebUI.Configs.Mapping;
 
 namespace ShareMe.WebUI
 {
@@ -23,6 +29,30 @@ namespace ShareMe.WebUI
             services
                 .AddDbContext<ShareMeContext>(options =>
                 options.UseSqlServer(connection));
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new WebUIMappingProfile());
+                mc.AddProfile(new BLLMappingProfile());
+            }
+            );
+#if DEBUG
+            mappingConfig.AssertConfigurationIsValid();
+#endif
+            services.AddSingleton(mappingConfig.CreateMapper());
+
+            services.AddScoped<IConfigService, ConfigService>();
+            services.AddScoped<IPostService, PostService>();
+            services.AddScoped<ITagService, TagService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<IPostRepository, PostRepository>();
+            services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

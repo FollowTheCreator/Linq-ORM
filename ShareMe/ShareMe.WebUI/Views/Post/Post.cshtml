@@ -1,0 +1,103 @@
+﻿@model PostViewModel
+
+<div class="w-50 mx-auto">
+    <div class="bg-white shadow">
+        <div class="pr-4 pl-4 pt-4 mt-5">
+            <div class="text-secondary">
+                <h3>
+                    @Model.Header
+                </h3>
+            </div>
+            <div>
+                <a asp-controller="User" asp-action="User" asp-route-Id="@Model.UserId">
+                    <div class="d-inline mr-5" style="color:#bebebe;">
+                        @Model.UserName
+                    </div>
+                </a>
+                <div class="d-inline" style="color:#bebebe;">
+                    @Model.Date.ToString("MMMM d, yyyy")
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="pr-4 pl-4 pb-4 pt-1">
+            <img src="@Model.Image" alt="image">
+            <div class="text-secondary pt-4">
+                @Model.Content
+            </div>
+            <div class="pt-4">
+                @foreach (var tag in Model.Tags)
+                {
+                    <a asp-controller="Post" asp-action="TagPosts" asp-route-Tag="@tag" class="btn btn-light text-secondary d-inline p-2 mr-2 ">
+                        @tag
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="p-4 mt-5 bg-white shadow">
+        <div>
+            <div class="font-italic">
+                    @Model.CommentsCount Comments
+            </div>
+            <div class="mt-3">
+                @foreach (var comment in Model.Comments)
+                {
+                    <div class="w-100 d-flex">
+                        <div>
+                            <img src="@comment.UserImage" alt="image" class="border rounded-circle bg-secondary">
+                        </div>
+                        <div class="w-100 ml-2">
+                            <div>
+                                <div>
+                                    <a asp-controller="User" asp-action="User" asp-route-Id="@Model.UserId" class="text-secondary">
+                                        @comment.UserName
+                                    </a>
+                                </div>
+                                <div style="color:#bebebe;">
+                                    @comment.Date.ToString("HH:mm, MMMM d, yyyy")
+                                </div>
+                            </div>
+                            <div>
+                                @comment.Content
+                            </div>
+                            <hr>
+                            <div class="ml-5">
+                                @foreach (var child in comment.Children)
+                                {
+                                    <div class="w-100 d-flex">
+                                        <div>
+                                            <img src="@child.UserImage" alt="image" class="border rounded-circle bg-secondary">
+                                        </div>
+                                        <div class="w-100 ml-2">
+                                            <div>
+                                                <div>
+                                                    <a asp-controller="User" asp-action="User" asp-route-Id="@Model.UserId" class="text-secondary">
+                                                        @child.UserName
+                                                    </a>
+                                                </div>
+                                                <div style="color:#bebebe;">
+                                                    @child.Date.ToString("HH:mm, MMMM d, yyyy")
+                                                </div>
+                                            </div>
+                                            <div>
+                                                @child.Content
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div>
+            <form class="form-inline mt-5" asp-action="Publish" asp-controller="Comment">
+                <textarea class="border-left-0 border-right-0 form-control w-100 rounded-0" rows="5" placeholder="Enter your comment..."></textarea>
+                <button class="btn btn-outline-secondary mt-3" type="submit">PUBLISH</button>
+            </form>
+        </div>
+    </div>
+</div>

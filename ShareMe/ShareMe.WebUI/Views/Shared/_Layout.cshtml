@@ -1,15 +1,24 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ShareMe</title>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ShareMe</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
-<body>
-    <div class="w-50 my-5 mx-auto">
-        @RenderBody()
-    </div>
-</body>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body style="background-color:#f6f8ff">
+        <nav class="navbar navbar-expand-lg bg-white justify-content-between shadow">
+            <ul class="navbar-nav ml-5">
+                <li class="nav-item ml-5"><a class="text-secondary" asp-action="Posts" asp-controller="Post"><h4>Share Me</h4></a></li>
+            </ul>
+            <form class="form-inline mr-5 my-2" asp-action="SearchPosts" asp-controller="Post">
+                <input class="form-control mr-2" name="header" placeholder="Search">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+            </form>
+        </nav>
+        <div class="my-5 mx-auto">
+            @RenderBody()
+        </div>
+    </body>
 </html>

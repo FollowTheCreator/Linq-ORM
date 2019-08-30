@@ -1,10 +1,12 @@
-﻿using System;
+﻿using ShareMe.DAL.Interfaces.Models;
+using ShareMe.DAL.Interfaces.Models.PostTagModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ShareMe.DAL.Interfaces.Repositories
 {
-    interface IPostTagRepository
+    public interface IPostTagRepository : IRepository<PostTag>
     {
     }
 }

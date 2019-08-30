@@ -22,6 +22,11 @@ namespace ShareMe.BLL.Services
             return GetValue<int>($"{PageInfoSection}:PageSize");
         }
 
+        public int GetPopularPostsCount()
+        {
+            return GetValue<int>($"{PageInfoSection}:PopularPostsCount");
+        }
+
         private T GetValue<T>(string path)
         {
             try

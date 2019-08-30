@@ -1,5 +1,5 @@
 ﻿using ShareMe.BLL.Interfaces.Models;
-using ShareMe.BLL.Interfaces.Models.Tag;
+using ShareMe.BLL.Interfaces.Models.TagModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,5 +20,9 @@ namespace ShareMe.BLL.Interfaces.Services
         Task DeleteAsync(Guid id);
 
         Task<bool> IsTagExistsAsync(Guid id);
+
+        Task<List<string>> GetPostTagsAsync(Guid postId);
+
+        Task<List<string>> GetTagsAsync();
     }
 }

@@ -1,5 +1,5 @@
 ﻿using ShareMe.BLL.Interfaces.Models;
-using ShareMe.BLL.Interfaces.Models.PostTag;
+using ShareMe.BLL.Interfaces.Models.PostTagModels;
 using System;
 using System.Collections.Generic;
 using System.Text;

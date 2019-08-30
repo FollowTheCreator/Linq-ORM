@@ -1,21 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\ShareMe.BLL.Interfaces\ShareMe.BLL.Interfaces.csproj" />
+    <ProjectReference Include="..\ShareMe.BLL\ShareMe.BLL.csproj" />
     <ProjectReference Include="..\ShareMe.DAL.Interfaces\ShareMe.DAL.Interfaces.csproj" />
+    <ProjectReference Include="..\ShareMe.DAL\ShareMe.DAL.csproj" />
   </ItemGroup>
 
 </Project>

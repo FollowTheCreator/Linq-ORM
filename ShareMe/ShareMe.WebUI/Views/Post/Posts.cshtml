@@ -1,29 +1,133 @@
-﻿@model IEnumerable<Post>
+﻿@model PostPreviewViewModel
 
-<div>
-    <table class="table mt-3">
-        <thead class="thead-light">
-            <tr>
-                <th class="text-dark">
-                    Id
-                </th>
-                <th class="text-dark">
-                    Header
-                </th>
-                <th class="text-dark">
-                    Content
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
+<div class="w-50 mx-auto d-flex justify-content-between">
+    <div class="w-75">
+        <div>
+            @foreach (var item in Model.PostPreviews)
             {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Header</td>
-                    <td>@item.Content</td>
-                </tr>
+                <div class="bg-white shadow">
+                    <div class="pr-4 pl-4 pt-4 mt-5">
+                        <img src="@item.Image" alt="image">
+                        <div>
+                            <a asp-controller="Post" asp-action="Post" asp-route-Id="@item.Id" class="text-secondary">
+                                <h3>
+                                    @item.Header
+                                </h3>
+                            </a>
+                        </div>
+                        <div>
+                            <a asp-controller="User" asp-action="User" asp-route-Id="@item.UserId">
+                                <div class="d-inline mr-5" style="color:#bebebe;">
+                                    @item.UserName
+                                </div>
+                            </a>
+                            <div class="d-inline" style="color:#bebebe;">
+                                @item.Date.ToString("MMMM d, yyyy")
+                            </div>
+                        </div>
+                        <div class="text-secondary">
+                            @item.Content
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="pr-4 pl-4 pb-4 pt-1 d-flex justify-content-between">
+                        <div class="w-75">
+                            @foreach (var tag in item.Tags)
+                            {
+                                <a asp-controller="Post" asp-action="TagPosts" asp-route-Tag="@tag" class="btn btn-light text-secondary d-inline p-2 mr-2 ">
+                                    @tag
+                                </a>
+                            }
+                        </div>
+                        <div>
+                            <a asp-controller="Post" asp-action="Post" asp-route-Id="@item.Id" class="btn btn-outline-secondary d-inline p-2">
+                                READ MORE
+                            </a>
+                        </div>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
+        </div>
+        <div class="d-flex my-5">
+            <div class="btn-group mx-auto">
+                @for (int i = 1; i <= Model.PageInfo.TotalPages; i++)
+                {
+                    if (i == Model.PageInfo.PageNumber)
+                    {
+                        <a asp-controller="Post" asp-action="Posts" asp-route-PageNumber="@i" class="btn btn-secondary">
+                            @i
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Post" asp-action="Posts" asp-route-PageNumber="@i" class="btn btn-outline-secondary">
+                            @i
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="ml-5 mt-5 w-25">
+        <div class="bg-white shadow text-secondary">
+            <div class="pt-2 pl-2 pr-2">
+                <h4>Popular Posts</h4>
+            </div>
+            <table class="table">
+                @foreach (var item in Model.PopularPosts)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Post" asp-action="Post" asp-route-Id="@item.Id" class="text-secondary">
+                                <div class="d-flex justify-content-between">
+                                    <img src="@item.Image" alt="image" class="w-25">
+                                    <div class="ml-2 w-75">
+                                        @item.Header
+                                    </div>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <div class="bg-white shadow text-secondary mt-5">
+            <div class="pt-2 pl-2 pr-2">
+                <h4>Categories</h4>
+            </div>
+            <table class="table">
+                @foreach (var item in Model.Categories)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Post" asp-action="CategoryPosts" asp-route-categoryId="@item.Id" class="text-secondary">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        >@item.Name
+                                    </div>
+                                    <div>
+                                        (@item.PostsCount)
+                                    </div>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <div class="bg-white shadow text-secondary mt-5">
+            <div class="pt-2 pl-2 pr-2">
+                <h4>Tags</h4>
+            </div>
+            <hr>
+            <div class="p-2">
+                @foreach (var tag in Model.Tags)
+                {
+                    <a asp-controller="Post" asp-action="TagPosts" asp-route-Tag="@tag" class="btn btn-light text-secondary d-inline-block p-2 mb-1">
+                        @tag
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
 </div>

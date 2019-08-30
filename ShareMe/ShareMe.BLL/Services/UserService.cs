@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ShareMe.BLL.Interfaces.Models;
-using ShareMe.BLL.Interfaces.Models.User;
+using ShareMe.BLL.Interfaces.Models.UserModels;
 using ShareMe.BLL.Interfaces.Services;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
@@ -14,11 +14,15 @@ namespace ShareMe.BLL.Services
     {
         private readonly IUserRepository _userRepository;
 
+        private readonly IPostService _postService;
+
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public UserService(IUserRepository userRepository, IPostService postService, IMapper mapper)
         {
             _userRepository = userRepository;
+
+            _postService = postService;
 
             _mapper = mapper;
         }
@@ -43,9 +47,15 @@ namespace ShareMe.BLL.Services
             throw new NotImplementedException();
         }
 
-        public async Task<string> GetSaltByIdAsync(Guid id)
+        public async Task<UserViewModel> GetUserAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var user = await _userRepository.GetUserAsync(id);
+            var convertedUser = _mapper.Map<DAL.Interfaces.Models.UserModels.UserViewModel, UserViewModel>(user);
+
+            var posts = await _postService.GetUserPostsAsync(convertedUser.Id);
+            convertedUser.UserPosts = posts;
+
+            return convertedUser;
         }
 
         public async Task<bool> IsEmailExistsAsync(string email)

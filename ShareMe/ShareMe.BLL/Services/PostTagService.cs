@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ShareMe.BLL.Interfaces.Models;
-using ShareMe.BLL.Interfaces.Models.PostTag;
+using ShareMe.BLL.Interfaces.Models.PostTagModels;
 using ShareMe.BLL.Interfaces.Services;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;

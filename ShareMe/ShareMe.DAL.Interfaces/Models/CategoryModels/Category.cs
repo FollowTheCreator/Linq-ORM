@@ -1,0 +1,19 @@
+﻿using ShareMe.DAL.Interfaces.Models.PostModels;
+using System;
+using System.Collections.Generic;
+
+namespace ShareMe.DAL.Interfaces.Models.CategoryModels
+{
+    public partial class Category : IEntity
+    {
+        public Category()
+        {
+            Post = new HashSet<Post>();
+        }
+
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+
+        public ICollection<Post> Post { get; set; }
+    }
+}

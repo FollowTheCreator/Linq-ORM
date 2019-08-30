@@ -1,5 +1,5 @@
 ﻿using ShareMe.BLL.Interfaces.Models;
-using ShareMe.BLL.Interfaces.Models.Comment;
+using ShareMe.BLL.Interfaces.Models.CommentModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,5 +20,9 @@ namespace ShareMe.BLL.Interfaces.Services
         Task DeleteAsync(Guid id);
 
         Task<bool> IsCommentExistsAsync(Guid id);
+
+        Task<List<CommentViewModel>> GetPostCommentsAsync(Guid postId);
+
+        Task<int> GetPostCommentsCount(Guid postId);
     }
 }

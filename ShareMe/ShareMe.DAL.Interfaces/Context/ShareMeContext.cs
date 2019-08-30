@@ -2,6 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using ShareMe.DAL.Interfaces.Models;
+using ShareMe.DAL.Interfaces.Models.CategoryModels;
+using ShareMe.DAL.Interfaces.Models.CommentModels;
+using ShareMe.DAL.Interfaces.Models.PostModels;
+using ShareMe.DAL.Interfaces.Models.PostTagModels;
+using ShareMe.DAL.Interfaces.Models.TagModels;
+using ShareMe.DAL.Interfaces.Models.UserModels;
 
 namespace ShareMe.DAL.Interfaces.Context
 {

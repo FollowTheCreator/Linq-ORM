@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareMe.DAL", "ShareMe.DAL\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareMe.DAL.Interfaces", "ShareMe.DAL.Interfaces\ShareMe.DAL.Interfaces.csproj", "{BB44052E-9135-4BCD-B7D8-21BDE9BD8633}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareMe.Utils", "ShareMe.Utils\ShareMe.Utils.csproj", "{F7D4975B-2E0C-4B1B-9127-259E091455F5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,10 +39,6 @@ Global
 		{BB44052E-9135-4BCD-B7D8-21BDE9BD8633}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB44052E-9135-4BCD-B7D8-21BDE9BD8633}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB44052E-9135-4BCD-B7D8-21BDE9BD8633}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F7D4975B-2E0C-4B1B-9127-259E091455F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F7D4975B-2E0C-4B1B-9127-259E091455F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F7D4975B-2E0C-4B1B-9127-259E091455F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F7D4975B-2E0C-4B1B-9127-259E091455F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

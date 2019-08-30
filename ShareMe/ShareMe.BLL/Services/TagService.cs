@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ShareMe.BLL.Interfaces.Models;
-using ShareMe.BLL.Interfaces.Models.Tag;
+using ShareMe.BLL.Interfaces.Models.TagModels;
 using ShareMe.BLL.Interfaces.Services;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
@@ -43,6 +43,13 @@ namespace ShareMe.BLL.Services
             throw new NotImplementedException();
         }
 
+        public async Task<List<string>> GetPostTagsAsync(Guid postId)
+        {
+            var result = await _tagRepository.GetPostTagsAsync(postId);
+
+            return result;
+        }
+
         public async Task<bool> IsTagExistsAsync(Guid id)
         {
             var result = await _tagRepository.GetByIdAsync(id);
@@ -53,6 +60,13 @@ namespace ShareMe.BLL.Services
         public async Task UpdateAsync(Tag item)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<string>> GetTagsAsync()
+        {
+            var result = await _tagRepository.GetTagsAsync();
+
+            return result;
         }
     }
 }

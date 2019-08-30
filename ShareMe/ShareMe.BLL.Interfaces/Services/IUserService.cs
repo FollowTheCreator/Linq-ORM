@@ -1,5 +1,5 @@
 ﻿using ShareMe.BLL.Interfaces.Models;
-using ShareMe.BLL.Interfaces.Models.User;
+using ShareMe.BLL.Interfaces.Models.UserModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,5 +22,7 @@ namespace ShareMe.BLL.Interfaces.Services
         Task<bool> IsEmailExistsAsync(string email);
 
         Task<bool> IsUserExistsAsync(Guid id);
+
+        Task<UserViewModel> GetUserAsync(Guid id);
     }
 }

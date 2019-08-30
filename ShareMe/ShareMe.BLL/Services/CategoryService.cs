@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ShareMe.BLL.Interfaces.Models;
-using ShareMe.BLL.Interfaces.Models.Category;
+using ShareMe.BLL.Interfaces.Models.CategoryModels;
 using ShareMe.BLL.Interfaces.Services;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
@@ -36,6 +36,14 @@ namespace ShareMe.BLL.Services
         public async Task<Category> GetByIdAsync(Guid id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<CategoryViewModel>> GetCategoriesAsync()
+        {
+            var result = await _categoryRepository.GetCategoriesAsync();
+            var convertedResult = _mapper.Map<List<DAL.Interfaces.Models.CategoryModels.CategoryViewModel>, List<CategoryViewModel>>(result);
+
+            return convertedResult;
         }
 
         public async Task<IEnumerable<Category>> GetRecordsAsync(PageInfo pageInfo)

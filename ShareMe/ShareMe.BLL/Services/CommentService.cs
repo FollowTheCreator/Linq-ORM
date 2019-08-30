@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ShareMe.BLL.Interfaces.Models;
-using ShareMe.BLL.Interfaces.Models.Comment;
+using ShareMe.BLL.Interfaces.Models.CommentModels;
 using ShareMe.BLL.Interfaces.Services;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
@@ -36,6 +36,21 @@ namespace ShareMe.BLL.Services
         public async Task<Comment> GetByIdAsync(Guid id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<CommentViewModel>> GetPostCommentsAsync(Guid postId)
+        {
+            var result = await _commentRepository.GetPostComments(postId);
+            var convertedResult = _mapper.Map<List<DAL.Interfaces.Models.CommentModels.CommentViewModel>, List<CommentViewModel>>(result);
+
+            return convertedResult;
+        }
+
+        public async Task<int> GetPostCommentsCount(Guid postId)
+        {
+            var result = await _commentRepository.GetPostCommentsCount(postId);
+
+            return result;
         }
 
         public async Task<IEnumerable<Comment>> GetRecordsAsync(PageInfo pageInfo)
