@@ -24,11 +24,13 @@
                             <a asp-controller="Post" asp-action="Post" asp-route-Id="@post.Id" class="text-secondary">
                                 <div class="d-flex justify-content-between">
                                     <img src="@post.Image" alt="image" class="w-25">
-                                    <div class="ml-2 w-75">
+                                    <div class="ml-2 w-50">
                                         @post.Header
                                     </div>
-                                    <div style="color:#bebebe;">
-                                        @post.Date.ToString("MMMM d, yyyy")
+                                    <div class="w-25" style="color:#bebebe;">
+                                        <div class="float-right">
+                                            @post.Date.ToString("MMMM d, yyyy")
+                                        </div>
                                     </div>
                                 </div>
                             </a>

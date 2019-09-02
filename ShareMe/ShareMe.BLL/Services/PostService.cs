@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using ShareMe.BLL.Interfaces.Models;
 using ShareMe.BLL.Interfaces.Models.PostModels;
+using ShareMe.BLL.Interfaces.Models.PostTagModels;
+using ShareMe.BLL.Interfaces.Models.TagModels;
 using ShareMe.BLL.Interfaces.Services;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShareMe.BLL.Services
@@ -17,6 +18,7 @@ namespace ShareMe.BLL.Services
 
         private readonly IConfigService _configService;
         private readonly ITagService _tagService;
+        private readonly IPostTagService _postTagService;
         private readonly ICommentService _commentService;
         private readonly ICategoryService _categoryService;
 
@@ -27,6 +29,7 @@ namespace ShareMe.BLL.Services
             IPostRepository postRepository, 
             IConfigService configService, 
             ITagService tagService,
+            IPostTagService postTagService,
             ICommentService commentService,
             ICategoryService categoryService,
             IMapper mapper
@@ -36,25 +39,67 @@ namespace ShareMe.BLL.Services
 
             _configService = configService;
             _tagService = tagService;
+            _postTagService = postTagService;
             _commentService = commentService;
             _categoryService = categoryService;
 
             _mapper = mapper;
         }
 
-        public async Task CreateAsync(Post item)
+        public async Task CreateAsync(PostCreateModel item)
         {
-            throw new NotImplementedException();
+            item.Views = 0;
+
+            var result = _mapper.Map<PostCreateModel, DAL.Interfaces.Models.PostModels.Post>(item);
+
+            var postId = Guid.NewGuid();
+            result.Id = postId;
+
+            await _postRepository.CreateAsync(result);
+
+            var tagIds = new List<Guid>(item.Tags.Count);
+            foreach(var tag in item.Tags)
+            {
+                var tagId = Guid.NewGuid();
+                await _tagService.CreateAsync(
+                    new Tag
+                    {
+                        Id = tagId,
+                        Name = tag
+                    }
+                );
+
+                var createdTag = await _tagService.GetByNameAsync(tag);
+                tagIds.Add(createdTag.Id);
+            }
+
+            foreach(var tagId in tagIds)
+            {
+                await _postTagService.CreateAsync(
+                    new PostTag
+                    {
+                        PostId = postId,
+                        TagId = tagId
+                    }
+                );
+            }
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
-        }
+            var comments = await _commentService.GetPostCommentsAsync(id);
+            foreach(var comment in comments)
+            {
+                await _commentService.DeleteAsync(comment.Id);
+            }
 
-        public async Task<PostViewModel> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
+            var postTags = await _postTagService.GetPostTagsByPostId(id);
+            foreach (var postTag in postTags)
+            {
+                await _postTagService.DeleteAsync(postTag.Id);
+            }
+
+            await _postRepository.DeleteAsync(id);
         }
 
         public async Task<PostPreviewViewModel> GetPostPreviewsAsync(PageInfo pageInfo)
@@ -141,11 +186,6 @@ namespace ShareMe.BLL.Services
             return convertedPostResult;
         }
 
-        public async Task<IEnumerable<Post>> GetRecordsAsync(PageInfo pageInfo)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<bool> IsPostExistsAsync(Guid id)
         {
             var result = await _postRepository.GetByIdAsync(id);
@@ -155,7 +195,9 @@ namespace ShareMe.BLL.Services
 
         public async Task UpdateAsync(Post item)
         {
-            throw new NotImplementedException();
+            var convertedItem = _mapper.Map<Post, DAL.Interfaces.Models.PostModels.Post>(item);
+
+            await _postRepository.UpdateAsync(convertedItem);
         }
 
         private static string TrimPost(string postContent)

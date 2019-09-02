@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
-using ShareMe.BLL.Interfaces.Models;
 using ShareMe.BLL.Interfaces.Models.UserModels;
 using ShareMe.BLL.Interfaces.Services;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShareMe.BLL.Services
@@ -29,22 +26,14 @@ namespace ShareMe.BLL.Services
 
         public async Task CreateAsync(User item)
         {
-            throw new NotImplementedException();
+            var convertedItem = _mapper.Map<User, DAL.Interfaces.Models.UserModels.User>(item);
+
+            await _userRepository.CreateAsync(convertedItem);
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<User> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<User>> GetRecordsAsync(PageInfo pageInfo)
-        {
-            throw new NotImplementedException();
+            await _userRepository.DeleteAsync(id);
         }
 
         public async Task<UserViewModel> GetUserAsync(Guid id)
@@ -72,7 +61,9 @@ namespace ShareMe.BLL.Services
 
         public async Task UpdateAsync(User item)
         {
-            throw new NotImplementedException();
+            var convertedItem = _mapper.Map<User, DAL.Interfaces.Models.UserModels.User>(item);
+
+            await _userRepository.UpdateAsync(convertedItem);
         }
     }
 }

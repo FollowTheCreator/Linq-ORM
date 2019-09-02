@@ -1,8 +1,6 @@
-﻿using ShareMe.DAL.Interfaces.Models;
-using ShareMe.DAL.Interfaces.Models.TagModels;
+﻿using ShareMe.DAL.Interfaces.Models.TagModels;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShareMe.DAL.Interfaces.Repositories
@@ -11,6 +9,10 @@ namespace ShareMe.DAL.Interfaces.Repositories
     {
         Task<List<string>> GetPostTagsAsync(Guid postId);
 
+        Task<List<Guid>> GetPostTagIdsAsync(Guid postId);
+
         Task<List<string>> GetTagsAsync();
+
+        Task<Tag> GetByNameAsync(string name);
     }
 }

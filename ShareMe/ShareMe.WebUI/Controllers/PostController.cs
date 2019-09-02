@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ShareMe.BLL.Interfaces.Services;
-using ShareMe.DAL.Interfaces.Context;
 using ShareMe.WebUI.Models;
 using ShareMe.WebUI.Models.PostModels;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ShareMe.WebUI.Controllers
 {
@@ -67,6 +64,32 @@ namespace ShareMe.WebUI.Controllers
             var convertedResult = _mapper.Map<BLL.Interfaces.Models.PostModels.PostViewModel, PostViewModel>(result);
 
             return View("~/Views/Post/Post.cshtml", convertedResult);
+        }
+
+        public async Task<ActionResult> Create()
+        {
+            var model = new PostCreateModel
+            {
+                Header = "Test create",
+                Content = "Test create",
+                Date = DateTime.Now,
+                CategoryId = Guid.Parse("21C59A9A-888C-4C2E-8C5C-8B31AC0C191D"),
+                UserId = Guid.Parse("0DC85AA9-566B-45F2-A92C-4E594D23CFA7"),
+                Tags = new List<string> { "Photography", "Sports", "Life"}
+            };
+
+            var convertedModel = _mapper.Map<PostCreateModel, BLL.Interfaces.Models.PostModels.PostCreateModel>(model);
+
+            await _postService.CreateAsync(convertedModel);
+
+            return RedirectToAction("Posts");
+        }
+
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            await _postService.DeleteAsync(id);
+
+            return RedirectToAction("Posts");
         }
     }
 }

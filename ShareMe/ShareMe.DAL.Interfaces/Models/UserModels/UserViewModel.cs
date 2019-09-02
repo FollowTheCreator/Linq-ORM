@@ -1,7 +1,6 @@
 ﻿using ShareMe.DAL.Interfaces.Models.PostModels;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ShareMe.DAL.Interfaces.Models.UserModels
 {

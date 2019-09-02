@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ShareMe.DAL.Interfaces.Models
+﻿namespace ShareMe.DAL.Interfaces.Models
 {
     public class PageInfo
     {

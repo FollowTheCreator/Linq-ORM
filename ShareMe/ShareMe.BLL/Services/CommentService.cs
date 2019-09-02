@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using ShareMe.BLL.Interfaces.Models;
 using ShareMe.BLL.Interfaces.Models.CommentModels;
 using ShareMe.BLL.Interfaces.Services;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShareMe.BLL.Services
@@ -25,22 +23,28 @@ namespace ShareMe.BLL.Services
 
         public async Task CreateAsync(Comment item)
         {
-            throw new NotImplementedException();
+            item.Content = "test test test";
+            item.Date = DateTime.Now;
+
+            var convertedItem = _mapper.Map<Comment, DAL.Interfaces.Models.CommentModels.Comment>(item);
+
+            await _commentRepository.CreateAsync(convertedItem);
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
-        }
+            var children = await _commentRepository.GetChildrenAsync(id);
+            foreach(var child in children)
+            {
+                await _commentRepository.DeleteAsync(child.Id);
+            }
 
-        public async Task<Comment> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
+            await _commentRepository.DeleteAsync(id);
         }
 
         public async Task<List<CommentViewModel>> GetPostCommentsAsync(Guid postId)
         {
-            var result = await _commentRepository.GetPostComments(postId);
+            var result = await _commentRepository.GetPostCommentsAsync(postId);
             var convertedResult = _mapper.Map<List<DAL.Interfaces.Models.CommentModels.CommentViewModel>, List<CommentViewModel>>(result);
 
             return convertedResult;
@@ -48,14 +52,9 @@ namespace ShareMe.BLL.Services
 
         public async Task<int> GetPostCommentsCount(Guid postId)
         {
-            var result = await _commentRepository.GetPostCommentsCount(postId);
+            var result = await _commentRepository.GetPostCommentsCountAsync(postId);
 
             return result;
-        }
-
-        public async Task<IEnumerable<Comment>> GetRecordsAsync(PageInfo pageInfo)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<bool> IsCommentExistsAsync(Guid id)
@@ -67,7 +66,9 @@ namespace ShareMe.BLL.Services
 
         public async Task UpdateAsync(Comment item)
         {
-            throw new NotImplementedException();
+            var convertedItem = _mapper.Map<Comment, DAL.Interfaces.Models.CommentModels.Comment>(item);
+
+            await _commentRepository.UpdateAsync(convertedItem);
         }
     }
 }

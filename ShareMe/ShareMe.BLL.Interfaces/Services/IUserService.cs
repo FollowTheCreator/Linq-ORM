@@ -1,18 +1,11 @@
-﻿using ShareMe.BLL.Interfaces.Models;
-using ShareMe.BLL.Interfaces.Models.UserModels;
+﻿using ShareMe.BLL.Interfaces.Models.UserModels;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShareMe.BLL.Interfaces.Services
 {
     public interface IUserService
     {
-        Task<IEnumerable<User>> GetRecordsAsync(PageInfo pageInfo);
-
-        Task<User> GetByIdAsync(Guid id);
-
         Task CreateAsync(User item);
 
         Task UpdateAsync(User item);

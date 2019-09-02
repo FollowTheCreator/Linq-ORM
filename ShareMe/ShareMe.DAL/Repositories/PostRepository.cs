@@ -1,14 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShareMe.DAL.Interfaces.Context;
 using ShareMe.DAL.Interfaces.Models;
-using ShareMe.DAL.Interfaces.Models.CategoryModels;
 using ShareMe.DAL.Interfaces.Models.PostModels;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShareMe.DAL.Repositories

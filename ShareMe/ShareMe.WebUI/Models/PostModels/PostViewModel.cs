@@ -1,8 +1,6 @@
 ﻿using ShareMe.WebUI.Models.CommentModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ShareMe.WebUI.Models.PostModels
 {

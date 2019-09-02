@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using ShareMe.BLL.Interfaces.Services;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ShareMe.BLL.Services
 {

@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using ShareMe.BLL.Interfaces.Models;
 using ShareMe.BLL.Interfaces.Models.CategoryModels;
 using ShareMe.BLL.Interfaces.Services;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShareMe.BLL.Services
@@ -23,21 +21,6 @@ namespace ShareMe.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task CreateAsync(Category item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Category> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<CategoryViewModel>> GetCategoriesAsync()
         {
             var result = await _categoryRepository.GetCategoriesAsync();
@@ -46,21 +29,11 @@ namespace ShareMe.BLL.Services
             return convertedResult;
         }
 
-        public async Task<IEnumerable<Category>> GetRecordsAsync(PageInfo pageInfo)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<bool> IsCategoryExistsAsync(Guid id)
         {
             var result = await _categoryRepository.GetByIdAsync(id);
 
             return result != null;
-        }
-
-        public async Task UpdateAsync(Category item)
-        {
-            throw new NotImplementedException();
         }
     }
 }

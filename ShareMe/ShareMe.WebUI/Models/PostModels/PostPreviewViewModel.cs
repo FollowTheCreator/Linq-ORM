@@ -1,8 +1,5 @@
-﻿using System;
+﻿using ShareMe.WebUI.Models.CategoryModels;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ShareMe.WebUI.Models.CategoryModels;
 
 namespace ShareMe.WebUI.Models.PostModels
 {

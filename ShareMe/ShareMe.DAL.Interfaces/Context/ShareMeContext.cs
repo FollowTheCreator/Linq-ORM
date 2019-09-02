@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using ShareMe.DAL.Interfaces.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using ShareMe.DAL.Interfaces.Models.CategoryModels;
 using ShareMe.DAL.Interfaces.Models.CommentModels;
 using ShareMe.DAL.Interfaces.Models.PostModels;

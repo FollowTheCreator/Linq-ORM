@@ -1,8 +1,5 @@
-﻿using ShareMe.DAL.Interfaces.Models;
-using ShareMe.DAL.Interfaces.Models.CategoryModels;
-using System;
+﻿using ShareMe.DAL.Interfaces.Models.CategoryModels;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShareMe.DAL.Interfaces.Repositories

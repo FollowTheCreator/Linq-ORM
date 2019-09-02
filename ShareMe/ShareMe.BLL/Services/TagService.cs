@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using ShareMe.BLL.Interfaces.Models;
 using ShareMe.BLL.Interfaces.Models.TagModels;
 using ShareMe.BLL.Interfaces.Services;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShareMe.BLL.Services
@@ -25,22 +23,18 @@ namespace ShareMe.BLL.Services
 
         public async Task CreateAsync(Tag item)
         {
-            throw new NotImplementedException();
+            if (!await IsTagExistsByNameAsync(item.Name))
+            {
+                var convertedItem = _mapper.Map<Tag, DAL.Interfaces.Models.TagModels.Tag>(item);
+                await _tagRepository.CreateAsync(convertedItem);
+            }
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<List<Guid>> GetPostTagIdsAsync(Guid postId)
         {
-            throw new NotImplementedException();
-        }
+            var result = await _tagRepository.GetPostTagIdsAsync(postId);
 
-        public async Task<Tag> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<Tag>> GetRecordsAsync(PageInfo pageInfo)
-        {
-            throw new NotImplementedException();
+            return result;
         }
 
         public async Task<List<string>> GetPostTagsAsync(Guid postId)
@@ -57,9 +51,11 @@ namespace ShareMe.BLL.Services
             return result != null;
         }
 
-        public async Task UpdateAsync(Tag item)
+        public async Task<bool> IsTagExistsByNameAsync(string name)
         {
-            throw new NotImplementedException();
+            var result = await _tagRepository.GetByNameAsync(name);
+
+            return result != null;
         }
 
         public async Task<List<string>> GetTagsAsync()
@@ -67,6 +63,15 @@ namespace ShareMe.BLL.Services
             var result = await _tagRepository.GetTagsAsync();
 
             return result;
+        }
+
+        public async Task<Tag> GetByNameAsync(string name)
+        {
+            var result = await _tagRepository.GetByNameAsync(name);
+
+            var convertedResult = _mapper.Map<DAL.Interfaces.Models.TagModels.Tag, Tag>(result);
+
+            return convertedResult;
         }
     }
 }

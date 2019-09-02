@@ -1,7 +1,6 @@
 ﻿using ShareMe.BLL.Interfaces.Models.CommentModels;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ShareMe.BLL.Interfaces.Models.PostModels
 {

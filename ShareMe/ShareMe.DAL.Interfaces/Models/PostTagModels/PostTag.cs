@@ -1,7 +1,6 @@
 ﻿using ShareMe.DAL.Interfaces.Models.PostModels;
 using ShareMe.DAL.Interfaces.Models.TagModels;
 using System;
-using System.Collections.Generic;
 
 namespace ShareMe.DAL.Interfaces.Models.PostTagModels
 {

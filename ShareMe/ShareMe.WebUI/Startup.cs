@@ -44,12 +44,14 @@ namespace ShareMe.WebUI
             services.AddScoped<IConfigService, ConfigService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<ITagService, TagService>();
+            services.AddScoped<IPostTagService, PostTagService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<IPostTagRepository, PostTagRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IUserRepository, UserRepository>();

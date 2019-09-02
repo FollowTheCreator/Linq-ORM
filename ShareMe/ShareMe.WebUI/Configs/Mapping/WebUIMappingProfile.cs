@@ -4,10 +4,6 @@ using ShareMe.WebUI.Models.CategoryModels;
 using ShareMe.WebUI.Models.CommentModels;
 using ShareMe.WebUI.Models.PostModels;
 using ShareMe.WebUI.Models.UserModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ShareMe.WebUI.Configs.Mapping
 {
@@ -38,6 +34,7 @@ namespace ShareMe.WebUI.Configs.Mapping
         private void CreateCommentMaps()
         {
             CreateMap<BLL.Interfaces.Models.CommentModels.CommentViewModel, CommentViewModel>();
+            CreateMap<Comment, BLL.Interfaces.Models.CommentModels.Comment>();
         }
 
         private void CreatePostMaps()
@@ -47,6 +44,7 @@ namespace ShareMe.WebUI.Configs.Mapping
             CreateMap<BLL.Interfaces.Models.PostModels.PostViewModel, PostViewModel>();
             CreateMap<BLL.Interfaces.Models.PostModels.PopularPost, PopularPost>();
             CreateMap<BLL.Interfaces.Models.PostModels.UserPost, UserPost>();
+            CreateMap<PostCreateModel, BLL.Interfaces.Models.PostModels.PostCreateModel>();
         }
 
         private void CreatePostTagMaps()

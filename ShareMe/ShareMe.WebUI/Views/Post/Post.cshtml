@@ -9,7 +9,7 @@
                 </h3>
             </div>
             <div>
-                <a asp-controller="User" asp-action="User" asp-route-Id="@Model.UserId">
+                <a asp-controller="User" asp-action="GetUser" asp-route-Id="@Model.UserId">
                     <div class="d-inline mr-5" style="color:#bebebe;">
                         @Model.UserName
                     </div>
@@ -25,13 +25,20 @@
             <div class="text-secondary pt-4">
                 @Model.Content
             </div>
-            <div class="pt-4">
-                @foreach (var tag in Model.Tags)
-                {
-                    <a asp-controller="Post" asp-action="TagPosts" asp-route-Tag="@tag" class="btn btn-light text-secondary d-inline p-2 mr-2 ">
-                        @tag
+            <div class="pt-4 d-flex justify-content-between w-100">
+                <div class="w-75">
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <a asp-controller="Post" asp-action="TagPosts" asp-route-Tag="@tag" class="btn btn-light text-secondary d-inline p-2 mr-2">
+                            @tag
+                        </a>
+                    }
+                </div>
+                <div>
+                    <a asp-controller="Post" asp-action="Delete" asp-route-Id="@Model.Id" class="btn btn-outline-danger">
+                        Delete post
                     </a>
-                }
+                </div>
             </div>
         </div>
     </div>
@@ -50,7 +57,7 @@
                         <div class="w-100 ml-2">
                             <div>
                                 <div>
-                                    <a asp-controller="User" asp-action="User" asp-route-Id="@Model.UserId" class="text-secondary">
+                                    <a asp-controller="User" asp-action="GetUser" asp-route-Id="@Model.UserId" class="text-secondary">
                                         @comment.UserName
                                     </a>
                                 </div>
@@ -60,6 +67,14 @@
                             </div>
                             <div>
                                 @comment.Content
+                            </div>
+                            <div>
+                                <a asp-controller="Comment" asp-action="Publish" asp-route-PostId="@Model.Id" asp-route-UserId="0DC85AA9-566B-45F2-A92C-4E594D23CFA7" asp-route-ParentId="@comment.Id" class="btn btn-light text-secondary p-2">
+                                    Reply
+                                </a>
+                                <a asp-controller="Comment" asp-action="Delete" asp-route-commentId="@comment.Id" asp-route-postId="@Model.Id" class="btn btn-light text-secondary p-2">
+                                    Delete
+                                </a>
                             </div>
                             <hr>
                             <div class="ml-5">
@@ -72,7 +87,7 @@
                                         <div class="w-100 ml-2">
                                             <div>
                                                 <div>
-                                                    <a asp-controller="User" asp-action="User" asp-route-Id="@Model.UserId" class="text-secondary">
+                                                    <a asp-controller="User" asp-action="GetUser" asp-route-Id="@Model.UserId" class="text-secondary">
                                                         @child.UserName
                                                     </a>
                                                 </div>
@@ -82,6 +97,11 @@
                                             </div>
                                             <div>
                                                 @child.Content
+                                            </div>
+                                            <div>
+                                                <a asp-controller="Comment" asp-action="Delete" asp-route-commentId="@child.Id" asp-route-postId="@Model.Id" class="btn btn-light text-secondary p-2">
+                                                    Delete
+                                                </a>
                                             </div>
                                             <hr>
                                         </div>
@@ -94,8 +114,8 @@
             </div>
         </div>
         <div>
-            <form class="form-inline mt-5" asp-action="Publish" asp-controller="Comment">
-                <textarea class="border-left-0 border-right-0 form-control w-100 rounded-0" rows="5" placeholder="Enter your comment..."></textarea>
+            <form class="form-inline mt-5" asp-action="Publish" asp-controller="Comment" asp-route-PostId="@Model.Id" asp-route-UserId="0DC85AA9-566B-45F2-A92C-4E594D23CFA7">
+                <textarea class="border-left-0 border-right-0 form-control w-100 rounded-0" rows="5" placeholder="Enter your comment..." name="Content"></textarea>
                 <button class="btn btn-outline-secondary mt-3" type="submit">PUBLISH</button>
             </form>
         </div>

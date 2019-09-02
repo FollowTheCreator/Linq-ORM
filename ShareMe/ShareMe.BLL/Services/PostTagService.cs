@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using ShareMe.BLL.Interfaces.Models;
 using ShareMe.BLL.Interfaces.Models.PostTagModels;
 using ShareMe.BLL.Interfaces.Services;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShareMe.BLL.Services
@@ -25,22 +23,22 @@ namespace ShareMe.BLL.Services
 
         public async Task CreateAsync(PostTag item)
         {
-            throw new NotImplementedException();
+            var convertedItem = _mapper.Map<PostTag, DAL.Interfaces.Models.PostTagModels.PostTag>(item);
+            await _postTagRepository.CreateAsync(convertedItem);
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            await _postTagRepository.DeleteAsync(id);
         }
 
-        public async Task<PostTag> GetByIdAsync(Guid id)
+        public async Task<List<PostTag>> GetPostTagsByPostId(Guid postId)
         {
-            throw new NotImplementedException();
-        }
+            var result = await _postTagRepository.GetPostTagsByPostId(postId);
 
-        public async Task<IEnumerable<PostTag>> GetRecordsAsync(PageInfo pageInfo)
-        {
-            throw new NotImplementedException();
+            var convertedResult = _mapper.Map<List<DAL.Interfaces.Models.PostTagModels.PostTag>, List<PostTag>>(result);
+
+            return convertedResult;
         }
 
         public async Task<bool> IsPostTagExistsAsync(Guid id)
@@ -48,11 +46,6 @@ namespace ShareMe.BLL.Services
             var result = await _postTagRepository.GetByIdAsync(id);
 
             return result != null;
-        }
-
-        public async Task UpdateAsync(PostTag item)
-        {
-            throw new NotImplementedException();
         }
     }
 }

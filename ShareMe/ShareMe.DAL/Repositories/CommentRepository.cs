@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShareMe.DAL.Interfaces.Context;
-using ShareMe.DAL.Interfaces.Models;
 using ShareMe.DAL.Interfaces.Models.CommentModels;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShareMe.DAL.Repositories
@@ -17,10 +15,21 @@ namespace ShareMe.DAL.Repositories
             : base(context)
         { }
 
-        public async Task<List<CommentViewModel>> GetPostComments(Guid postId)
+        public async Task<List<Comment>> GetChildrenAsync(Guid id)
+        {
+            var result = await DbSet
+                .AsNoTracking()
+                .Where(comment => comment.ParentId == id)
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<List<CommentViewModel>> GetPostCommentsAsync(Guid postId)
         {
             var comments = await DbSet
                 .Include(comment => comment.User)
+                .AsNoTracking()
                 .Where(comment =>
                     comment.PostId == postId &&
                     comment.ParentId == null
@@ -60,7 +69,7 @@ namespace ShareMe.DAL.Repositories
             return result;
         }
 
-        public async Task<int> GetPostCommentsCount(Guid postId)
+        public async Task<int> GetPostCommentsCountAsync(Guid postId)
         {
             var result = await DbSet
                 .Where(comment => comment.PostId == postId)

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace ShareMe.WebUI.Models.CommentModels
 {
-    public class CommentViewModel
+    public class Comment
     {
         public Guid Id { get; set; }
 
@@ -11,11 +10,9 @@ namespace ShareMe.WebUI.Models.CommentModels
 
         public DateTime Date { get; set; }
 
-        public List<CommentViewModel> Children { get; set; }
+        public Guid PostId { get; set; }
 
-        public string UserName { get; set; }
-
-        public string UserImage { get; set; }
+        public Guid? ParentId { get; set; }
 
         public Guid UserId { get; set; }
     }

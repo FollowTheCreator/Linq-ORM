@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ShareMe.BLL.Interfaces.Models
+﻿namespace ShareMe.BLL.Interfaces.Models
 {
     public class PageInfo
     {

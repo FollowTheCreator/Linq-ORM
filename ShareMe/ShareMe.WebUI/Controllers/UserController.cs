@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ShareMe.BLL.Interfaces.Services;
 using ShareMe.WebUI.Models.UserModels;
+using System;
+using System.Threading.Tasks;
 
 namespace ShareMe.WebUI.Controllers
 {
@@ -22,7 +20,7 @@ namespace ShareMe.WebUI.Controllers
             _mapper = mapper;
         }
 
-        public async Task<ActionResult<UserViewModel>> User(Guid id)
+        public async Task<ActionResult<UserViewModel>> GetUser(Guid id)
         {
             var result = await _userService.GetUserAsync(id);
             var convertedResult = _mapper.Map<BLL.Interfaces.Models.UserModels.UserViewModel, UserViewModel>(result);
