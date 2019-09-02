@@ -2,7 +2,7 @@
 
 namespace ShareMe.DAL.Interfaces.Models.CategoryModels
 {
-    public class CategoryViewModel
+    public class CategoryWithPostsCount
     {
         public Guid Id { get; set; }
 

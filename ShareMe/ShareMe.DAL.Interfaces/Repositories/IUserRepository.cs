@@ -8,6 +8,6 @@ namespace ShareMe.DAL.Interfaces.Repositories
     {
         Task<bool> IsEmailExistsAsync(string email);
 
-        Task<UserViewModel> GetUserAsync(Guid id);
+        Task<User> GetUserAsync(Guid id);
     }
 }

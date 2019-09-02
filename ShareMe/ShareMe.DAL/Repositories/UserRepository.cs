@@ -14,19 +14,10 @@ namespace ShareMe.DAL.Repositories
             : base(context)
         { }
 
-        public async Task<UserViewModel> GetUserAsync(Guid id)
+        public async Task<User> GetUserAsync(Guid id)
         {
             var item = await DbSet
                 .Where(user => user.Id == id)
-                .Select(user =>
-                    new UserViewModel
-                    {
-                        Id = user.Id,
-                        Email = user.Email,
-                        Name = user.Name,
-                        Image = user.Image
-                    }
-                )
                 .FirstOrDefaultAsync();
 
             return item;
@@ -40,7 +31,5 @@ namespace ShareMe.DAL.Repositories
 
             return item != null;
         }
-
-
     }
 }

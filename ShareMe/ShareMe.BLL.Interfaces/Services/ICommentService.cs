@@ -15,8 +15,6 @@ namespace ShareMe.BLL.Interfaces.Services
 
         Task<bool> IsCommentExistsAsync(Guid id);
 
-        Task<List<CommentViewModel>> GetPostCommentsAsync(Guid postId);
-
-        Task<int> GetPostCommentsCount(Guid postId);
+        Task DeleteByPostIdAsync(Guid postId);
     }
 }

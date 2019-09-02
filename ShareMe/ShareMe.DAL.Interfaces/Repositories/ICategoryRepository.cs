@@ -6,7 +6,6 @@ namespace ShareMe.DAL.Interfaces.Repositories
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        Task<List<CategoryViewModel>> GetCategoriesAsync();
-
+        Task<List<CategoryWithPostsCount>> GetCategoriesWithPostsCountAsync();
     }
 }

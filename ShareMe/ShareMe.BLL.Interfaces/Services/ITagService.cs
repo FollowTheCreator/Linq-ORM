@@ -9,16 +9,12 @@ namespace ShareMe.BLL.Interfaces.Services
     {
         Task<Tag> GetByNameAsync(string name);
 
-        Task CreateAsync(Tag item);
+        Task<Tag> CreateIfExistsAsync(string name);
 
         Task<bool> IsTagExistsAsync(Guid id);
 
         Task<List<string>> GetPostTagsAsync(Guid postId);
 
         Task<List<string>> GetTagsAsync();
-
-        Task<List<Guid>> GetPostTagIdsAsync(Guid postId);
-
-        Task<bool> IsTagExistsByNameAsync(string name);
     }
 }

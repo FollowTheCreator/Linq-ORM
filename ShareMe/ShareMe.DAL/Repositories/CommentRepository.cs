@@ -11,9 +11,24 @@ namespace ShareMe.DAL.Repositories
 {
     public class CommentRepository : Repository<Comment>, ICommentRepository
     {
+        private readonly ShareMeContext _context;
+
         public CommentRepository(ShareMeContext context)
             : base(context)
-        { }
+        {
+            _context = context;
+        }
+
+        public async Task DeleteByPostIdAsync(Guid postId)
+        {
+            var comments = _context
+                .Comment
+                .AsNoTracking()
+                .Where(comment => comment.PostId == postId);
+
+            DbSet.RemoveRange(comments);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task<List<Comment>> GetChildrenAsync(Guid id)
         {
@@ -21,59 +36,6 @@ namespace ShareMe.DAL.Repositories
                 .AsNoTracking()
                 .Where(comment => comment.ParentId == id)
                 .ToListAsync();
-
-            return result;
-        }
-
-        public async Task<List<CommentViewModel>> GetPostCommentsAsync(Guid postId)
-        {
-            var comments = await DbSet
-                .Include(comment => comment.User)
-                .AsNoTracking()
-                .Where(comment =>
-                    comment.PostId == postId &&
-                    comment.ParentId == null
-                )
-                .ToListAsync();
-
-            var result = (await Task.WhenAll(comments
-                    .Select(async comment => 
-                        new CommentViewModel
-                        {
-                            Id = comment.Id,
-                            Content = comment.Content,
-                            Date = comment.Date,
-                            UserId = comment.User.Id,
-                            UserName = comment.User.Name,
-                            UserImage = comment.User.Image,
-                            Children = await DbSet
-                                .Include(childComment => childComment.User)
-                                .Where(childComment => childComment.ParentId == comment.Id)
-                                .Select(childComment => new CommentViewModel
-                                {
-                                    Id = childComment.Id,
-                                    Content = childComment.Content,
-                                    Date = childComment.Date,
-                                    UserId = childComment.User.Id,
-                                    UserImage = childComment.User.Image,
-                                    UserName = childComment.User.Name
-                                })
-                                .OrderBy(childComment => childComment.Date)
-                                .ToListAsync()
-                        }
-                    )
-                ))
-                .OrderBy(comment => comment.Date)
-                .ToList();
-
-            return result;
-        }
-
-        public async Task<int> GetPostCommentsCountAsync(Guid postId)
-        {
-            var result = await DbSet
-                .Where(comment => comment.PostId == postId)
-                .CountAsync();
 
             return result;
         }

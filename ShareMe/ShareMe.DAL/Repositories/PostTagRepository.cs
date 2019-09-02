@@ -11,16 +11,23 @@ namespace ShareMe.DAL.Repositories
 {
     public class PostTagRepository : Repository<PostTag>, IPostTagRepository
     {
+        private readonly ShareMeContext _context;
+
         public PostTagRepository(ShareMeContext context)
             : base(context)
-        { }
-
-        public async Task<List<PostTag>> GetPostTagsByPostId(Guid postId)
         {
-            return await DbSet
+            _context = context;
+        }
+
+        public async Task DeleteByPostIdAsync(Guid postId)
+        {
+            var postTags = _context
+                .PostTag
                 .AsNoTracking()
-                .Where(postTag => postTag.PostId == postId)
-                .ToListAsync();
+                .Where(postTag => postTag.PostId == postId);
+
+            DbSet.RemoveRange(postTags);
+            await _context.SaveChangesAsync();
         }
     }
 }

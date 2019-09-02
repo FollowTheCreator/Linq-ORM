@@ -30,12 +30,11 @@ namespace ShareMe.WebUI.Configs.Mapping
 
         private void CreateCategoryMaps()
         {
-            CreateMap<DAL.Interfaces.Models.CategoryModels.CategoryViewModel, CategoryViewModel>();
+            CreateMap<DAL.Interfaces.Models.CategoryModels.CategoryWithPostsCount, CategoryViewModel>();
         }
 
         private void CreateCommentMaps()
         {
-            CreateMap<DAL.Interfaces.Models.CommentModels.CommentViewModel, CommentViewModel>();
             CreateMap<Comment, DAL.Interfaces.Models.CommentModels.Comment>()
                 .ForMember(
                     m => m.Parent,
@@ -57,10 +56,6 @@ namespace ShareMe.WebUI.Configs.Mapping
 
         private void CreatePostMaps()
         {
-            CreateMap<DAL.Interfaces.Models.PostModels.PostPreview, PostPreview>();
-            CreateMap<DAL.Interfaces.Models.PostModels.PostViewModel, PostViewModel>();
-            CreateMap<DAL.Interfaces.Models.PostModels.PopularPost, PopularPost>();
-            CreateMap<DAL.Interfaces.Models.PostModels.UserPost, UserPost>();
             CreateMap<PostCreateModel, DAL.Interfaces.Models.PostModels.Post>()
                 .ForMember(
                     m => m.Category,
@@ -107,7 +102,11 @@ namespace ShareMe.WebUI.Configs.Mapping
 
         private void CreateUserMaps()
         {
-            CreateMap<DAL.Interfaces.Models.UserModels.UserViewModel, UserViewModel>();
+            CreateMap<DAL.Interfaces.Models.UserModels.User, UserViewModel>()
+                .ForMember(
+                    m => m.UserPosts,
+                    opt => opt.Ignore()
+                );
         }
 
         private void CreatePageInfoMaps()

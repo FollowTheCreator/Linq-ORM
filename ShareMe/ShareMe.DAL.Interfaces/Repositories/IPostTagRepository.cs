@@ -7,6 +7,6 @@ namespace ShareMe.DAL.Interfaces.Repositories
 {
     public interface IPostTagRepository : IRepository<PostTag>
     {
-        Task<List<PostTag>> GetPostTagsByPostId(Guid postId);
+        Task DeleteByPostIdAsync(Guid postId);
     }
 }

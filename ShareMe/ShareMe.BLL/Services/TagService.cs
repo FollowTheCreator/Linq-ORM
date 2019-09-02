@@ -21,18 +21,21 @@ namespace ShareMe.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task CreateAsync(Tag item)
+        public async Task<Tag> CreateIfExistsAsync(string name)
         {
-            if (!await IsTagExistsByNameAsync(item.Name))
+            var result = await GetByNameAsync(name);
+            if (result == null)
             {
+                var item = new Tag
+                {
+                    Id = Guid.NewGuid(),
+                    Name = name
+                };
                 var convertedItem = _mapper.Map<Tag, DAL.Interfaces.Models.TagModels.Tag>(item);
                 await _tagRepository.CreateAsync(convertedItem);
-            }
-        }
 
-        public async Task<List<Guid>> GetPostTagIdsAsync(Guid postId)
-        {
-            var result = await _tagRepository.GetPostTagIdsAsync(postId);
+                result = item;
+            }
 
             return result;
         }
@@ -47,13 +50,6 @@ namespace ShareMe.BLL.Services
         public async Task<bool> IsTagExistsAsync(Guid id)
         {
             var result = await _tagRepository.GetByIdAsync(id);
-
-            return result != null;
-        }
-
-        public async Task<bool> IsTagExistsByNameAsync(string name)
-        {
-            var result = await _tagRepository.GetByNameAsync(name);
 
             return result != null;
         }

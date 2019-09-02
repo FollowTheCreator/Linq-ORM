@@ -69,7 +69,7 @@
                                 @comment.Content
                             </div>
                             <div>
-                                <a asp-controller="Comment" asp-action="Publish" asp-route-PostId="@Model.Id" asp-route-UserId="0DC85AA9-566B-45F2-A92C-4E594D23CFA7" asp-route-ParentId="@comment.Id" class="btn btn-light text-secondary p-2">
+                                <a asp-controller="Comment" asp-action="Publish" asp-all-route-data='@new Dictionary<string,string> { { "Content", "child comment text" }, {"PostId", Model.Id.ToString() }, { "UserId", "0DC85AA9-566B-45F2-A92C-4E594D23CFA7" }, {"ParentId", comment.Id.ToString() } }' class="btn btn-light text-secondary p-2">
                                     Reply
                                 </a>
                                 <a asp-controller="Comment" asp-action="Delete" asp-route-commentId="@comment.Id" asp-route-postId="@Model.Id" class="btn btn-light text-secondary p-2">
@@ -115,7 +115,7 @@
         </div>
         <div>
             <form class="form-inline mt-5" asp-action="Publish" asp-controller="Comment" asp-route-PostId="@Model.Id" asp-route-UserId="0DC85AA9-566B-45F2-A92C-4E594D23CFA7">
-                <textarea class="border-left-0 border-right-0 form-control w-100 rounded-0" rows="5" placeholder="Enter your comment..." name="Content"></textarea>
+                <textarea class="border-left-0 border-right-0 form-control w-100 rounded-0" rows="5" placeholder="Enter your comment..." name="Content">comment text</textarea>
                 <button class="btn btn-outline-secondary mt-3" type="submit">PUBLISH</button>
             </form>
         </div>

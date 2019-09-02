@@ -26,6 +26,11 @@ namespace ShareMe.BLL.Services
 
         public async Task CreateAsync(User item)
         {
+            if(item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             var convertedItem = _mapper.Map<User, DAL.Interfaces.Models.UserModels.User>(item);
 
             await _userRepository.CreateAsync(convertedItem);
@@ -39,12 +44,12 @@ namespace ShareMe.BLL.Services
         public async Task<UserViewModel> GetUserAsync(Guid id)
         {
             var user = await _userRepository.GetUserAsync(id);
-            var convertedUser = _mapper.Map<DAL.Interfaces.Models.UserModels.UserViewModel, UserViewModel>(user);
+            var userView = _mapper.Map<DAL.Interfaces.Models.UserModels.User, UserViewModel>(user);
 
-            var posts = await _postService.GetUserPostsAsync(convertedUser.Id);
-            convertedUser.UserPosts = posts;
+            var posts = await _postService.GetUserPostsAsync(userView.Id);
+            userView.UserPosts = posts;
 
-            return convertedUser;
+            return userView;
         }
 
         public async Task<bool> IsEmailExistsAsync(string email)

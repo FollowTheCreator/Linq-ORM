@@ -9,10 +9,8 @@ namespace ShareMe.BLL.Interfaces.Services
     {
         Task CreateAsync(PostTag item);
 
-        Task DeleteAsync(Guid id);
-
         Task<bool> IsPostTagExistsAsync(Guid id);
 
-        Task<List<PostTag>> GetPostTagsByPostId(Guid postId);
+        Task DeleteByPostIdAsync(Guid postId);
     }
 }

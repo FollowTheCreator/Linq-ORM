@@ -25,6 +25,11 @@ namespace ShareMe.BLL.Services
             return GetValue<int>($"{PageInfoSection}:PopularPostsCount");
         }
 
+        public int GetMaxPreviewContentLength()
+        {
+            return GetValue<int>($"{PageInfoSection}:MaxPreviewContentLength");
+        }
+
         private T GetValue<T>(string path)
         {
             try

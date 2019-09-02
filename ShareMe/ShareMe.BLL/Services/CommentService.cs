@@ -23,7 +23,6 @@ namespace ShareMe.BLL.Services
 
         public async Task CreateAsync(Comment item)
         {
-            item.Content = "test test test";
             item.Date = DateTime.Now;
 
             var convertedItem = _mapper.Map<Comment, DAL.Interfaces.Models.CommentModels.Comment>(item);
@@ -42,19 +41,9 @@ namespace ShareMe.BLL.Services
             await _commentRepository.DeleteAsync(id);
         }
 
-        public async Task<List<CommentViewModel>> GetPostCommentsAsync(Guid postId)
+        public async Task DeleteByPostIdAsync(Guid postId)
         {
-            var result = await _commentRepository.GetPostCommentsAsync(postId);
-            var convertedResult = _mapper.Map<List<DAL.Interfaces.Models.CommentModels.CommentViewModel>, List<CommentViewModel>>(result);
-
-            return convertedResult;
-        }
-
-        public async Task<int> GetPostCommentsCount(Guid postId)
-        {
-            var result = await _commentRepository.GetPostCommentsCountAsync(postId);
-
-            return result;
+            await _commentRepository.DeleteByPostIdAsync(postId);
         }
 
         public async Task<bool> IsCommentExistsAsync(Guid id)

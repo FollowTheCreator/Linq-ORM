@@ -8,18 +8,18 @@ namespace ShareMe.DAL.Interfaces.Repositories
 {
     public interface IPostRepository : IRepository<Post>
     {
-        Task<List<PostPreview>> GetPostPreviewsAsync(PageInfo pageInfo);
+        Task<List<Post>> GetPostsAsync(PageInfo pageInfo);
 
-        Task<List<PostPreview>> GetPostPreviewsBySearchAsync(PageInfo pageInfo, string header);
+        Task<List<Post>> GetPostPreviewsBySearchAsync(PageInfo pageInfo, string header);
 
-        Task<List<PostPreview>> GetPostPreviewsByTagAsync(PageInfo pageInfo, string tag);
+        Task<List<Post>> GetPostPreviewsByTagAsync(PageInfo pageInfo, string tag);
 
-        Task<List<PostPreview>> GetPostPreviewsByCategoryAsync(PageInfo pageInfo, Guid categoryId);
+        Task<List<Post>> GetPostPreviewsByCategoryAsync(PageInfo pageInfo, Guid categoryId);
 
-        Task<PostViewModel> GetPostViewModelAsync(Guid id);
+        Task<Post> GetPostByIdAsync(Guid id);
 
-        Task<List<PopularPost>> GetPopularPostsAsync();
+        Task<List<Post>> GetPostsOrderedByViewsDescAsync();
 
-        Task<List<UserPost>> GetUserPostsAsync(Guid userId);
+        Task<List<Post>> GetUserPostsAsync(Guid userId);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ShareMe.BLL.Interfaces.Models;
+using ShareMe.BLL.Interfaces.Models.CommentModels;
 using ShareMe.BLL.Interfaces.Models.PostModels;
 using ShareMe.BLL.Interfaces.Models.PostTagModels;
 using ShareMe.BLL.Interfaces.Models.TagModels;
@@ -12,6 +13,10 @@ using System.Threading.Tasks;
 
 namespace ShareMe.BLL.Services
 {
+    //todo null checks
+    //todo remove unnecessary methods after all
+    //todo pageinfo math remove
+    //todo pagination on every getRecords
     public class PostService : IPostService
     {
         private readonly IPostRepository _postRepository;
@@ -49,6 +54,7 @@ namespace ShareMe.BLL.Services
         public async Task CreateAsync(PostCreateModel item)
         {
             item.Views = 0;
+            item.Date = DateTime.Now;
 
             var result = _mapper.Map<PostCreateModel, DAL.Interfaces.Models.PostModels.Post>(item);
 
@@ -60,17 +66,9 @@ namespace ShareMe.BLL.Services
             var tagIds = new List<Guid>(item.Tags.Count);
             foreach(var tag in item.Tags)
             {
-                var tagId = Guid.NewGuid();
-                await _tagService.CreateAsync(
-                    new Tag
-                    {
-                        Id = tagId,
-                        Name = tag
-                    }
-                );
+                var currentTag = await _tagService.CreateIfExistsAsync(tag);
 
-                var createdTag = await _tagService.GetByNameAsync(tag);
-                tagIds.Add(createdTag.Id);
+                tagIds.Add(currentTag.Id);
             }
 
             foreach(var tagId in tagIds)
@@ -87,17 +85,9 @@ namespace ShareMe.BLL.Services
 
         public async Task DeleteAsync(Guid id)
         {
-            var comments = await _commentService.GetPostCommentsAsync(id);
-            foreach(var comment in comments)
-            {
-                await _commentService.DeleteAsync(comment.Id);
-            }
+            await _commentService.DeleteByPostIdAsync(id);
 
-            var postTags = await _postTagService.GetPostTagsByPostId(id);
-            foreach (var postTag in postTags)
-            {
-                await _postTagService.DeleteAsync(postTag.Id);
-            }
+            await _postTagService.DeleteByPostIdAsync(id);
 
             await _postRepository.DeleteAsync(id);
         }
@@ -108,9 +98,9 @@ namespace ShareMe.BLL.Services
 
             var convertedPageInfo = _mapper.Map<PageInfo, DAL.Interfaces.Models.PageInfo>(pageInfo);
 
-            var postResult = await _postRepository.GetPostPreviewsAsync(convertedPageInfo);
+            var posts = await _postRepository.GetPostsAsync(convertedPageInfo);
 
-            var result = await FillPostPreviewViewModel(postResult, pageInfo);
+            var result = await FillPostPreviewViewModel(posts, pageInfo);
 
             return result;
         }
@@ -126,9 +116,9 @@ namespace ShareMe.BLL.Services
 
             var convertedPageInfo = _mapper.Map<PageInfo, DAL.Interfaces.Models.PageInfo>(pageInfo);
 
-            var postResult = await _postRepository.GetPostPreviewsBySearchAsync(convertedPageInfo, header);
+            var posts = await _postRepository.GetPostPreviewsBySearchAsync(convertedPageInfo, header);
 
-            var result = await FillPostPreviewViewModel(postResult, pageInfo);
+            var result = await FillPostPreviewViewModel(posts, pageInfo);
 
             return result;
         }
@@ -144,9 +134,9 @@ namespace ShareMe.BLL.Services
 
             var convertedPageInfo = _mapper.Map<PageInfo, DAL.Interfaces.Models.PageInfo>(pageInfo);
 
-            var postResult = await _postRepository.GetPostPreviewsByTagAsync(convertedPageInfo, tag);
+            var posts = await _postRepository.GetPostPreviewsByTagAsync(convertedPageInfo, tag);
 
-            var result = await FillPostPreviewViewModel(postResult, pageInfo);
+            var result = await FillPostPreviewViewModel(posts, pageInfo);
 
             return result;
         }
@@ -162,28 +152,70 @@ namespace ShareMe.BLL.Services
 
             var convertedPageInfo = _mapper.Map<PageInfo, DAL.Interfaces.Models.PageInfo>(pageInfo);
 
-            var postResult = await _postRepository.GetPostPreviewsByCategoryAsync(convertedPageInfo, categoryId);
+            var posts = await _postRepository.GetPostPreviewsByCategoryAsync(convertedPageInfo, categoryId);
 
-            var result = await FillPostPreviewViewModel(postResult, pageInfo);
+            var result = await FillPostPreviewViewModel(posts, pageInfo);
 
             return result;
         }
 
         public async Task<PostViewModel> GetPostViewModelAsync(Guid id)
         {
-            var postResult = await _postRepository.GetPostViewModelAsync(id);
-            var convertedPostResult = _mapper.Map<DAL.Interfaces.Models.PostModels.PostViewModel, PostViewModel>(postResult);
+            var post = await _postRepository.GetPostByIdAsync(id);
 
-            var tags = await _tagService.GetPostTagsAsync(convertedPostResult.Id);
-            convertedPostResult.Tags = tags;
+            var result = new PostViewModel
+            {
+                Id = post.Id,
+                Header = post.Header,
+                Content = post.Content,
+                Date = post.Date,
+                Image = post.Image,
+                UserId = post.User.Id,
+                UserName = post.User.Name
+            };
 
-            var comments = await _commentService.GetPostCommentsAsync(convertedPostResult.Id);
-            convertedPostResult.Comments = comments;
+            var tags = new List<string>(post.PostTag.Count);
+            foreach(var postTag in post.PostTag)
+            {
+                tags.Add(postTag.Tag.Name);
+            }
+            result.Tags = tags;
 
-            var commentsCount = await _commentService.GetPostCommentsCount(convertedPostResult.Id);
-            convertedPostResult.CommentsCount = commentsCount;
+            result.Comments = post
+                .Comment
+                .Where(comment => comment.ParentId == null)
+                .Select(comment => 
+                    new CommentViewModel
+                    {
+                        Id = comment.Id,
+                        Content = comment.Content,
+                        Date = comment.Date,
+                        UserId = comment.UserId,
+                        UserName = comment.User.Name,
+                        UserImage = comment.User.Image,
+                        Children = comment
+                            .InverseParent
+                            .Select(child =>
+                                new CommentViewModel
+                                {
+                                    Id = child.Id,
+                                    Content = child.Content,
+                                    Date = child.Date,
+                                    UserId = child.UserId,
+                                    UserImage = child.User.Image,
+                                    UserName = child.User.Name
+                                }
+                            )
+                            .OrderBy(child => child.Date)
+                            .ToList()
+                    }
+                )
+                .OrderBy(comment => comment.Date)
+                .ToList();
 
-            return convertedPostResult;
+            result.CommentsCount = post.Comment.Count;
+
+            return result;
         }
 
         public async Task<bool> IsPostExistsAsync(Guid id)
@@ -200,30 +232,49 @@ namespace ShareMe.BLL.Services
             await _postRepository.UpdateAsync(convertedItem);
         }
 
-        private static string TrimPost(string postContent)
+        private string TrimPost(string postContent, int maxLength)
         {
-            if (postContent.Length > 300)
+            if (postContent.Length > maxLength)
             {
-                postContent = postContent.Substring(0, 300) + "...";
+                postContent = $"{postContent.Substring(0, maxLength)}...";
             }
 
             return postContent;
         }
 
-        private async Task<PostPreviewViewModel> FillPostPreviewViewModel(List<DAL.Interfaces.Models.PostModels.PostPreview> postResult, PageInfo pageInfo)
+        private async Task<PostPreviewViewModel> FillPostPreviewViewModel(List<DAL.Interfaces.Models.PostModels.Post> posts, PageInfo pageInfo)
         {
-            foreach (var item in postResult)
+            var postPreviews = new List<PostPreview>(posts.Count);
+            foreach (var post in posts)
             {
-                item.Content = TrimPost(item.Content);
+                postPreviews.Add(new PostPreview
+                {
+                    Id = post.Id,
+                    Content = post.Content,
+                    Date = post.Date,
+                    Header = post.Header,
+                    Image = post.Image,
+                    Tags = post
+                        .PostTag
+                        .Select(postTag => postTag.Tag.Name)
+                        .ToList(),
+                    UserId = post.UserId,
+                    UserName = post.User.Name
+                });
             }
-            var convertedPostResult = _mapper.Map<List<DAL.Interfaces.Models.PostModels.PostPreview>, List<PostPreview>>(postResult);
 
-            foreach (var post in convertedPostResult)
+            var maxLength = _configService.GetMaxPreviewContentLength();
+            foreach (var item in postPreviews)
+            {
+                item.Content = TrimPost(item.Content, maxLength);
+            }
+
+            foreach (var post in postPreviews)
             {
                 var tags = await _tagService.GetPostTagsAsync(post.Id);
                 post.Tags = tags;
             }
-
+            //todo pageinfo
             pageInfo.TotalItems = await _postRepository.RecordsCountAsync();
             pageInfo.TotalPages = (int)Math.Ceiling(pageInfo.TotalItems / (double)pageInfo.PageSize);
 
@@ -236,7 +287,7 @@ namespace ShareMe.BLL.Services
 
             return new PostPreviewViewModel
             {
-                PostPreviews = convertedPostResult,
+                PostPreviews = postPreviews,
                 PageInfo = pageInfo,
                 PopularPosts = topPopularPosts,
                 Categories = categories,
@@ -246,18 +297,41 @@ namespace ShareMe.BLL.Services
 
         public async Task<List<PopularPost>> GetPopularPostsAsync()
         {
-            var result = await _postRepository.GetPopularPostsAsync();
-            var convertedResult = _mapper.Map<List<DAL.Interfaces.Models.PostModels.PopularPost>, List<PopularPost>>(result);
+            var orderedPosts = await _postRepository.GetPostsOrderedByViewsDescAsync();
 
-            return convertedResult;
+            var result = orderedPosts
+                .Select(post =>
+                    new PopularPost
+                    {
+                        Id = post.Id,
+                        Header = post.Header,
+                        Image = post.Image
+                    }
+                )
+                .ToList();
+
+            return result;
         }
 
         public async Task<List<UserPost>> GetUserPostsAsync(Guid userId)
         {
-            var result = await _postRepository.GetUserPostsAsync(userId);
-            var convertedResult = _mapper.Map<List<DAL.Interfaces.Models.PostModels.UserPost>, List<UserPost>>(result);
+            var posts = await _postRepository.GetUserPostsAsync(userId);
 
-            return convertedResult;
+            var result = new List<UserPost>(posts.Count);
+            foreach(var post in posts)
+            {
+                result.Add(
+                    new UserPost
+                    {
+                        Id = post.Id,
+                        Date = post.Date,
+                        Header = post.Header,
+                        Image = post.Image
+                    }
+                );
+            }
+
+            return result;
         }
     }
 }

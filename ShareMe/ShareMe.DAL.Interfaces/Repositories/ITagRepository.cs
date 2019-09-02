@@ -9,8 +9,6 @@ namespace ShareMe.DAL.Interfaces.Repositories
     {
         Task<List<string>> GetPostTagsAsync(Guid postId);
 
-        Task<List<Guid>> GetPostTagIdsAsync(Guid postId);
-
         Task<List<string>> GetTagsAsync();
 
         Task<Tag> GetByNameAsync(string name);

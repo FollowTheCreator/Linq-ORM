@@ -23,8 +23,8 @@ namespace ShareMe.BLL.Services
 
         public async Task<List<CategoryViewModel>> GetCategoriesAsync()
         {
-            var result = await _categoryRepository.GetCategoriesAsync();
-            var convertedResult = _mapper.Map<List<DAL.Interfaces.Models.CategoryModels.CategoryViewModel>, List<CategoryViewModel>>(result);
+            var result = await _categoryRepository.GetCategoriesWithPostsCountAsync();
+            var convertedResult = _mapper.Map<List<DAL.Interfaces.Models.CategoryModels.CategoryWithPostsCount>, List<CategoryViewModel>>(result);
 
             return convertedResult;
         }

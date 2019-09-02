@@ -27,18 +27,9 @@ namespace ShareMe.BLL.Services
             await _postTagRepository.CreateAsync(convertedItem);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteByPostIdAsync(Guid postId)
         {
-            await _postTagRepository.DeleteAsync(id);
-        }
-
-        public async Task<List<PostTag>> GetPostTagsByPostId(Guid postId)
-        {
-            var result = await _postTagRepository.GetPostTagsByPostId(postId);
-
-            var convertedResult = _mapper.Map<List<DAL.Interfaces.Models.PostTagModels.PostTag>, List<PostTag>>(result);
-
-            return convertedResult;
+            await _postTagRepository.DeleteByPostIdAsync(postId);
         }
 
         public async Task<bool> IsPostTagExistsAsync(Guid id)

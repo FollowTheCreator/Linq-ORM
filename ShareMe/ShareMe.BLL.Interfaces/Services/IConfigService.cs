@@ -5,5 +5,7 @@
         int GetPageSize();
 
         int GetPopularPostsCount();
+
+        int GetMaxPreviewContentLength();
     }
 }

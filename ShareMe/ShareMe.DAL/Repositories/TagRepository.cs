@@ -27,18 +27,6 @@ namespace ShareMe.DAL.Repositories
             return result;
         }
 
-        public async Task<List<Guid>> GetPostTagIdsAsync(Guid postId)
-        {
-            var result = await _context
-                .PostTag
-                .Include(postTag => postTag.Tag)
-                .Where(postTag => postTag.PostId == postId)
-                .Select(postTag => postTag.Tag.Id)
-                .ToListAsync();
-
-            return result;
-        }
-
         public async Task<List<string>> GetPostTagsAsync(Guid postId)
         {
             var result = await _context

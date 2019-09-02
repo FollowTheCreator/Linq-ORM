@@ -12,12 +12,12 @@
 
         public void CheckPageInfo(int pageSize)
         {
-            if (PageSize == 0)
+            if (PageSize <= 0)
             {
                 PageSize = pageSize;
             }
 
-            if (PageNumber == 0)
+            if (PageNumber <= 0)
             {
                 PageNumber = 1;
             }

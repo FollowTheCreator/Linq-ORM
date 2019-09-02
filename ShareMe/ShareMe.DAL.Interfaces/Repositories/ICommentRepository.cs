@@ -7,10 +7,8 @@ namespace ShareMe.DAL.Interfaces.Repositories
 {
     public interface ICommentRepository : IRepository<Comment>
     {
-        Task<List<CommentViewModel>> GetPostCommentsAsync(Guid postId);
-
-        Task<int> GetPostCommentsCountAsync(Guid postId);
-
         Task<List<Comment>> GetChildrenAsync(Guid id);
+
+        Task DeleteByPostIdAsync(Guid postId);
     }
 }

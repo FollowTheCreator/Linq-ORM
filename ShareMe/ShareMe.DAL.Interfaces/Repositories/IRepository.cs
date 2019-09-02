@@ -9,11 +9,9 @@ namespace ShareMe.DAL.Interfaces.Repositories
     {
         Task<IEnumerable<T>> GetRecordsAsync(PageInfo pageInfo);
 
-        Task<IEnumerable<T>> GetAllRecordsAsync();
-
         Task<T> GetByIdAsync(Guid id);
 
-        Task CreateAsync(T item);
+        Task<T> CreateAsync(T item);
 
         Task UpdateAsync(T item);
 
