@@ -13,10 +13,6 @@ using System.Threading.Tasks;
 
 namespace ShareMe.BLL.Services
 {
-    //todo null checks
-    //todo remove unnecessary methods after all
-    //todo pageinfo math remove
-    //todo pagination on every getRecords
     public class PostService : IPostService
     {
         private readonly IPostRepository _postRepository;
@@ -26,17 +22,21 @@ namespace ShareMe.BLL.Services
         private readonly IPostTagService _postTagService;
         private readonly ICommentService _commentService;
         private readonly ICategoryService _categoryService;
+        private readonly IIsEntityExistsService _isEntityExistsService;
 
         private readonly IMapper _mapper;
 
         public PostService
         (
             IPostRepository postRepository, 
+
             IConfigService configService, 
             ITagService tagService,
             IPostTagService postTagService,
             ICommentService commentService,
             ICategoryService categoryService,
+            IIsEntityExistsService isEntityExistsService,
+
             IMapper mapper
         )
         {
@@ -47,12 +47,18 @@ namespace ShareMe.BLL.Services
             _postTagService = postTagService;
             _commentService = commentService;
             _categoryService = categoryService;
+            _isEntityExistsService = isEntityExistsService;
 
             _mapper = mapper;
         }
 
         public async Task CreateAsync(PostCreateModel item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             item.Views = 0;
             item.Date = DateTime.Now;
 
@@ -66,7 +72,7 @@ namespace ShareMe.BLL.Services
             var tagIds = new List<Guid>(item.Tags.Count);
             foreach(var tag in item.Tags)
             {
-                var currentTag = await _tagService.CreateIfExistsAsync(tag);
+                var currentTag = await _tagService.GetOrCreateAsync(tag);
 
                 tagIds.Add(currentTag.Id);
             }
@@ -94,6 +100,11 @@ namespace ShareMe.BLL.Services
 
         public async Task<PostPreviewViewModel> GetPostPreviewsAsync(PageInfo pageInfo)
         {
+            if (pageInfo == null)
+            {
+                throw new ArgumentNullException(nameof(pageInfo));
+            }
+
             pageInfo.CheckPageInfo(_configService.GetPageSize());
 
             var convertedPageInfo = _mapper.Map<PageInfo, DAL.Interfaces.Models.PageInfo>(pageInfo);
@@ -110,6 +121,11 @@ namespace ShareMe.BLL.Services
             if (string.IsNullOrWhiteSpace(header))
             {
                 return await GetPostPreviewsAsync(pageInfo);
+            }
+
+            if (pageInfo == null)
+            {
+                throw new ArgumentNullException(nameof(pageInfo));
             }
 
             pageInfo.CheckPageInfo(_configService.GetPageSize());
@@ -130,6 +146,11 @@ namespace ShareMe.BLL.Services
                 return await GetPostPreviewsAsync(pageInfo);
             }
 
+            if (pageInfo == null)
+            {
+                throw new ArgumentNullException(nameof(pageInfo));
+            }
+
             pageInfo.CheckPageInfo(_configService.GetPageSize());
 
             var convertedPageInfo = _mapper.Map<PageInfo, DAL.Interfaces.Models.PageInfo>(pageInfo);
@@ -143,9 +164,14 @@ namespace ShareMe.BLL.Services
 
         public async Task<PostPreviewViewModel> GetPostPreviewsByCategoryAsync(PageInfo pageInfo, Guid categoryId)
         {
-            if (!await _categoryService.IsCategoryExistsAsync(categoryId))
+            if (!await _isEntityExistsService.IsCategoryExistsAsync(categoryId))
             {
                 return await GetPostPreviewsAsync(pageInfo);
+            }
+
+            if (pageInfo == null)
+            {
+                throw new ArgumentNullException(nameof(pageInfo));
             }
 
             pageInfo.CheckPageInfo(_configService.GetPageSize());
@@ -161,6 +187,11 @@ namespace ShareMe.BLL.Services
 
         public async Task<PostViewModel> GetPostViewModelAsync(Guid id)
         {
+            if (!await _isEntityExistsService.IsPostExistsAsync(id))
+            {
+                throw new ArgumentException(nameof(id), "Post with this Id doesn't exist");
+            }
+
             var post = await _postRepository.GetPostByIdAsync(id);
 
             var result = new PostViewModel
@@ -218,15 +249,13 @@ namespace ShareMe.BLL.Services
             return result;
         }
 
-        public async Task<bool> IsPostExistsAsync(Guid id)
-        {
-            var result = await _postRepository.GetByIdAsync(id);
-
-            return result != null;
-        }
-
         public async Task UpdateAsync(Post item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             var convertedItem = _mapper.Map<Post, DAL.Interfaces.Models.PostModels.Post>(item);
 
             await _postRepository.UpdateAsync(convertedItem);
@@ -274,7 +303,7 @@ namespace ShareMe.BLL.Services
                 var tags = await _tagService.GetPostTagsAsync(post.Id);
                 post.Tags = tags;
             }
-            //todo pageinfo
+
             pageInfo.TotalItems = await _postRepository.RecordsCountAsync();
             pageInfo.TotalPages = (int)Math.Ceiling(pageInfo.TotalItems / (double)pageInfo.PageSize);
 
@@ -283,7 +312,7 @@ namespace ShareMe.BLL.Services
 
             var categories = await _categoryService.GetCategoriesAsync();
 
-            var allTags = await _tagService.GetTagsAsync();
+            var allTags = await _tagService.GetTagsAsync(pageInfo);
 
             return new PostPreviewViewModel
             {
@@ -315,6 +344,11 @@ namespace ShareMe.BLL.Services
 
         public async Task<List<UserPost>> GetUserPostsAsync(Guid userId)
         {
+            if(!await _isEntityExistsService.IsUserExistsAsync(userId))
+            {
+                throw new ArgumentException(nameof(userId), "User with this Id doesn't exist");
+            }
+
             var posts = await _postRepository.GetUserPostsAsync(userId);
 
             var result = new List<UserPost>(posts.Count);

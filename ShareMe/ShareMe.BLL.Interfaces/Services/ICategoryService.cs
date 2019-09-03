@@ -7,8 +7,6 @@ namespace ShareMe.BLL.Interfaces.Services
 {
     public interface ICategoryService
     {
-        Task<bool> IsCategoryExistsAsync(Guid id);
-
         Task<List<CategoryViewModel>> GetCategoriesAsync();
     }
 }

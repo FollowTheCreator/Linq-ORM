@@ -23,6 +23,11 @@ namespace ShareMe.BLL.Services
 
         public async Task CreateAsync(PostTag item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             var convertedItem = _mapper.Map<PostTag, DAL.Interfaces.Models.PostTagModels.PostTag>(item);
             await _postTagRepository.CreateAsync(convertedItem);
         }
@@ -30,13 +35,6 @@ namespace ShareMe.BLL.Services
         public async Task DeleteByPostIdAsync(Guid postId)
         {
             await _postTagRepository.DeleteByPostIdAsync(postId);
-        }
-
-        public async Task<bool> IsPostTagExistsAsync(Guid id)
-        {
-            var result = await _postTagRepository.GetByIdAsync(id);
-
-            return result != null;
         }
     }
 }

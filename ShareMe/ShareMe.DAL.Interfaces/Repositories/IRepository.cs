@@ -1,6 +1,7 @@
 ﻿using ShareMe.DAL.Interfaces.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ShareMe.DAL.Interfaces.Repositories
@@ -17,6 +18,8 @@ namespace ShareMe.DAL.Interfaces.Repositories
 
         Task DeleteAsync(Guid id);
 
-        Task<int> RecordsCountAsync(); 
+        Task<int> RecordsCountAsync();
+
+        IQueryable<T> GetPageOfRecords(IQueryable<T> records, PageInfo pageInfo);
     }
 }

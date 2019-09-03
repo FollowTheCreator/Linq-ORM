@@ -1,4 +1,5 @@
-﻿using ShareMe.BLL.Interfaces.Models.TagModels;
+﻿using ShareMe.BLL.Interfaces.Models;
+using ShareMe.BLL.Interfaces.Models.TagModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,12 +10,12 @@ namespace ShareMe.BLL.Interfaces.Services
     {
         Task<Tag> GetByNameAsync(string name);
 
-        Task<Tag> CreateIfExistsAsync(string name);
-
-        Task<bool> IsTagExistsAsync(Guid id);
+        Task<Tag> GetOrCreateAsync(string name);
 
         Task<List<string>> GetPostTagsAsync(Guid postId);
 
-        Task<List<string>> GetTagsAsync();
+        Task<List<string>> GetTagsAsync(PageInfo pageInfo);
+
+        Task<Tag> CreateAsync(string name);
     }
 }

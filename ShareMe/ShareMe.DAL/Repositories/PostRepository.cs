@@ -18,20 +18,36 @@ namespace ShareMe.DAL.Repositories
 
         public async Task<List<Post>> GetPostsAsync(PageInfo pageInfo)
         {
-            var result = await DbSet
+            if(pageInfo == null)
+            {
+                throw new ArgumentNullException(nameof(pageInfo));
+            }
+
+            var records = DbSet
                 .Include(post => post.User)
                 .Include(post => post.PostTag)
-                    .ThenInclude(postTag => postTag.Tag)
-                .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
-                .Take(pageInfo.PageSize)
-                .ToListAsync();
+                    .ThenInclude(postTag => postTag.Tag);
+
+            var recordsPage = GetPageOfRecords(records, pageInfo);
+                
+            var result = await recordsPage.ToListAsync();
 
             return result;
         }
 
         public async Task<List<Post>> GetPostPreviewsByTagAsync(PageInfo pageInfo, string tag)
         {
-            var result = await DbSet
+            if (pageInfo == null)
+            {
+                throw new ArgumentNullException(nameof(pageInfo));
+            }
+
+            if (tag == null)
+            {
+                throw new ArgumentNullException(nameof(tag));
+            }
+
+            var records = DbSet
                 .Include(post => post.User)
                 .Include(post => post.PostTag)
                     .ThenInclude(postTag => postTag.Tag)
@@ -39,41 +55,59 @@ namespace ShareMe.DAL.Repositories
                     .PostTag
                     .Where(postTag => postTag.Tag.Name == tag)
                     .Any()
-                )
-                .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
-                .Take(pageInfo.PageSize)
-                .ToListAsync();
+                );
+
+            var recordsPage = GetPageOfRecords(records, pageInfo);
+
+            var result = await recordsPage.ToListAsync();
 
             return result;
         }
 
         public async Task<List<Post>> GetPostPreviewsBySearchAsync(PageInfo pageInfo, string header)
         {
-            var result = await DbSet
+            if (pageInfo == null)
+            {
+                throw new ArgumentNullException(nameof(pageInfo));
+            }
+
+            if (header == null)
+            {
+                throw new ArgumentNullException(nameof(header));
+            }
+
+            var records = DbSet
                .Include(post => post.User)
                .Include(post => post.PostTag)
                    .ThenInclude(postTag => postTag.Tag)
                .Where(post => post
                    .Header
                    .Contains(header)
-                )
-               .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
-               .Take(pageInfo.PageSize)
-               .ToListAsync();
+                );
+
+            var recordsPage = GetPageOfRecords(records, pageInfo);
+
+            var result = await recordsPage.ToListAsync();
 
             return result;
         }
 
         public async Task<List<Post>> GetPostPreviewsByCategoryAsync(PageInfo pageInfo, Guid categoryId)
         {
-            var result = await DbSet
+            if (pageInfo == null)
+            {
+                throw new ArgumentNullException(nameof(pageInfo));
+            }
+
+            var records = DbSet
               .Include(post => post.User)
               .Include(post => post.PostTag)
                   .ThenInclude(postTag => postTag.Tag)
-              .Where(post => post.CategoryId == categoryId)
-              .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
-              .Take(pageInfo.PageSize)
-              .ToListAsync();
+              .Where(post => post.CategoryId == categoryId);
+
+            var recordsPage = GetPageOfRecords(records, pageInfo);
+
+            var result = await recordsPage.ToListAsync();
 
             return result;
         }

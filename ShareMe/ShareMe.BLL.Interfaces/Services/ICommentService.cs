@@ -13,8 +13,6 @@ namespace ShareMe.BLL.Interfaces.Services
 
         Task DeleteAsync(Guid id);
 
-        Task<bool> IsCommentExistsAsync(Guid id);
-
         Task DeleteByPostIdAsync(Guid postId);
     }
 }

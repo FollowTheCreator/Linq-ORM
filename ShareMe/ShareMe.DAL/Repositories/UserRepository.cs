@@ -25,6 +25,11 @@ namespace ShareMe.DAL.Repositories
 
         public async Task<bool> IsEmailExistsAsync(string email)
         {
+            if (email == null)
+            {
+                throw new ArgumentNullException(nameof(email));
+            }
+
             var item = await DbSet
                 .AsNoTracking()
                 .FirstOrDefaultAsync(i => i.Email == email);

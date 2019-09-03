@@ -28,12 +28,5 @@ namespace ShareMe.BLL.Services
 
             return convertedResult;
         }
-
-        public async Task<bool> IsCategoryExistsAsync(Guid id)
-        {
-            var result = await _categoryRepository.GetByIdAsync(id);
-
-            return result != null;
-        }
     }
 }

@@ -48,6 +48,7 @@ namespace ShareMe.WebUI
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IIsEntityExistsService, IsEntityExistsService>();
 
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<ITagRepository, TagRepository>();

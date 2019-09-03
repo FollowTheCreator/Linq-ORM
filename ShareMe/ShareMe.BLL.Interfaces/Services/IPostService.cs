@@ -14,8 +14,6 @@ namespace ShareMe.BLL.Interfaces.Services
 
         Task DeleteAsync(Guid id);
 
-        Task<bool> IsPostExistsAsync(Guid id);
-
         Task<PostPreviewViewModel> GetPostPreviewsAsync(PageInfo pageInfo);
 
         Task<PostPreviewViewModel> GetPostPreviewsByTagAsync(PageInfo pageInfo, string tag);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShareMe.DAL.Interfaces.Context;
+using ShareMe.DAL.Interfaces.Models;
 using ShareMe.DAL.Interfaces.Models.TagModels;
 using ShareMe.DAL.Interfaces.Repositories;
 using System;
@@ -21,6 +22,11 @@ namespace ShareMe.DAL.Repositories
 
         public async Task<Tag> GetByNameAsync(string name)
         {
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
             var result = await DbSet
                 .FirstOrDefaultAsync(tag => tag.Name == name);
 
@@ -39,11 +45,21 @@ namespace ShareMe.DAL.Repositories
             return result;
         }
 
-        public async Task<List<string>> GetTagsAsync()
+        public async Task<List<string>> GetTagsAsync(PageInfo pageInfo)
         {
-            var result = await DbSet
-                .Select(tag => tag.Name)
-                .ToListAsync();
+            if (pageInfo == null)
+            {
+                throw new ArgumentNullException(nameof(pageInfo));
+            }
+
+            var records = DbSet;
+
+            var recordsPage = GetPageOfRecords(records, pageInfo);
+
+            var tagNames = recordsPage
+                .Select(tag => tag.Name);
+
+            var result = await tagNames.ToListAsync();
 
             return result;
         }

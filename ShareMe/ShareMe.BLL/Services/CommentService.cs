@@ -23,6 +23,11 @@ namespace ShareMe.BLL.Services
 
         public async Task CreateAsync(Comment item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             item.Date = DateTime.Now;
 
             var convertedItem = _mapper.Map<Comment, DAL.Interfaces.Models.CommentModels.Comment>(item);
@@ -46,15 +51,13 @@ namespace ShareMe.BLL.Services
             await _commentRepository.DeleteByPostIdAsync(postId);
         }
 
-        public async Task<bool> IsCommentExistsAsync(Guid id)
-        {
-            var result = await _commentRepository.GetByIdAsync(id);
-
-            return result != null;
-        }
-
         public async Task UpdateAsync(Comment item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             var convertedItem = _mapper.Map<Comment, DAL.Interfaces.Models.CommentModels.Comment>(item);
 
             await _commentRepository.UpdateAsync(convertedItem);

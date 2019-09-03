@@ -14,8 +14,6 @@ namespace ShareMe.BLL.Interfaces.Services
 
         Task<bool> IsEmailExistsAsync(string email);
 
-        Task<bool> IsUserExistsAsync(Guid id);
-
         Task<UserViewModel> GetUserAsync(Guid id);
     }
 }
