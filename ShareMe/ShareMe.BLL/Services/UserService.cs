@@ -47,7 +47,7 @@ namespace ShareMe.BLL.Services
         {
             if (!await _isEntityExistsService.IsUserExistsAsync(id))
             {
-                throw new ArgumentException(nameof(id), "User with this Id doesn't exist");
+                throw new ArgumentException(nameof(id), $"User with id: {id} doesn't exist");
             }
 
             var user = await _userRepository.GetUserAsync(id);

@@ -132,7 +132,7 @@ namespace ShareMe.BLL.Services
 
             var convertedPageInfo = _mapper.Map<PageInfo, DAL.Interfaces.Models.PageInfo>(pageInfo);
 
-            var posts = await _postRepository.GetPostPreviewsBySearchAsync(convertedPageInfo, header);
+            var posts = await _postRepository.GetPostsBySearchAsync(convertedPageInfo, header);
 
             var result = await FillPostPreviewViewModel(posts, pageInfo);
 
@@ -155,7 +155,7 @@ namespace ShareMe.BLL.Services
 
             var convertedPageInfo = _mapper.Map<PageInfo, DAL.Interfaces.Models.PageInfo>(pageInfo);
 
-            var posts = await _postRepository.GetPostPreviewsByTagAsync(convertedPageInfo, tag);
+            var posts = await _postRepository.GetPostsByTagAsync(convertedPageInfo, tag);
 
             var result = await FillPostPreviewViewModel(posts, pageInfo);
 
@@ -178,7 +178,7 @@ namespace ShareMe.BLL.Services
 
             var convertedPageInfo = _mapper.Map<PageInfo, DAL.Interfaces.Models.PageInfo>(pageInfo);
 
-            var posts = await _postRepository.GetPostPreviewsByCategoryAsync(convertedPageInfo, categoryId);
+            var posts = await _postRepository.GetPostsByCategoryAsync(convertedPageInfo, categoryId);
 
             var result = await FillPostPreviewViewModel(posts, pageInfo);
 
@@ -189,7 +189,7 @@ namespace ShareMe.BLL.Services
         {
             if (!await _isEntityExistsService.IsPostExistsAsync(id))
             {
-                throw new ArgumentException(nameof(id), "Post with this Id doesn't exist");
+                throw new ArgumentException(nameof(id), $"Post with id: {id} doesn't exist");
             }
 
             var post = await _postRepository.GetPostByIdAsync(id);
@@ -346,7 +346,7 @@ namespace ShareMe.BLL.Services
         {
             if(!await _isEntityExistsService.IsUserExistsAsync(userId))
             {
-                throw new ArgumentException(nameof(userId), "User with this Id doesn't exist");
+                throw new ArgumentException(nameof(userId), $"User with id: {userId} doesn't exist");
             }
 
             var posts = await _postRepository.GetUserPostsAsync(userId);

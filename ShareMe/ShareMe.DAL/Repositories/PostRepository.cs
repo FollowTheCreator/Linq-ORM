@@ -35,7 +35,7 @@ namespace ShareMe.DAL.Repositories
             return result;
         }
 
-        public async Task<List<Post>> GetPostPreviewsByTagAsync(PageInfo pageInfo, string tag)
+        public async Task<List<Post>> GetPostsByTagAsync(PageInfo pageInfo, string tag)
         {
             if (pageInfo == null)
             {
@@ -64,7 +64,7 @@ namespace ShareMe.DAL.Repositories
             return result;
         }
 
-        public async Task<List<Post>> GetPostPreviewsBySearchAsync(PageInfo pageInfo, string header)
+        public async Task<List<Post>> GetPostsBySearchAsync(PageInfo pageInfo, string header)
         {
             if (pageInfo == null)
             {
@@ -92,7 +92,7 @@ namespace ShareMe.DAL.Repositories
             return result;
         }
 
-        public async Task<List<Post>> GetPostPreviewsByCategoryAsync(PageInfo pageInfo, Guid categoryId)
+        public async Task<List<Post>> GetPostsByCategoryAsync(PageInfo pageInfo, Guid categoryId)
         {
             if (pageInfo == null)
             {

@@ -10,11 +10,11 @@ namespace ShareMe.DAL.Interfaces.Repositories
     {
         Task<List<Post>> GetPostsAsync(PageInfo pageInfo);
 
-        Task<List<Post>> GetPostPreviewsBySearchAsync(PageInfo pageInfo, string header);
+        Task<List<Post>> GetPostsBySearchAsync(PageInfo pageInfo, string header);
 
-        Task<List<Post>> GetPostPreviewsByTagAsync(PageInfo pageInfo, string tag);
+        Task<List<Post>> GetPostsByTagAsync(PageInfo pageInfo, string tag);
 
-        Task<List<Post>> GetPostPreviewsByCategoryAsync(PageInfo pageInfo, Guid categoryId);
+        Task<List<Post>> GetPostsByCategoryAsync(PageInfo pageInfo, Guid categoryId);
 
         Task<Post> GetPostByIdAsync(Guid id);
 

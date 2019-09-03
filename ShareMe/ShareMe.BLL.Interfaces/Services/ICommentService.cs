@@ -9,8 +9,6 @@ namespace ShareMe.BLL.Interfaces.Services
     {
         Task CreateAsync(Comment item);
 
-        Task UpdateAsync(Comment item);
-
         Task DeleteAsync(Guid id);
 
         Task DeleteByPostIdAsync(Guid postId);

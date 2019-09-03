@@ -68,7 +68,7 @@ namespace ShareMe.BLL.Services
         {
             if (!await _isEntityExistsService.IsPostExistsAsync(postId))
             {
-                throw new ArgumentException(nameof(postId), "Post with this Id doesn't exist");
+                throw new ArgumentException(nameof(postId), $"Post with id: {postId} doesn't exist");
             }
 
             var result = await _tagRepository.GetPostTagsAsync(postId);
