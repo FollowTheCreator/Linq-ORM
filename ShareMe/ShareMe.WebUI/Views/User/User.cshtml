@@ -1,0 +1,43 @@
+﻿@model UserViewModel
+
+<div class="w-50 mx-auto">
+    <div class="bg-white shadow p-2">
+        <div>
+            <div class="d-inline">
+                <img src="@Model.Image" alt="image" />
+            </div>
+            <div class="text-secondary d-inline">
+                <h3>
+                    @Model.Name
+                </h3>
+            </div>
+        </div>
+        <div class="text-secondary">
+            Email: @Model.Email
+        </div>
+        <div>
+            <table class="table mt-5">
+                @foreach(var post in Model.UserPosts)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Post" asp-action="Post" asp-route-Id="@post.Id" class="text-secondary">
+                                <div class="d-flex justify-content-between">
+                                    <img src="@post.Image" alt="image" class="w-25">
+                                    <div class="ml-2 w-50">
+                                        @post.Header
+                                    </div>
+                                    <div class="w-25" style="color:#bebebe;">
+                                        <div class="float-right">
+                                            @post.Date.ToString("MMMM d, yyyy")
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
